@@ -1,0 +1,25 @@
+{
+  "name": "com.pancake.playfab",
+  "displayName": "Playfab",
+  "description": "UPM Unity C# SDKs for PlayFab ",
+  "version": "2.130.220406",
+  "unity": "2019.1",
+  "category": "pancake",
+  "author": {
+    "name": "yenmoc",
+    "email": "phongsoyenmoc.diep@gmail.com",
+    "url": "https://github.com/yenmoc"
+  },
+  "license": "MIT",
+  "keywords": [ "playfab" ],
+  "dependencies": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:pancake-llc/playfab.git",
+    "directory": "com.pancake.playfab"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@pancake"
+  }
+}
