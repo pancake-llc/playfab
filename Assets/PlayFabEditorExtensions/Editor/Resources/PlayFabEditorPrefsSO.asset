@@ -15,9 +15,9 @@ MonoBehaviour:
   DevAccountEmail: 1@gmail.com
   DevAccountToken: r9qod5tzha4dm5rweb46knk5c71sywbhsuuwdhao3kekpw4fymzap6jyire1jxzthajj48e3ax8jpy3nd4mbh73c73ak6ydqn4xenckqdewkjc4yf67h6bo7yauho1cnsgn1h77zffobfnu91uey11yeb6edie37tyz1q3f4na9ai9zix3gxy7em916m5rbbdpjzr4ib
   SelectedStudio: 
-  SdkPath: Assets/PlayFabSDK
+  SdkPath: Assets/_Root/PlayFabSDK
   EdExPath: 
   LocalCloudScriptPath: 
   PanelIsShown: 0
-  curMainMenuIdx: 4
-  curSubMenuIdx: 0
+  curMainMenuIdx: 2
+  curSubMenuIdx: 1
