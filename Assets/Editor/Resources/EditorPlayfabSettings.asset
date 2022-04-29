@@ -12,3 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eab1c9d880943b09609c823c81e0612, type: 3}
   m_Name: EditorPlayfabSettings
   m_EditorClassIdentifier: 
+  titleId: 
+  secretKey: 
+  requestType: 0
+  enableAdminApi: 0
+  enableClientApi: 1
+  enableEntityApi: 1
+  enableServerApi: 0
+  enableRequestTimesApi: 0

@@ -701,7 +701,22 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
-    Standalone: ENABLE_PLAYFABADMIN_API;PLAYFAB_REQUEST_TIMING;ENABLE_PLAYFABSERVER_API
+    Android: 
+    CloudRendering: 
+    EmbeddedLinux: 
+    GameCoreScarlett: 
+    GameCoreXboxOne: 
+    Lumin: 
+    Nintendo Switch: 
+    PS4: 
+    PS5: 
+    Stadia: 
+    Standalone: 
+    WebGL: 
+    Windows Store Apps: 
+    XboxOne: 
+    iPhone: 
+    tvOS: 
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}

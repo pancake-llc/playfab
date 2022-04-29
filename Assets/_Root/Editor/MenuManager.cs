@@ -10,6 +10,8 @@ namespace Pancake.Editor
             // Load settings object or create a new one if it doesn't exist.
             var instance = PlayfabSettings.LoadSettings();
             if (instance == null) Creator.CreateSettingsAsset();
+            var shared = PlayfabSettings.GetSharedSettingsObjectPrivate();
+            if (shared == null) Creator.CreateSharedSettingsAsset();
             PlayfabWindow.ShowWindow();
         }
     }

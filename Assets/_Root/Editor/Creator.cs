@@ -26,6 +26,26 @@ namespace Pancake.Editor
             return instance;
         }
 
+        internal static PlayFabSharedSettings CreateSharedSettingsAsset()
+        {
+            // Stop if the asset is already created.
+            var instance = PlayfabSettings.GetSharedSettingsObjectPrivate();
+            if (instance != null) return instance;
+
+            // Create Resources folder if it doesn't exist.
+            EnsureFolderExists("Assets/Resources");
+
+            // Now create the asset inside the Resources folder.
+            instance = PlayfabSettings.SharedSettings;
+            AssetDatabase.CreateAsset(instance, "Assets/Resources/PlayFabSharedSettings.asset");
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            Debug.Log("Settings was created at Assets/Resources/PlayFabSharedSettings.asset");
+
+            return instance;
+        }
+        
         /// <summary>
         /// Creates the folder if it doesn't exist.
         /// </summary>
