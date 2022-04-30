@@ -13,4 +13,4 @@ To `Packages/manifest.json`
 
 ![playfab-anonymous-login-and-recoverable-login-min](https://user-images.githubusercontent.com/44673303/166100604-75c5949d-8c71-4b67-abbc-eb752ec51bfa.png)
 
-![compact_version](https://user-images.githubusercontent.com/44673303/166101985-6f625a57-e8f9-4600-820f-1a955b090c86.png)
+![compact_login](https://user-images.githubusercontent.com/44673303/166114223-13fb92e7-00cc-4947-b33f-50f54acf2270.png)
