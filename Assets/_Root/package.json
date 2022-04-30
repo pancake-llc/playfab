@@ -1,5 +1,5 @@
 {
-  "name": "com.pancake.playfab",
+  "name": "com.pancake.gameservice",
   "displayName": "Playfab",
   "description": "UPM Unity C# SDKs for PlayFab ",
   "version": "2.130.220406",
@@ -16,8 +16,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:pancake-llc/playfab.git",
-    "directory": "com.pancake.playfab"
+    "url": "git@github.com:pancake-llc/game-service.git",
+    "directory": "com.pancake.gameservice"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@pancake"
