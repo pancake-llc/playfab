@@ -6,22 +6,22 @@ namespace Pancake.Editor
 {
     public class Creator
     {
-        internal static PlayfabSettings CreateSettingsAsset()
+        internal static ServiceSettings CreateSettingsAsset()
         {
             // Stop if the asset is already created.
-            var instance = PlayfabSettings.LoadSettings();
+            var instance = ServiceSettings.LoadSettings();
             if (instance != null) return instance;
 
             // Create Resources folder if it doesn't exist.
-            EnsureFolderExists("Assets/Editor/Resources");
+            EnsureFolderExists("Assets/Resources");
 
             // Now create the asset inside the Resources folder.
-            instance = PlayfabSettings.Instance; // this will create a new instance of the EMSettings scriptable.
-            AssetDatabase.CreateAsset(instance, "Assets/Editor/Resources/EditorPlayfabSettings.asset");
+            instance = ServiceSettings.Instance; // this will create a new instance of the EMSettings scriptable.
+            AssetDatabase.CreateAsset(instance, "Assets/Resources/GameServiceSettings.asset");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            Debug.Log("Settings was created at Assets/Editor/Resources/EditorPlayfabSettings.asset");
+            Debug.Log("Settings was created at Assets/Resources/GameServiceSettings.asset");
 
             return instance;
         }
@@ -29,14 +29,14 @@ namespace Pancake.Editor
         internal static PlayFabSharedSettings CreateSharedSettingsAsset()
         {
             // Stop if the asset is already created.
-            var instance = PlayfabSettings.GetSharedSettingsObjectPrivate();
+            var instance = ServiceSettings.GetSharedSettingsObjectPrivate();
             if (instance != null) return instance;
 
             // Create Resources folder if it doesn't exist.
             EnsureFolderExists("Assets/Resources");
 
             // Now create the asset inside the Resources folder.
-            instance = PlayfabSettings.SharedSettings;
+            instance = ServiceSettings.SharedSettings;
             AssetDatabase.CreateAsset(instance, "Assets/Resources/PlayFabSharedSettings.asset");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();

@@ -10,7 +10,7 @@ namespace Pancake.Editor
 
         private void OnGUI()
         {
-            if (_editor == null) _editor = UnityEditor.Editor.CreateEditor(PlayfabSettings.Instance);
+            if (_editor == null) _editor = UnityEditor.Editor.CreateEditor(ServiceSettings.Instance);
 
             if (_editor == null)
             {

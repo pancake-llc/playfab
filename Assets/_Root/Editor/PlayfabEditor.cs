@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Pancake.Editor
 {
-    [CustomEditor(typeof(PlayfabSettings))]
+    [CustomEditor(typeof(ServiceSettings))]
     public class PlayfabEditor : UnityEditor.Editor
     {
         public static bool callFromEditorWindow = false;
@@ -15,6 +15,7 @@ namespace Pancake.Editor
         private Uniform.Property _enableEntityApi;
         private Uniform.Property _enableServerApi;
         private Uniform.Property _enableRequestTimesApi;
+        private Uniform.Property _infoRequestParams;
 
         private void Init()
         {
@@ -27,6 +28,7 @@ namespace Pancake.Editor
             _enableServerApi = new Uniform.Property(serializedObject.FindProperty("enableServerApi"), new GUIContent("Server API", "Enable server api"));
             _enableRequestTimesApi = new Uniform.Property(serializedObject.FindProperty("enableRequestTimesApi"),
                 new GUIContent("Request Times API", "Enable request time api"));
+            _infoRequestParams = new Uniform.Property(serializedObject.FindProperty("infoRequestParams"), new GUIContent("Info Request Param"));
         }
 
         public override void OnInspectorGUI()
@@ -53,11 +55,13 @@ namespace Pancake.Editor
                     EditorGUILayout.PropertyField(_secretKey.property, _secretKey.content);
                     EditorGUILayout.PropertyField(_requestType.property, _requestType.content);
 
-                    PlayfabSettings.SharedSettings.TitleId = PlayfabSettings.TitleId;
+                    ServiceSettings.SharedSettings.TitleId = ServiceSettings.TitleId;
 #if ENABLE_PLAYFABSERVER_API || ENABLE_PLAYFABADMIN_API || UNITY_EDITOR
-                    PlayfabSettings.SharedSettings.DeveloperSecretKey = PlayfabSettings.SecretKey;
+                    ServiceSettings.SharedSettings.DeveloperSecretKey = ServiceSettings.SecretKey;
 #endif
-                    PlayfabSettings.SharedSettings.RequestType = PlayfabSettings.RequestType;
+                    ServiceSettings.SharedSettings.RequestType = ServiceSettings.RequestType;
+                    Uniform.SpaceOneLine();
+                    EditorGUILayout.PropertyField(_infoRequestParams.property, _infoRequestParams.content);
                 });
             Uniform.SpaceOneLine();
             Uniform.DrawUppercaseSection("PLAYFAB_FEATURE",
@@ -71,19 +75,19 @@ namespace Pancake.Editor
                     Uniform.SpaceTwoLine();
                     EditorGUILayout.PropertyField(_enableRequestTimesApi.property, _enableRequestTimesApi.content);
 
-                    if (PlayfabSettings.EnableAdminApi) ScriptingDefinition.AddDefineSymbolOnAllPlatforms(PlayfabConstant.ENABLE_PLAYFABADMIN_API);
+                    if (ServiceSettings.EnableAdminApi) ScriptingDefinition.AddDefineSymbolOnAllPlatforms(PlayfabConstant.ENABLE_PLAYFABADMIN_API);
                     else ScriptingDefinition.RemoveDefineSymbolOnAllPlatforms(PlayfabConstant.ENABLE_PLAYFABADMIN_API);
 
-                    if (PlayfabSettings.EnableClientApi) ScriptingDefinition.RemoveDefineSymbolOnAllPlatforms(PlayfabConstant.DISABLE_PLAYFABCLIENT_API);
+                    if (ServiceSettings.EnableClientApi) ScriptingDefinition.RemoveDefineSymbolOnAllPlatforms(PlayfabConstant.DISABLE_PLAYFABCLIENT_API);
                     else ScriptingDefinition.AddDefineSymbolOnAllPlatforms(PlayfabConstant.DISABLE_PLAYFABCLIENT_API);
 
-                    if (PlayfabSettings.EnableEntityApi) ScriptingDefinition.RemoveDefineSymbolOnAllPlatforms(PlayfabConstant.DISABLE_PLAYFABENTITY_API);
+                    if (ServiceSettings.EnableEntityApi) ScriptingDefinition.RemoveDefineSymbolOnAllPlatforms(PlayfabConstant.DISABLE_PLAYFABENTITY_API);
                     else ScriptingDefinition.AddDefineSymbolOnAllPlatforms(PlayfabConstant.DISABLE_PLAYFABENTITY_API);
 
-                    if (PlayfabSettings.EnableServerApi) ScriptingDefinition.AddDefineSymbolOnAllPlatforms(PlayfabConstant.ENABLE_PLAYFABSERVER_API);
+                    if (ServiceSettings.EnableServerApi) ScriptingDefinition.AddDefineSymbolOnAllPlatforms(PlayfabConstant.ENABLE_PLAYFABSERVER_API);
                     else ScriptingDefinition.RemoveDefineSymbolOnAllPlatforms(PlayfabConstant.ENABLE_PLAYFABSERVER_API);
 
-                    if (PlayfabSettings.EnableRequestTimesApi) ScriptingDefinition.AddDefineSymbolOnAllPlatforms(PlayfabConstant.PLAYFAB_REQUEST_TIMING);
+                    if (ServiceSettings.EnableRequestTimesApi) ScriptingDefinition.AddDefineSymbolOnAllPlatforms(PlayfabConstant.PLAYFAB_REQUEST_TIMING);
                     else ScriptingDefinition.RemoveDefineSymbolOnAllPlatforms(PlayfabConstant.PLAYFAB_REQUEST_TIMING);
                 });
 

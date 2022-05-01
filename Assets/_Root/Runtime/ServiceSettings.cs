@@ -1,4 +1,5 @@
 ﻿using PlayFab;
+using PlayFab.ClientModels;
 using UnityEngine;
 
 namespace Pancake.Editor
@@ -6,12 +7,12 @@ namespace Pancake.Editor
     /// <summary>
     /// bridge setting for PlayfabSharedSettings
     /// </summary>
-    public class PlayfabSettings : ScriptableObject
+    public class ServiceSettings : ScriptableObject
     {
-        private static PlayfabSettings instance;
+        private static ServiceSettings instance;
         private static PlayFabSharedSettings sharedSettings;
 
-        public static PlayfabSettings Instance
+        public static ServiceSettings Instance
         {
             get
             {
@@ -23,7 +24,7 @@ namespace Pancake.Editor
 #if !UNITY_EDITOR
                         Debug.LogError("Playfab settings not found! Please go to menu Tools > Pancake > Playfab to setup the plugin.");
 #endif
-                    instance = CreateInstance<PlayfabSettings>();
+                    instance = CreateInstance<ServiceSettings>();
                 }
 
                 return instance;
@@ -59,6 +60,7 @@ namespace Pancake.Editor
         [SerializeField] private bool enableEntityApi = true;
         [SerializeField] private bool enableServerApi;
         [SerializeField] private bool enableRequestTimesApi;
+        [SerializeField] private GetPlayerCombinedInfoRequestParams infoRequestParams;
 
         public static bool EnableAdminApi => Instance.enableAdminApi;
         public static bool EnableClientApi => Instance.enableClientApi;
@@ -72,6 +74,8 @@ namespace Pancake.Editor
 
         public static WebRequestType RequestType => Instance.requestType;
 
-        public static PlayfabSettings LoadSettings() { return Resources.Load<PlayfabSettings>("EditorPlayfabSettings"); }
+        public static GetPlayerCombinedInfoRequestParams InfoRequestParams => Instance.infoRequestParams;
+
+        public static ServiceSettings LoadSettings() { return Resources.Load<ServiceSettings>("GameServiceSettings"); }
     }
 }

@@ -8,9 +8,9 @@ namespace Pancake.Editor
         public static void MenuOpenSettings()
         {
             // Load settings object or create a new one if it doesn't exist.
-            var instance = PlayfabSettings.LoadSettings();
+            var instance = ServiceSettings.LoadSettings();
             if (instance == null) Creator.CreateSettingsAsset();
-            var shared = PlayfabSettings.GetSharedSettingsObjectPrivate();
+            var shared = ServiceSettings.GetSharedSettingsObjectPrivate();
             if (shared == null) Creator.CreateSharedSettingsAsset();
             PlayfabWindow.ShowWindow();
         }
