@@ -25,22 +25,19 @@ namespace Pancake.GameService
         //Events to subscribe to for this service
         public delegate void DisplayAuthenticationEvent();
 
-        public static event DisplayAuthenticationEvent OnDisplayAuthentication;
-
         public delegate void LoginSuccessEvent(LoginResult success);
-
-        public static event LoginSuccessEvent OnLoginSuccess;
 
         public delegate void PlayFabErrorEvent(PlayFabError error);
 
-        public static event PlayFabErrorEvent OnPlayFabError;
-
         public delegate void UpdateUserTitleDisplayNameSuccessEvent(UpdateUserTitleDisplayNameResult success);
-
-        public static event UpdateUserTitleDisplayNameSuccessEvent OnUpdateUserTitleDisplayNameSuccess;
 
         public delegate void UpdatePlayerStatisticsSuccessEvent(UpdatePlayerStatisticsResult success);
 
+
+        public static event DisplayAuthenticationEvent OnDisplayAuthentication;
+        public static event LoginSuccessEvent OnLoginSuccess;
+        public static event PlayFabErrorEvent OnPlayFabError;
+        public static event UpdateUserTitleDisplayNameSuccessEvent OnUpdateUserTitleDisplayNameSuccess;
         public static event UpdatePlayerStatisticsSuccessEvent OnUpdatePlayerStatisticsSuccess;
 
         public string email;
@@ -189,6 +186,8 @@ namespace Pancake.GameService
                 },
                 error =>
                 {
+                    isLoggedIn = false;
+                    isRequestCompleted = true;
                     if (onSuccess == null && OnPlayFabError != null)
                     {
                         OnPlayFabError.Invoke(error);
@@ -225,6 +224,8 @@ namespace Pancake.GameService
                 },
                 error =>
                 {
+                    isLoggedIn = false;
+                    isRequestCompleted = true;
                     if (onSuccess == null && OnPlayFabError != null)
                     {
                         OnPlayFabError.Invoke(error);
@@ -256,6 +257,7 @@ namespace Pancake.GameService
                 },
                 error =>
                 {
+                    SetErrorInfo();
                     if (onSuccess == null && OnPlayFabError != null)
                     {
                         OnPlayFabError.Invoke(error);
@@ -287,7 +289,11 @@ namespace Pancake.GameService
                         SetResultInfo(result);
                         OnLoginSuccess?.Invoke(result);
                     },
-                    error => { OnPlayFabError?.Invoke(error); });
+                    error =>
+                    {
+                        SetErrorInfo();
+                        OnPlayFabError?.Invoke(error);
+                    });
 
                 return;
             }
@@ -320,7 +326,11 @@ namespace Pancake.GameService
 
                     OnLoginSuccess?.Invoke(result);
                 },
-                error => { OnPlayFabError?.Invoke(error); });
+                error =>
+                {
+                    SetErrorInfo();
+                    OnPlayFabError?.Invoke(error);
+                });
         }
 
         /// <summary>
@@ -355,8 +365,7 @@ namespace Pancake.GameService
                         if (OnLoginSuccess != null)
                         {
                             //Store identity and session
-                            PlayFabId = result.PlayFabId;
-                            SessionTicket = result.SessionTicket;
+                            SetResultInfo(result);
 
                             //If they opted to be remembered on next login.
                             if (RememberMe)
@@ -376,6 +385,7 @@ namespace Pancake.GameService
                     },
                     error =>
                     {
+                        SetErrorInfo();
                         //Report error result back to subscriber
                         OnPlayFabError?.Invoke(error);
                     });
@@ -403,7 +413,7 @@ namespace Pancake.GameService
                 OnLoginSuccess?.Invoke(result);
             }, error =>
             {
-
+                SetErrorInfo();
                 //report errro back to the subscriber
                 OnPlayFabError?.Invoke(error);
             });
@@ -434,6 +444,7 @@ namespace Pancake.GameService
             OnLoginSuccess?.Invoke(result);
         }, (error) =>
         {
+            SetErrorInfo();
             //report errro back to the subscriber
             OnPlayFabError?.Invoke(error);
         });
@@ -445,6 +456,12 @@ namespace Pancake.GameService
             PlayFabId = result.PlayFabId;
             SessionTicket = result.SessionTicket;
             isLoggedIn = true;
+            isRequestCompleted = true;
+        }
+
+        private void SetErrorInfo()
+        {
+            isLoggedIn = false;
             isRequestCompleted = true;
         }
 
@@ -469,7 +486,7 @@ namespace Pancake.GameService
             isLoggedIn = false;
             isRequestCompleted = false;
         }
-        
+
         /// <summary>
         /// require enable put static score in setting dashboard
         /// </summary>
