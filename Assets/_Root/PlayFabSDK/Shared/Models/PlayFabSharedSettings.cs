@@ -1,9 +1,13 @@
 using UnityEngine;
 using PlayFab;
 
+#if UNITY_5_3_OR_NEWER
+[CreateAssetMenu(fileName = "PlayFabSharedSettings", menuName = "PlayFab/CreateSharedSettings", order = 1)]
+#endif
 public class PlayFabSharedSettings : ScriptableObject
 {
     public string TitleId;
+
     internal string VerticalName = null;
 #if ENABLE_PLAYFABSERVER_API || ENABLE_PLAYFABADMIN_API || UNITY_EDITOR
     public string DeveloperSecretKey;

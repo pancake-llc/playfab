@@ -30,7 +30,7 @@ namespace Pancake.Editor
 
         private static PlayfabWindow GetWindow()
         {
-            var window = GetWindow<PlayfabWindow>(UtilEditor.InspectorWindow);
+            var window = GetWindow<PlayfabWindow>(InEditor.InspectorWindow);
             window.titleContent = new GUIContent("Playfab Setting");
 
             return window;

@@ -1780,6 +1780,31 @@ namespace PlayFab.AdminModels
         public string JobReceiptId;
     }
 
+    /// <summary>
+    /// Request must contain the Segment ID
+    /// </summary>
+    [Serializable]
+    public class ExportPlayersInSegmentRequest : PlayFabRequestCommon
+    {
+        /// <summary>
+        /// Unique identifier of the requested segment.
+        /// </summary>
+        public string SegmentId;
+    }
+
+    [Serializable]
+    public class ExportPlayersInSegmentResult : PlayFabResultCommon
+    {
+        /// <summary>
+        /// Unique identifier of the export for the requested Segment.
+        /// </summary>
+        public string ExportId;
+        /// <summary>
+        /// Unique identifier of the requested Segment.
+        /// </summary>
+        public string SegmentId;
+    }
+
     [Serializable]
     public class FirstLoginDateSegmentFilter : PlayFabBaseModel
     {
@@ -2518,6 +2543,11 @@ namespace PlayFab.AdminModels
         EventSinkSasTokenInvalid,
         EventSinkNotFound,
         EventSinkNameInvalid,
+        EventSinkSasTokenPermissionInvalid,
+        EventSinkSecretInvalid,
+        EventSinkTenantNotFound,
+        EventSinkAadNotFound,
+        EventSinkDatabaseNotFound,
         OperationCanceled,
         InvalidDisplayNameRandomSuffixLength,
         AllowNonUniquePlayerDisplayNamesDisableNotAllowed
@@ -2914,6 +2944,31 @@ namespace PlayFab.AdminModels
         /// The player shared secret to use when calling Client/GetTitlePublicKey
         /// </summary>
         public List<SharedSecret> SharedSecrets;
+    }
+
+    /// <summary>
+    /// Request must contain the ExportId
+    /// </summary>
+    [Serializable]
+    public class GetPlayersInSegmentExportRequest : PlayFabRequestCommon
+    {
+        /// <summary>
+        /// Unique identifier of the export for the requested Segment.
+        /// </summary>
+        public string ExportId;
+    }
+
+    [Serializable]
+    public class GetPlayersInSegmentExportResponse : PlayFabResultCommon
+    {
+        /// <summary>
+        /// Url from which the index file can be downloaded.
+        /// </summary>
+        public string IndexUrl;
+        /// <summary>
+        /// Shows the current status of the export
+        /// </summary>
+        public string State;
     }
 
     /// <summary>
@@ -5917,6 +5972,10 @@ namespace PlayFab.AdminModels
     public class SetTitleDataAndOverridesRequest : PlayFabRequestCommon
     {
         /// <summary>
+        /// The optional custom tags associated with the request (e.g. build number, external trace identifiers, etc.).
+        /// </summary>
+        public Dictionary<string,string> CustomTags;
+        /// <summary>
         /// List of titleData key-value pairs to set/delete. Use an empty value to delete an existing key; use a non-empty value to
         /// create/update a key.
         /// </summary>
@@ -5925,6 +5984,10 @@ namespace PlayFab.AdminModels
         /// Name of the override.
         /// </summary>
         public string OverrideLabel;
+        /// <summary>
+        /// Title Id
+        /// </summary>
+        public string TitleId;
     }
 
     [Serializable]
@@ -5933,10 +5996,11 @@ namespace PlayFab.AdminModels
     }
 
     /// <summary>
-    /// This API method is designed to store title specific values which are accessible only by the server. These values can be
-    /// used to tweak settings used by game servers and Cloud Scripts without the need to update and re-deploy. This operation
-    /// is additive. If a Key does not exist in the current dataset, it will be added with the specified Value. If it already
-    /// exists, the Value for that key will be overwritten with the new Value.
+    /// This API method is designed to store title specific values which can be read by the client. For example, a developer
+    /// could choose to store values which modify the user experience, such as enemy spawn rates, weapon strengths, movement
+    /// speeds, etc. This allows a developer to update the title without the need to create, test, and ship a new build. This
+    /// operation is additive. If a Key does not exist in the current dataset, it will be added with the specified Value. If it
+    /// already exists, the Value for that key will be overwritten with the new Value.
     /// </summary>
     [Serializable]
     public class SetTitleDataRequest : PlayFabRequestCommon
@@ -7236,6 +7300,10 @@ namespace PlayFab.AdminModels
         /// XBox user ID
         /// </summary>
         public string XboxUserId;
+        /// <summary>
+        /// XBox user sandbox
+        /// </summary>
+        public string XboxUserSandbox;
     }
 
     [Serializable]
