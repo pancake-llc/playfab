@@ -2,7 +2,7 @@
 using PlayFab.ClientModels;
 using UnityEngine;
 
-namespace Pancake.Editor
+namespace Pancake.GameService
 {
     /// <summary>
     /// bridge setting for PlayfabSharedSettings
@@ -55,6 +55,7 @@ namespace Pancake.Editor
         [SerializeField] private string secretKey;
         [SerializeField] private WebRequestType requestType = WebRequestType.UnityWebRequest;
 
+        [SerializeField] private bool useCustomIdAsDefault = true;
         [SerializeField] private bool enableAdminApi;
         [SerializeField] private bool enableClientApi = true;
         [SerializeField] private bool enableEntityApi = true;
@@ -75,6 +76,8 @@ namespace Pancake.Editor
         public static WebRequestType RequestType => Instance.requestType;
 
         public static GetPlayerCombinedInfoRequestParams InfoRequestParams => Instance.infoRequestParams;
+
+        public static bool UseCustomIdAsDefault => Instance.useCustomIdAsDefault;
 
         public static ServiceSettings LoadSettings() { return Resources.Load<ServiceSettings>("GameServiceSettings"); }
     }

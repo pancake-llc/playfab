@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using Pancake.GameService;
+using UnityEditor;
 
 namespace Pancake.Editor
 {

@@ -149,6 +149,12 @@ namespace Pancake.GameService
 
         private void SilentlyAuthenticate(Action<LoginResult> onSuccess = null, Action<PlayFabError> onError = null)
         {
+            if (ServiceSettings.UseCustomIdAsDefault)
+            {
+                LoginWithCustomId(onSuccess);
+            }
+            else
+            {
 #if UNITY_ANDROID && !UNITY_EDITOR
             PlayFabClientAPI.LoginWithAndroidDeviceID(new LoginWithAndroidDeviceIDRequest()
                 {
@@ -187,7 +193,7 @@ namespace Pancake.GameService
                         Debug.LogError(error.GenerateErrorReport());
                     }
                 });
-#elif (UNITY_IPHONE || UNITY_IOS) && !UNITY_EDITOR && !UNITY_EDITOR
+#elif (UNITY_IPHONE || UNITY_IOS) && !UNITY_EDITOR
             PlayFabClientAPI.LoginWithIOSDeviceID(new LoginWithIOSDeviceIDRequest()
                 {
                     TitleId = PlayFabSettings.TitleId,
@@ -226,10 +232,15 @@ namespace Pancake.GameService
                     }
                 });
 #else
-            PlayFabClientAPI.LoginWithCustomID(new LoginWithCustomIDRequest
-                {
-                    TitleId = PlayFabSettings.TitleId, CustomId = CustomId, CreateAccount = true, InfoRequestParameters = infoRequestParams
-                },
+                LoginWithCustomId(onSuccess);
+#endif
+            }
+        }
+
+        private void LoginWithCustomId(Action<LoginResult> onSuccess)
+        {
+            PlayFabClientAPI.LoginWithCustomID(
+                new LoginWithCustomIDRequest {TitleId = PlayFabSettings.TitleId, CustomId = CustomId, CreateAccount = true, InfoRequestParameters = infoRequestParams},
                 result =>
                 {
                     SetResultInfo(result);
@@ -257,7 +268,6 @@ namespace Pancake.GameService
                         Debug.LogError(error.GenerateErrorReport());
                     }
                 });
-#endif
         }
 
         /// <summary>
@@ -334,7 +344,7 @@ namespace Pancake.GameService
                 if (result == null)
                 {
                     //something went wrong with Silent Authentication, Check the debug console.
-                    OnPlayFabError?.Invoke(new PlayFabError() {Error = PlayFabErrorCode.UnknownError, ErrorMessage = "Silent Authentication by Device failed"});
+                    OnPlayFabError?.Invoke(new PlayFabError() {Error = PlayFabErrorCode.UnknownError, ErrorMessage = "Silent Authentication by device failed"});
                 }
 
                 //Note: If silent auth is success, which is should always be and the following 
@@ -344,7 +354,7 @@ namespace Pancake.GameService
                 //Now add our username & password.
                 PlayFabClientAPI.AddUsernamePassword(new AddUsernamePasswordRequest()
                     {
-                        Username = !string.IsNullOrEmpty(userName) ? userName : result.PlayFabId, //Because it is required & Unique and not supplied by User.
+                        Username = !string.IsNullOrEmpty(userName) ? userName : CustomId, //Because it is required & Unique and not supplied by User.
                         Email = email,
                         Password = password,
                     },

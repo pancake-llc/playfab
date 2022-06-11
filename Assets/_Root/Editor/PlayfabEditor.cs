@@ -1,3 +1,4 @@
+using Pancake.GameService;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ namespace Pancake.Editor
         private Uniform.Property _titleId;
         private Uniform.Property _secretKey;
         private Uniform.Property _requestType;
+        private Uniform.Property _useCustomIdAsDefault;
         private Uniform.Property _enableAdminApi;
         private Uniform.Property _enableClientApi;
         private Uniform.Property _enableEntityApi;
@@ -22,6 +24,8 @@ namespace Pancake.Editor
             _titleId = new Uniform.Property(serializedObject.FindProperty("titleId"), new GUIContent("Title Id", "Title id of project"));
             _secretKey = new Uniform.Property(serializedObject.FindProperty("secretKey"), new GUIContent("Secret Key", "Title secret key"));
             _requestType = new Uniform.Property(serializedObject.FindProperty("requestType"), new GUIContent("Request Type", "Request type"));
+            _useCustomIdAsDefault = new Uniform.Property(serializedObject.FindProperty("useCustomIdAsDefault"),
+                new GUIContent("Use Custom Id", "Use custom id instead of device id for specific splatform"));
             _enableAdminApi = new Uniform.Property(serializedObject.FindProperty("enableAdminApi"), new GUIContent("Admin API", "Enable admin api"));
             _enableClientApi = new Uniform.Property(serializedObject.FindProperty("enableClientApi"), new GUIContent("Client API", "Enable client api"));
             _enableEntityApi = new Uniform.Property(serializedObject.FindProperty("enableEntityApi"), new GUIContent("Entity API", "Enable entity api"));
@@ -68,6 +72,7 @@ namespace Pancake.Editor
                 "API & FEATURE",
                 () =>
                 {
+                    EditorGUILayout.PropertyField(_useCustomIdAsDefault.property, _useCustomIdAsDefault.content);
                     EditorGUILayout.PropertyField(_enableAdminApi.property, _enableAdminApi.content);
                     EditorGUILayout.PropertyField(_enableClientApi.property, _enableClientApi.content);
                     EditorGUILayout.PropertyField(_enableEntityApi.property, _enableEntityApi.content);

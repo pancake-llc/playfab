@@ -15,6 +15,7 @@ MonoBehaviour:
   titleId: 
   secretKey: 
   requestType: 0
+  useCustomIdAsDefault: 1
   enableAdminApi: 0
   enableClientApi: 1
   enableEntityApi: 1
