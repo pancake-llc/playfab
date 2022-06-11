@@ -93,19 +93,7 @@ namespace Pancake.GameService
                 string id = PlayerPrefs.GetString(CUSTOM_ID_STORE_KEY, "");
                 if (string.IsNullOrEmpty(id))
                 {
-                    var deviceId = "";
-                    try
-                    {
-                        deviceId = SystemInfo.deviceUniqueIdentifier;
-                    }
-                    catch (Exception e)
-                    {
-                        deviceId = $"{Random.Range(100000, 999999)}";
-                    }
-
-                    var generator = new Id64Generator(25);
-                    deviceId += generator.GenerateId();
-                    id = deviceId;
+                    id = Ulid.NewUlid().ToString();
                     PlayerPrefs.SetString(CUSTOM_ID_STORE_KEY, id);
                 }
 

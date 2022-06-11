@@ -8,13 +8,20 @@
       "hash": "e39981bca07f08f068231f651e1e8d0f69397222"
     },
     "com.pancake.common": {
-      "version": "https://github.com/pancake-llc/common.git?path=Assets/_Root#1.1.7",
+      "version": "https://github.com/pancake-llc/common.git?path=Assets/_Root#1.2.6",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "3.0.1"
+        "com.unity.nuget.newtonsoft-json": "3.0.2"
       },
-      "hash": "6b19d6cfb517fb32b849d0afe03e2cfab29464d2"
+      "hash": "be6a54985c29d317355458a2cdb85c0e47e05736"
+    },
+    "com.system-community.systemruntimecompilerservicesunsafe": {
+      "version": "https://github.com/system-community/SystemRuntimeCompilerServicesUnsafe.git?path=Assets/_Root#4.5.3",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "c9a633f2999d98b73fb9798fb7e4a411bc431147"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
@@ -55,7 +62,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.nuget.newtonsoft-json": {
-      "version": "3.0.1",
+      "version": "3.0.2",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
