@@ -1,5 +1,19 @@
 {
   "dependencies": {
+    "com.cysharp.unitask": {
+      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.3.1",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "33d32baea4d50040e0601b725a694dcf3dcf6640"
+    },
+    "com.google.external-dependency-manager": {
+      "version": "https://github.com/pancake-llc/external-dependency-manager.git?path=Assets/_Root#1.2.169",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "8479d378666d8af0e30fc0308df447196857659d"
+    },
     "com.lupidan.apple-signin-unity": {
       "version": "https://github.com/lupidan/apple-signin-unity.git#v1.4.2",
       "depth": 0,
@@ -15,6 +29,20 @@
         "com.unity.nuget.newtonsoft-json": "3.0.2"
       },
       "hash": "be6a54985c29d317355458a2cdb85c0e47e05736"
+    },
+    "com.pancake.facebook": {
+      "version": "https://github.com/pancake-llc/facebook.git?path=Assets/_Root#1.0.0",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "75df4edd13dcb389dd9b1956da6c1982e58f9594"
+    },
+    "com.pancake.simplejson": {
+      "version": "https://github.com/pancake-llc/SimpleJSON.git?path=Assets/_Root#1.0.2",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "cb8168a6e41f6531649d5befb3f895381365e1a3"
     },
     "com.system-community.systemruntimecompilerservicesunsafe": {
       "version": "https://github.com/system-community/SystemRuntimeCompilerServicesUnsafe.git?path=Assets/_Root#4.5.3",
