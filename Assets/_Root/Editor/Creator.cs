@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Pancake.Editor
 {
-    public class Creator
+    public static class Creator
     {
         internal static ServiceSettings CreateSettingsAsset()
         {
@@ -46,7 +46,7 @@ namespace Pancake.Editor
 
             return instance;
         }
-        
+
         /// <summary>
         /// Creates the folder if it doesn't exist.
         /// </summary>

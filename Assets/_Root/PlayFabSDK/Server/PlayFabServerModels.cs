@@ -1962,6 +1962,10 @@ namespace PlayFab.ServerModels
         PhotonApplicationIdAlreadyInUse,
         CloudScriptUnableToDeleteProductionRevision,
         CustomIdNotFound,
+        AutomationInvalidInput,
+        AutomationInvalidRuleName,
+        AutomationRuleAlreadyExists,
+        AutomationRuleLimitExceeded,
         MatchmakingEntityInvalid,
         MatchmakingPlayerAttributesInvalid,
         MatchmakingQueueNotFound,
@@ -2029,6 +2033,7 @@ namespace PlayFab.ServerModels
         ExportCannotParseQuery,
         ExportControlCommandsNotAllowed,
         ExportQueryMissingTableReference,
+        ExportInsightsV1Deprecated,
         ExplorerBasicInvalidQueryName,
         ExplorerBasicInvalidQueryDescription,
         ExplorerBasicInvalidQueryConditions,
@@ -3147,6 +3152,27 @@ namespace PlayFab.ServerModels
         /// Mapping of Steam identifiers to PlayFab identifiers.
         /// </summary>
         public List<SteamPlayFabIdPair> Data;
+    }
+
+    [Serializable]
+    public class GetPlayFabIDsFromTwitchIDsRequest : PlayFabRequestCommon
+    {
+        /// <summary>
+        /// Array of unique Twitch identifiers (Twitch's _id) for which the title needs to get PlayFab identifiers.
+        /// </summary>
+        public List<string> TwitchIds;
+    }
+
+    /// <summary>
+    /// For Twitch identifiers which have not been linked to PlayFab accounts, null will be returned.
+    /// </summary>
+    [Serializable]
+    public class GetPlayFabIDsFromTwitchIDsResult : PlayFabResultCommon
+    {
+        /// <summary>
+        /// Mapping of Twitch identifiers to PlayFab identifiers.
+        /// </summary>
+        public List<TwitchPlayFabIdPair> Data;
     }
 
     [Serializable]
@@ -5705,11 +5731,6 @@ namespace PlayFab.ServerModels
         /// </summary>
         public string Key;
         /// <summary>
-        /// Unique identifier for the title, found in the Settings > Game Properties section of the PlayFab developer site when a
-        /// title has been selected.
-        /// </summary>
-        public string TitleId;
-        /// <summary>
         /// new value to set. Set to null to remove a value
         /// </summary>
         public string Value;
@@ -6020,6 +6041,19 @@ namespace PlayFab.ServerModels
         /// List of the experiment variants.
         /// </summary>
         public List<string> Variants;
+    }
+
+    [Serializable]
+    public class TwitchPlayFabIdPair : PlayFabBaseModel
+    {
+        /// <summary>
+        /// Unique PlayFab identifier for a user, or null if no PlayFab account is linked to the Twitch identifier.
+        /// </summary>
+        public string PlayFabId;
+        /// <summary>
+        /// Unique Twitch identifier for a user.
+        /// </summary>
+        public string TwitchId;
     }
 
     [Serializable]

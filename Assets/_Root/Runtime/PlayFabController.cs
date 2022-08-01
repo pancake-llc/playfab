@@ -1,5 +1,4 @@
 using System;
-using Pancake.Leaderboard;
 using PlayFab.ClientModels;
 using UnityEngine;
 
@@ -13,10 +12,7 @@ namespace Pancake.GameService
             AuthService.OnLoginSuccess += AuthServiceOnLoginSuccess;
         }
 
-        private void Start()
-        {
-            AuthService.Instance.Authenticate(EAuthType.Silent);
-        }
+        private void Start() { AuthService.Instance.Authenticate(EAuthType.Silent); }
 
         private void AuthServiceOnLoginSuccess(LoginResult success)
         {

@@ -1711,13 +1711,18 @@ namespace PlayFab.MultiplayerModels
         /// </summary>
         public bool ExcludeSteamFriends;
         /// <summary>
-        /// OData style string that contains one or more filters. The OR and grouping operators are not allowed.
+        /// OData style string that contains one or more filters. Only the following operators are supported: "and" (logical and),
+        /// "eq" (equal), "ne" (not equals), "ge" (greater than or equal), "gt" (greater than), "le" (less than or equal), and "lt"
+        /// (less than). The left-hand side of each OData logical expression should be either a search property key (e.g.
+        /// string_key1, number_key3, etc) or one of the pre-defined search keys: memberCount, membershipLock (must equal 'Unlocked'
+        /// or 'Locked'), amOwner (required to equal "true"), amMember (required to equal "true").
         /// </summary>
         public string Filter;
         /// <summary>
-        /// OData style string that contains sorting for this query. To sort by closest, a moniker `distance{number_key1 = 5}` can
-        /// be used to sort by distance from the given number. This field only supports either one sort clause or one distance
-        /// clause.
+        /// OData style string that contains sorting for this query in either ascending ("asc") or descending ("desc") order.
+        /// OrderBy clauses are of the form "number_key1 asc" or the pre-defined search key "memberCount desc". To sort by closest,
+        /// a moniker `distance{number_key1 = 5}` can be used to sort by distance from the given number. This field only supports
+        /// either one sort clause or one distance clause.
         /// </summary>
         public string OrderBy;
         /// <summary>
@@ -1754,13 +1759,18 @@ namespace PlayFab.MultiplayerModels
         /// </summary>
         public Dictionary<string,string> CustomTags;
         /// <summary>
-        /// OData style string that contains one or more filters. The OR and grouping operators are not allowed.
+        /// OData style string that contains one or more filters. Only the following operators are supported: "and" (logical and),
+        /// "eq" (equal), "ne" (not equals), "ge" (greater than or equal), "gt" (greater than), "le" (less than or equal), and "lt"
+        /// (less than). The left-hand side of each OData logical expression should be either a search property key (e.g.
+        /// string_key1, number_key3, etc) or one of the pre-defined search keys: memberCount, membershipLock (must equal 'Unlocked'
+        /// or 'Locked'), amOwner (required to equal "true"), amMember (required to equal "true").
         /// </summary>
         public string Filter;
         /// <summary>
-        /// OData style string that contains sorting for this query. To sort by closest, a moniker `distance{number_key1 = 5}` can
-        /// be used to sort by distance from the given number. This field only supports either one sort clause or one distance
-        /// clause.
+        /// OData style string that contains sorting for this query in either ascending ("asc") or descending ("desc") order.
+        /// OrderBy clauses are of the form "number_key1 asc" or the pre-defined search key "memberCount desc". To sort by closest,
+        /// a moniker `distance{number_key1 = 5}` can be used to sort by distance from the given number. This field only supports
+        /// either one sort clause or one distance clause.
         /// </summary>
         public string OrderBy;
         /// <summary>
@@ -1806,6 +1816,10 @@ namespace PlayFab.MultiplayerModels
         /// The maximum number of players allowed in the lobby.
         /// </summary>
         public uint MaxPlayers;
+        /// <summary>
+        /// A setting indicating whether members are allowed to join this lobby. When Locked new members are prevented from joining.
+        /// </summary>
+        public MembershipLock? MembershipLock;
         /// <summary>
         /// The client or server entity which owns this lobby.
         /// </summary>
@@ -2245,6 +2259,7 @@ namespace PlayFab.MultiplayerModels
         /// <summary>
         /// The guid string build ID of the multiplayer server to get details for.
         /// </summary>
+        [Obsolete("No longer available", false)]
         public string BuildId;
         /// <summary>
         /// The optional custom tags associated with the request (e.g. build number, external trace identifiers, etc.).
@@ -2253,6 +2268,7 @@ namespace PlayFab.MultiplayerModels
         /// <summary>
         /// The region the multiplayer server is located in to get details for.
         /// </summary>
+        [Obsolete("No longer available", false)]
         public string Region;
         /// <summary>
         /// The title generated guid string session ID of the multiplayer server to get details for. This is to keep track of
@@ -3380,6 +3396,10 @@ namespace PlayFab.MultiplayerModels
         /// The maximum number of players allowed in the lobby.
         /// </summary>
         public uint MaxPlayers;
+        /// <summary>
+        /// A setting indicating whether members are allowed to join this lobby. When Locked new members are prevented from joining.
+        /// </summary>
+        public MembershipLock? MembershipLock;
         /// <summary>
         /// The client or server entity which owns this lobby.
         /// </summary>

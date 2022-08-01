@@ -1,4 +1,4 @@
-namespace Pancake.Leaderboard
+namespace Pancake.GameService
 {
     public enum EAuthType
     {

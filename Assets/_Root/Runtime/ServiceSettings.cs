@@ -44,6 +44,7 @@ namespace Pancake.GameService
 #endif
                     sharedSettings = CreateInstance<PlayFabSharedSettings>();
                 }
+
                 return sharedSettings;
             }
         }

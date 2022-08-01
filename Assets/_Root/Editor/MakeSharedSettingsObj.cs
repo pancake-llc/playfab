@@ -2,15 +2,18 @@
 using UnityEditor;
 using UnityEngine;
 
-public class MakeScriptableObject
+public static class MakeScriptableObject
 {
-    //[MenuItem("PlayFab/MakePlayFabSharedSettings")]
+    [MenuItem("PlayFab/MakePlayFabSharedSettings")]
     public static void MakePlayFabSharedSettings()
     {
         PlayFabSharedSettings asset = ScriptableObject.CreateInstance<PlayFabSharedSettings>();
-        AssetDatabase.CreateAsset(asset, "Assets/Resources/PlayFabSharedSettings.asset"); // TODO: Path should not be hard coded
+
+        AssetDatabase.CreateAsset(asset, "Assets/PlayFabSdk/Shared/Public/Resources/PlayFabSharedSettings.asset"); // TODO: Path should not be hard coded
         AssetDatabase.SaveAssets();
+
         EditorUtility.FocusProjectWindow();
+
         Selection.activeObject = asset;
     }
 }
