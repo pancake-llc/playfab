@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+#if UNITY_IOS
 using AppleAuth;
 using AppleAuth.Interfaces;
 using AppleAuth.Native;
+#endif
 using Pancake.Common;
 using PlayFab;
 using PlayFab.ClientModels;

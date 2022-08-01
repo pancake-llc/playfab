@@ -7,6 +7,10 @@
         {
             "key": "PLAYFAB_FEATURE",
             "state": true
+        },
+        {
+            "key": "UNIBUTTON_MOTION",
+            "state": true
         }
     ]
 }
