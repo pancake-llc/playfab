@@ -11,6 +11,18 @@
         {
             "key": "UNIBUTTON_MOTION",
             "state": true
+        },
+        {
+            "key": "UIPOPUP_CLOSE",
+            "state": true
+        },
+        {
+            "key": "UIPOPUP_SETTING_DISPLAY",
+            "state": true
+        },
+        {
+            "key": "UIPOPUP_SETTING_HIDE",
+            "state": true
         }
     ]
 }
