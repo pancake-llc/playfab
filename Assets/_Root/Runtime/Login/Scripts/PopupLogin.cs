@@ -1,68 +1,87 @@
 using Pancake.Common;
 using Pancake.Tween;
 using Pancake.UI;
+using Pancake.UIQuery;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Pancake.GameService
 {
     public class PopupLogin : UIPopup, IEnhancedScrollerDelegate
     {
+        private class PopupUiElements : IMappedObject
+        {
+            public IMapper Mapper { get; private set; }
+            public UIButton BtnCountry { get; private set; }
+            public TMP_InputField IpfEnterName { get; private set; }
+            public TextMeshProUGUI TxtWarning { get; private set; }
+            public RectTransform SelectCountryPopup { get; private set; }
+            public Image ImgCurrentCountryIcon { get; private set; }
+            public TextMeshProUGUI TxtCurrentCountryName { get; private set; }
+            public EnhancedScroller Scroller { get; private set; }
+
+            public PopupUiElements() { }
+            public PopupUiElements(IMapper mapper) { Initialize(mapper); }
+
+            public void Initialize(IMapper mapper)
+            {
+                Mapper = mapper;
+                BtnCountry = mapper.Get<UIButton>("BtnCountry");
+                IpfEnterName = mapper.Get<TMP_InputField>("IpfEnterName");
+                TxtWarning = mapper.Get<TextMeshProUGUI>("TxtWarning");
+                TxtCurrentCountryName = mapper.Get<TextMeshProUGUI>("TxtCurrentCountryName");
+                SelectCountryPopup = mapper.Get<RectTransform>("SelectCountryPopup");
+                ImgCurrentCountryIcon = mapper.Get<Image>("ImgCurrentCountryIcon");
+                Scroller = mapper.Get<EnhancedScroller>("Scroller");
+            }
+        }
+
         [SerializeField] private CountryCode countryCode;
         [SerializeField] private CountryView elementPrefab;
 
         private SmallList<CountryData> _data;
-
-        private const string IPF_ENTER_NAME = "IpfEnterName";
-        private const string TXT_WARNING = "TxtWarning";
-        private const string BTN_COUNTRY = "BtnCountry";
-        private const string SELECT_COUNTRY_POPUP = "SelectCountryPopup";
-        private const string SCROLLER = "Scroller";
-
+        private PopupUiElements _uiElements;
 
         private void Start()
         {
-            UIRoot.Get<EnhancedScroller>(SCROLLER).Delegate = this;
-            var ipf = UIRoot.Get<TMP_InputField>(IPF_ENTER_NAME);
-            ipf.characterLimit = 16;
-            ipf.onValueChanged.AddListener(OnInputNameCallback);
-            ipf.text = "";
-            ipf.ActivateInputField();
-            ipf.Select();
-            var btn = UIRoot.Get<UIButton>(BTN_COUNTRY);
-            btn.onClick.RemoveListener(OnButtonShowPopupCountryClicked);
-            btn.onClick.AddListener(OnButtonShowPopupCountryClicked);
-            var warning = UIRoot.Get<TextMeshProUGUI>(TXT_WARNING);
-            warning.gameObject.SetActive(false);
+            _uiElements = new PopupUiElements(UIRoot);
+            // _uiElements.Scroller.Delegate = this;
+            // _uiElements.IpfEnterName.characterLimit = 16;
+            // _uiElements.IpfEnterName.onValueChanged.AddListener(OnInputNameCallback);
+            // _uiElements.IpfEnterName.text = "";
+            // _uiElements.IpfEnterName.ActivateInputField();
+            // _uiElements.IpfEnterName.Select();
+            // _uiElements.BtnCountry.onClick.RemoveListener(OnButtonShowPopupCountryClicked);
+            // _uiElements.BtnCountry.onClick.AddListener(OnButtonShowPopupCountryClicked);
+            // _uiElements.TxtWarning.gameObject.SetActive(false);
         }
 
         private void OnInputNameCallback(string value)
         {
-            var warning = UIRoot.Get<TextMeshProUGUI>(TXT_WARNING);
             if (value.Length >= 16)
             {
-                if (!warning.gameObject.activeSelf)
+                if (!_uiElements.TxtWarning.gameObject.activeSelf)
                 {
-                    warning.gameObject.SetActive(true);
-                    warning.text = "Name length cannot be longer than 16 characters";
+                    _uiElements.TxtWarning.gameObject.SetActive(true);
+                    _uiElements.TxtWarning.text = "Name length cannot be longer than 16 characters";
                 }
             }
             else
             {
-                warning.gameObject.SetActive(false);
+                _uiElements.TxtWarning.gameObject.SetActive(false);
             }
         }
 
         private void OnButtonShowPopupCountryClicked()
         {
-            var btn = UIRoot.Get<UIButton>(BTN_COUNTRY);
-            if (btn.AffectObject.localEulerAngles.z.Equals(0))
+            if (_uiElements.BtnCountry.AffectObject.localEulerAngles.z.Equals(0))
             {
-                btn.AffectObject.TweenLocalRotationZ(90, 0.3f, RotationMode.Beyond360).Play();
+                _uiElements.BtnCountry.AffectObject.TweenLocalRotationZ(90, 0.3f, RotationMode.Beyond360).Play();
             }
             else
             {
-                btn.AffectObject.TweenLocalRotationZ(0, 0.3f, RotationMode.Beyond360).Play();
+                _uiElements.BtnCountry.AffectObject.TweenLocalRotationZ(0, 0.3f, RotationMode.Beyond360).Play();
             }
         }
 
@@ -74,15 +93,14 @@ namespace Pancake.GameService
                 _data.Add(new CountryData() {id = i});
             }
 
-            UIRoot.Get<EnhancedScroller>(SCROLLER).ReloadData();
+            _uiElements.Scroller.ReloadData();
         }
 
         private void InternalShowSelectCountry()
         {
-            var t = UIRoot.Get<RectTransform>(SELECT_COUNTRY_POPUP);
-            t.gameObject.SetActive(true);
-            t.sizeDelta = t.sizeDelta.Change(y: 103);
-            t.TweenSizeDeltaY(666, 0.5f).SetEase(Ease.OutQuad).Play();
+            _uiElements.SelectCountryPopup.gameObject.SetActive(true);
+            _uiElements.SelectCountryPopup.sizeDelta = _uiElements.SelectCountryPopup.sizeDelta.Change(y: 103);
+            _uiElements.SelectCountryPopup.TweenSizeDeltaY(666, 0.5f).SetEase(Ease.OutQuad).Play();
         }
 
         public int GetNumberOfCells(EnhancedScroller scroller) { return _data.Count; }

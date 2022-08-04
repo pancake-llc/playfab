@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 362502491}
   - component: {fileID: 362502490}
   m_Layer: 5
-  m_Name: CurrentCountryIcon
+  m_Name: ImgCurrentCountryIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -297,7 +297,7 @@ GameObject:
   - component: {fileID: 1878514930}
   - component: {fileID: 1878514929}
   m_Layer: 5
-  m_Name: CurrentCountryName
+  m_Name: TxtCurrentCountryName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2775,9 +2775,9 @@ MonoBehaviour:
   - GameObject: {fileID: 5585135771250714894}
     Path: de529aa1a1d0f78759a9a436c4c936d8
   - GameObject: {fileID: 362502488}
-    Path: 411ef2cca1d0f78759a9a436c4c936d8
+    Path: 8ee5abf3a1d0f78759a9a436c4c936d8
   - GameObject: {fileID: 1878514927}
-    Path: e99d7a42a1d0f78759a9a436c4c936d8
+    Path: 3986a587a1d0f78759a9a436c4c936d8
   - GameObject: {fileID: 299644171671003575}
     Path: b70a590d59a9a436c4c936d8
   - GameObject: {fileID: 1116961268748440438}
@@ -2868,7 +2868,6 @@ MonoBehaviour:
   containerGraphicRaycaster: {fileID: 0}
   containerCanvasGroup: {fileID: 0}
   countryCode: {fileID: 11400000, guid: a8b68d3469e81bb4d80003d99cd5e951, type: 2}
-  scroller: {fileID: 184467000985319990}
   elementPrefab: {fileID: 2671724171046910489, guid: 815eb80c90ba3904686e738de16e8b60, type: 3}
 --- !u!1 &8197230264855388032
 GameObject:
