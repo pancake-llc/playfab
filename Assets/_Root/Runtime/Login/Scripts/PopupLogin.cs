@@ -46,15 +46,15 @@ namespace Pancake.GameService
         private void Start()
         {
             _uiElements = new PopupUiElements(UIRoot);
-            // _uiElements.Scroller.Delegate = this;
-            // _uiElements.IpfEnterName.characterLimit = 16;
-            // _uiElements.IpfEnterName.onValueChanged.AddListener(OnInputNameCallback);
-            // _uiElements.IpfEnterName.text = "";
-            // _uiElements.IpfEnterName.ActivateInputField();
-            // _uiElements.IpfEnterName.Select();
-            // _uiElements.BtnCountry.onClick.RemoveListener(OnButtonShowPopupCountryClicked);
-            // _uiElements.BtnCountry.onClick.AddListener(OnButtonShowPopupCountryClicked);
-            // _uiElements.TxtWarning.gameObject.SetActive(false);
+            _uiElements.Scroller.Delegate = this;
+            _uiElements.IpfEnterName.characterLimit = 16;
+            _uiElements.IpfEnterName.onValueChanged.AddListener(OnInputNameCallback);
+            _uiElements.IpfEnterName.text = "";
+            _uiElements.IpfEnterName.ActivateInputField();
+            _uiElements.IpfEnterName.Select();
+            _uiElements.BtnCountry.onClick.RemoveListener(OnButtonShowPopupCountryClicked);
+            _uiElements.BtnCountry.onClick.AddListener(OnButtonShowPopupCountryClicked);
+            _uiElements.TxtWarning.gameObject.SetActive(false);
         }
 
         private void OnInputNameCallback(string value)
