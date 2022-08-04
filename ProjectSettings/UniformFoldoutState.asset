@@ -23,6 +23,10 @@
         {
             "key": "UIPOPUP_SETTING_HIDE",
             "state": true
+        },
+        {
+            "key": "UIPOPUP_LOGIN",
+            "state": true
         }
     ]
 }

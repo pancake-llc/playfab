@@ -52,13 +52,13 @@
       "hash": "61323c5a6f8a5ca701c69ae86c0d11e2aefeab7b"
     },
     "com.pancake.ui": {
-      "version": "https://github.com/pancake-llc/ui.git?path=Assets/_Root#1.0.2",
+      "version": "https://github.com/pancake-llc/ui.git?path=Assets/_Root#1.0.5",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.addressables": "1.19.19"
       },
-      "hash": "1227e4b9ffd382712df25590be60a32ec8443ca5"
+      "hash": "97f3b385853a554adc62259940a81a3735fc0b14"
     },
     "com.system-community.systemruntimecompilerservicesunsafe": {
       "version": "https://github.com/system-community/SystemRuntimeCompilerServicesUnsafe.git?path=Assets/_Root#4.5.3",
