@@ -22,13 +22,13 @@
       "hash": "e39981bca07f08f068231f651e1e8d0f69397222"
     },
     "com.pancake.common": {
-      "version": "https://github.com/pancake-llc/common.git?path=Assets/_Root#1.3.2",
+      "version": "https://github.com/pancake-llc/common.git?path=Assets/_Root#1.3.3",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2"
       },
-      "hash": "5793d2c1a06d3cb8acce5a8fa5efdeb279590ee3"
+      "hash": "a65e10ae84b0e28165db55e4d194f93eb7985d8e"
     },
     "com.pancake.facebook": {
       "version": "https://github.com/pancake-llc/facebook.git?path=Assets/_Root#1.0.0",

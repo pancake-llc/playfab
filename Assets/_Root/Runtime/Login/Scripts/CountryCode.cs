@@ -17,15 +17,7 @@ namespace Pancake.GameService
         public CountryCodeData Get(string code)
         {
             Enum.TryParse(code, out ECountryCode countryCode);
-
-            try
-            {
-                return countryCodeDatas[(int) countryCode];
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            return countryCodeDatas[(int) countryCode];
         }
 
 #if UNITY_EDITOR

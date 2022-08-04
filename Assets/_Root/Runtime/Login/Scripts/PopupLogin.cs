@@ -55,6 +55,17 @@ namespace Pancake.GameService
             _uiElements.BtnCountry.onClick.RemoveListener(OnButtonShowPopupCountryClicked);
             _uiElements.BtnCountry.onClick.AddListener(OnButtonShowPopupCountryClicked);
             _uiElements.TxtWarning.gameObject.SetActive(false);
+            var currentCountryCode = ServiceSettings.GetCurrentCountryCode;
+            if (string.IsNullOrEmpty(currentCountryCode))
+            {
+                currentCountryCode = Locale.GetRegion();
+                ServiceSettings.SetCurrentCountryCode(currentCountryCode);
+            }
+
+            var countryData = countryCode.Get(currentCountryCode);
+            _uiElements.ImgCurrentCountryIcon.sprite = countryData.icon;
+            _uiElements.ImgCurrentCountryIcon.color = Color.white;
+            _uiElements.TxtCurrentCountryName.text = countryData.name;
         }
 
         private void OnInputNameCallback(string value)
