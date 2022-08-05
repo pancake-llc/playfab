@@ -1,3 +1,4 @@
+using System;
 using Pancake.Common;
 using Pancake.Tween;
 using Pancake.UI;
@@ -47,6 +48,9 @@ namespace Pancake.GameService
         private bool _firstTime;
         private ITween _tween;
         private string _selectedCountry;
+        private ISequence _sequenceTxtWarning;
+
+        public Func<bool> onAcceptName;
 
         private void Start()
         {
@@ -70,24 +74,41 @@ namespace Pancake.GameService
 
         private void OnButtonOkClicked()
         {
-            if (string.IsNullOrEmpty(_selectedCountry)) _selectedCountry = Locale.GetRegion();
-            ServiceSettings.SetCurrentCountryCode(_selectedCountry);
+            var result = onAcceptName?.Invoke();
+            if (result == null)
+            {
+                DisplayWarning("Error code O1: Result null, Invalid action");
+                return;
+            }
+
+            if (result.Value)
+            {
+                if (string.IsNullOrEmpty(_selectedCountry)) _selectedCountry = Locale.GetRegion();
+                ServiceSettings.SetCurrentCountryCode(_selectedCountry);
+            }
         }
 
         private void OnInputNameCallback(string value)
         {
             if (value.Length >= 16)
             {
-                if (!_uiElements.TxtWarning.gameObject.activeSelf)
-                {
-                    _uiElements.TxtWarning.gameObject.SetActive(true);
-                    _uiElements.TxtWarning.text = "Name length cannot be longer than 16 characters";
-                }
+                if (!_uiElements.TxtWarning.gameObject.activeSelf) DisplayWarning("Name length cannot be longer than 16 characters!");
             }
             else
             {
                 _uiElements.TxtWarning.gameObject.SetActive(false);
             }
+        }
+
+        private void DisplayWarning(string message)
+        {
+            _uiElements.TxtWarning.gameObject.SetActive(true);
+            _uiElements.TxtWarning.text = message;
+            _sequenceTxtWarning?.Kill();
+            _sequenceTxtWarning = TweenManager.Sequence();
+            _sequenceTxtWarning.Append(_uiElements.TxtWarning.transform.TweenLocalScale(new Vector3(1.1f, 1.1f, 1.1f), 0.12f).SetEase(Ease.Parabolic));
+            _sequenceTxtWarning.Append(_uiElements.TxtWarning.transform.TweenLocalScale(new Vector3(1f, 1f, 1f), 0.12f).SetEase(Ease.Linear));
+            _sequenceTxtWarning.Play();
         }
 
         private void OnButtonShowPopupCountryClicked()
