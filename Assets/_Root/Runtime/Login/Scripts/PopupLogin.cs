@@ -14,6 +14,7 @@ namespace Pancake.GameService
         {
             public IMapper Mapper { get; private set; }
             public UIButton BtnCountry { get; private set; }
+            public UIButton BtnOk { get; private set; }
             public TMP_InputField IpfEnterName { get; private set; }
             public TextMeshProUGUI TxtWarning { get; private set; }
             public RectTransform SelectCountryPopup { get; private set; }
@@ -28,6 +29,7 @@ namespace Pancake.GameService
             {
                 Mapper = mapper;
                 BtnCountry = mapper.Get<UIButton>("BtnCountry");
+                BtnOk = mapper.Get<UIButton>("BtnOk");
                 IpfEnterName = mapper.Get<TMP_InputField>("IpfEnterName");
                 TxtWarning = mapper.Get<TextMeshProUGUI>("TxtWarning");
                 TxtCurrentCountryName = mapper.Get<TextMeshProUGUI>("TxtCurrentCountryName");
@@ -42,6 +44,9 @@ namespace Pancake.GameService
 
         private SmallList<CountryData> _data;
         private PopupUiElements _uiElements;
+        private bool _firstTime;
+        private ITween _tween;
+        private string _selectedCountry;
 
         private void Start()
         {
@@ -54,18 +59,19 @@ namespace Pancake.GameService
             _uiElements.IpfEnterName.Select();
             _uiElements.BtnCountry.onClick.RemoveListener(OnButtonShowPopupCountryClicked);
             _uiElements.BtnCountry.onClick.AddListener(OnButtonShowPopupCountryClicked);
+            _uiElements.BtnOk.onClick.RemoveListener(OnButtonOkClicked);
+            _uiElements.BtnOk.onClick.AddListener(OnButtonOkClicked);
             _uiElements.TxtWarning.gameObject.SetActive(false);
-            var currentCountryCode = ServiceSettings.GetCurrentCountryCode;
-            if (string.IsNullOrEmpty(currentCountryCode))
-            {
-                currentCountryCode = Locale.GetRegion();
-                ServiceSettings.SetCurrentCountryCode(currentCountryCode);
-            }
-
-            var countryData = countryCode.Get(currentCountryCode);
+            var countryData = countryCode.Get(ServiceSettings.GetCurrentCountryCode);
             _uiElements.ImgCurrentCountryIcon.sprite = countryData.icon;
             _uiElements.ImgCurrentCountryIcon.color = Color.white;
             _uiElements.TxtCurrentCountryName.text = countryData.name;
+        }
+
+        private void OnButtonOkClicked()
+        {
+            if (string.IsNullOrEmpty(_selectedCountry)) _selectedCountry = Locale.GetRegion();
+            ServiceSettings.SetCurrentCountryCode(_selectedCountry);
         }
 
         private void OnInputNameCallback(string value)
@@ -89,10 +95,20 @@ namespace Pancake.GameService
             if (_uiElements.BtnCountry.AffectObject.localEulerAngles.z.Equals(0))
             {
                 _uiElements.BtnCountry.AffectObject.TweenLocalRotationZ(90, 0.3f, RotationMode.Beyond360).Play();
+                // show
+
+                InternalShowSelectCountry();
+                if (!_firstTime)
+                {
+                    _firstTime = true;
+                    InitData();
+                }
             }
             else
             {
                 _uiElements.BtnCountry.AffectObject.TweenLocalRotationZ(0, 0.3f, RotationMode.Beyond360).Play();
+                // hide
+                InternalHideSelectCountry();
             }
         }
 
@@ -110,9 +126,37 @@ namespace Pancake.GameService
         private void InternalShowSelectCountry()
         {
             _uiElements.SelectCountryPopup.gameObject.SetActive(true);
+            _uiElements.BtnOk.interactable = false;
             _uiElements.SelectCountryPopup.sizeDelta = _uiElements.SelectCountryPopup.sizeDelta.Change(y: 103);
-            _uiElements.SelectCountryPopup.TweenSizeDeltaY(666, 0.5f).SetEase(Ease.OutQuad).Play();
+            _tween?.Kill();
+            _tween = _uiElements.SelectCountryPopup.TweenSizeDeltaY(666, 0.5f);
+            _tween.SetEase(Ease.OutQuad)
+                .OnComplete(() =>
+                {
+                    _uiElements.Scroller.ScrollbarVisibility = EnhancedScroller.ScrollbarVisibilityEnum.Always;
+                    _uiElements.BtnOk.interactable = true;
+                })
+                .Play();
+            ContainerTransform.TweenSizeDeltaY(1206f, 0.5f).Play();
         }
+
+        private void InternalHideSelectCountry()
+        {
+            _uiElements.Scroller.ScrollbarVisibility = EnhancedScroller.ScrollbarVisibilityEnum.Never;
+            _uiElements.BtnOk.interactable = false;
+            _tween?.Kill();
+            _tween = _uiElements.SelectCountryPopup.TweenSizeDeltaY(103f, 0.5f);
+            _tween.SetEase(Ease.OutQuad)
+                .OnComplete(() =>
+                {
+                    _uiElements.SelectCountryPopup.gameObject.SetActive(false);
+                    _uiElements.BtnOk.interactable = true;
+                })
+                .Play();
+            ContainerTransform.TweenSizeDeltaY(940f, 0.5f).Play();
+        }
+
+        #region implement
 
         public int GetNumberOfCells(EnhancedScroller scroller) { return _data.Count; }
 
@@ -125,11 +169,24 @@ namespace Pancake.GameService
             {
                 var code = (ECountryCode) dataIndex;
                 element.name = "Country_" + code;
-                element.Init(_data[dataIndex], countryCode.Get);
+                element.Init(_data[dataIndex], OnButtonElementCountryClicked, IsElementSelected, countryCode.Get);
                 return element;
             }
 
             return null;
         }
+
+        private void OnButtonElementCountryClicked(CountryView view)
+        {
+            _selectedCountry = view.Data.code.ToString();
+            _uiElements.Scroller.RefreshActiveCellViews();
+            _uiElements.ImgCurrentCountryIcon.sprite = view.Data.icon;
+            _uiElements.ImgCurrentCountryIcon.color = Color.white;
+            _uiElements.TxtCurrentCountryName.text = view.Data.name;
+        }
+
+        private bool IsElementSelected(string code) { return ServiceSettings.GetCurrentCountryCode.Equals(code); }
+
+        #endregion
     }
 }

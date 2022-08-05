@@ -1,4 +1,6 @@
 using System;
+using Pancake.Common;
+using Pancake.Tween;
 using Pancake.UI;
 #if PANCAKE_TMP
 using TMPro;
@@ -15,25 +17,49 @@ namespace Pancake.GameService
 #if PANCAKE_TMP
         [SerializeField] private TextMeshProUGUI countryName;
 #endif
+        [SerializeField] private GameObject selectedHightLight;
+        [SerializeField] private Button btnSelect;
 
-        private CountryData _data;
+        private CountryCodeData _data;
+        private ITween _tweenSelect;
 
         public Image CountryIcon => countryIcon;
 #if PANCAKE_TMP
         public TextMeshProUGUI CountryName => countryName;
 #endif
-        public CountryData Data => _data;
+        public CountryCodeData Data => _data;
+        private Func<string, bool> _isSelected;
 
-        public void Init(CountryData data, Func<string, CountryCodeData> get)
+        public void Init(CountryData data, Action<CountryView> onClicked, Func<string, bool> isSelected, Func<string, CountryCodeData> get)
         {
-            _data = data;
-            var result = get?.Invoke(((ECountryCode) _data.id).ToString());
-            if (result != null)
+            _isSelected = isSelected;
+            _data = get?.Invoke(((ECountryCode) data.id).ToString());
+            if (Data == null)
             {
-                countryIcon.sprite = result.icon;
+                Debug.Log("Can not get country code data with id = " + data.id);
+                return;
+            }
+
+            countryIcon.sprite = Data.icon;
 #if PANCAKE_TMP
-                countryName.text = result.name;
+            countryName.text = Data.name;
 #endif
+
+            btnSelect.onClick.RemoveAllListeners();
+            btnSelect.onClick.AddListener(() => { onClicked?.Invoke(this); });
+
+            selectedHightLight.SetActive(_isSelected.Invoke(Data.code.ToString()));
+        }
+
+        public override void RefreshCellView()
+        {
+            _tweenSelect?.Kill();
+            selectedHightLight.SetActive(_isSelected.Invoke(Data.code.ToString()));
+            if (selectedHightLight.activeInHierarchy)
+            {
+                selectedHightLight.transform.SetLocalScale(x: 0);
+                _tweenSelect = selectedHightLight.transform.TweenLocalScaleX(1, 0.25f);
+                _tweenSelect.Play();
             }
         }
     }
