@@ -12,12 +12,14 @@ namespace Pancake.Editor
     {
         private SerializedProperty _elementPrefab;
         private SerializedProperty _countryCode;
+        private SerializedProperty _btnSpriteLocked;
 
         protected override void OnEnable()
         {
             base.OnEnable();
             _elementPrefab = serializedObject.FindProperty("elementPrefab");
             _countryCode = serializedObject.FindProperty("countryCode");
+            _btnSpriteLocked = serializedObject.FindProperty("btnSpriteLocked");
         }
 
         public override void OnInspectorGUI() { base.OnInspectorGUI(); }
@@ -38,6 +40,11 @@ namespace Pancake.Editor
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Country Code", GUILayout.Width(DEFAULT_LABEL_WIDTH));
             _countryCode.objectReferenceValue = EditorGUILayout.ObjectField(_countryCode.objectReferenceValue, typeof(CountryCode), allowSceneObjects: false);
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Sprite Lock", GUILayout.Width(DEFAULT_LABEL_WIDTH));
+            _btnSpriteLocked.objectReferenceValue = EditorGUILayout.ObjectField(_btnSpriteLocked.objectReferenceValue, typeof(Sprite), allowSceneObjects: false);
             EditorGUILayout.EndHorizontal();
         }
     }

@@ -22,8 +22,8 @@ namespace Pancake.GameService
             public Image ImgCurrentCountryIcon { get; private set; }
             public TextMeshProUGUI TxtCurrentCountryName { get; private set; }
             public EnhancedScroller Scroller { get; private set; }
+            public Transform Block { get; private set; }
 
-            public PopupUiElements() { }
             public PopupUiElements(IMapper mapper) { Initialize(mapper); }
 
             public void Initialize(IMapper mapper)
@@ -37,18 +37,22 @@ namespace Pancake.GameService
                 SelectCountryPopup = mapper.Get<RectTransform>("SelectCountryPopup");
                 ImgCurrentCountryIcon = mapper.Get<Image>("ImgCurrentCountryIcon");
                 Scroller = mapper.Get<EnhancedScroller>("Scroller");
+                Block = mapper.Get<RectTransform>("Block");
             }
         }
 
         [SerializeField] private CountryCode countryCode;
         [SerializeField] private CountryView elementPrefab;
+        [SerializeField] private Sprite btnSpriteLocked;
 
         private SmallList<CountryData> _data;
         private PopupUiElements _uiElements;
         private bool _firstTime;
         private ITween _tween;
         private string _selectedCountry;
+        private string _userName;
         private ISequence _sequenceTxtWarning;
+        private Sprite _defaultSprite;
 
         public Func<bool> onAcceptName;
 
@@ -56,7 +60,7 @@ namespace Pancake.GameService
         {
             _uiElements = new PopupUiElements(UIRoot);
             _uiElements.Scroller.Delegate = this;
-            _uiElements.IpfEnterName.characterLimit = 16;
+            _uiElements.IpfEnterName.characterLimit = 17;
             _uiElements.IpfEnterName.onValueChanged.AddListener(OnInputNameCallback);
             _uiElements.IpfEnterName.text = "";
             _uiElements.IpfEnterName.ActivateInputField();
@@ -70,11 +74,24 @@ namespace Pancake.GameService
             _uiElements.ImgCurrentCountryIcon.sprite = countryData.icon;
             _uiElements.ImgCurrentCountryIcon.color = Color.white;
             _uiElements.TxtCurrentCountryName.text = countryData.name;
+            _defaultSprite = _uiElements.BtnOk.image.sprite;
+            _uiElements.Block.gameObject.SetActive(false);
         }
 
         private void OnButtonOkClicked()
         {
-            var result = onAcceptName?.Invoke();
+            if (string.IsNullOrEmpty(_uiElements.IpfEnterName.text))
+            {
+                DisplayWarning("Name cannot be blank!");
+                _uiElements.Block.gameObject.SetActive(false);
+                _uiElements.IpfEnterName.Select();
+                return;
+            }
+
+            _uiElements.BtnOk.interactable = false;
+            _uiElements.Block.gameObject.SetActive(true);
+            _uiElements.TxtWarning.gameObject.SetActive(false);
+            var result = onAcceptName?.Invoke(); // validate name with server
             if (result == null)
             {
                 DisplayWarning("Error code O1: Result null, Invalid action");
@@ -85,6 +102,7 @@ namespace Pancake.GameService
             {
                 if (string.IsNullOrEmpty(_selectedCountry)) _selectedCountry = Locale.GetRegion();
                 ServiceSettings.SetCurrentCountryCode(_selectedCountry);
+                ServiceSettings.SetCurrentName(_userName);
             }
         }
 
@@ -92,11 +110,15 @@ namespace Pancake.GameService
         {
             if (value.Length >= 16)
             {
+                _uiElements.BtnOk.interactable = false;
+                _uiElements.BtnOk.image.sprite = btnSpriteLocked;
                 if (!_uiElements.TxtWarning.gameObject.activeSelf) DisplayWarning("Name length cannot be longer than 16 characters!");
             }
             else
             {
                 _uiElements.TxtWarning.gameObject.SetActive(false);
+                _uiElements.BtnOk.interactable = true;
+                _uiElements.BtnOk.image.sprite = _defaultSprite;
             }
         }
 
@@ -200,6 +222,7 @@ namespace Pancake.GameService
         private void OnButtonElementCountryClicked(CountryView view)
         {
             _selectedCountry = view.Data.code.ToString();
+            _userName = _uiElements.IpfEnterName.text;
             _uiElements.Scroller.RefreshActiveCellViews();
             _uiElements.ImgCurrentCountryIcon.sprite = view.Data.icon;
             _uiElements.ImgCurrentCountryIcon.color = Color.white;
