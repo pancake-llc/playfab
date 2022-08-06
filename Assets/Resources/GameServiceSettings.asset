@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eab1c9d880943b09609c823c81e0612, type: 3}
   m_Name: GameServiceSettings
   m_EditorClassIdentifier: 
-  titleId: 
-  secretKey: 
+  titleId: 411A2
+  secretKey: HCCP3Q879FOZ3DTTX546EJB45X9H1DOF6RIIDSOPG8KY41TT6Y
   requestType: 0
   useCustomIdAsDefault: 1
   enableAdminApi: 0

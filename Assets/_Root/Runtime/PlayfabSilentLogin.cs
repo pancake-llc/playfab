@@ -17,6 +17,7 @@ namespace Pancake.GameService
 
         private void AuthServiceOnLoginSuccess(LoginResult success)
         {
+            Debug.Log("NewlyCreated:" + success.NewlyCreated);
             // if (success.NewlyCreated)
             // {
             //     // enter name

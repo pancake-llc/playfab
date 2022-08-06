@@ -7,8 +7,8 @@ using UnityEngine;
 
 namespace Pancake.Editor
 {
-    [CustomEditor(typeof(PopupLogin))]
-    public class PopupLoginEditor : UIPopupEditor
+    [CustomEditor(typeof(PopupEnterName))]
+    public class PopupEnterNameEditor : UIPopupEditor
     {
         private SerializedProperty _elementPrefab;
         private SerializedProperty _countryCode;

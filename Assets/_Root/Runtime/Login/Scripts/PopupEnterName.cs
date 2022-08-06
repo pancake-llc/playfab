@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace Pancake.GameService
 {
-    public class PopupLogin : UIPopup, IEnhancedScrollerDelegate
+    public class PopupEnterName : UIPopup, IEnhancedScrollerDelegate
     {
         private class PopupUiElements : IMappedObject
         {
@@ -92,6 +92,7 @@ namespace Pancake.GameService
             _uiElements.Block.gameObject.SetActive(true);
             _uiElements.TxtWarning.gameObject.SetActive(false);
             var result = onAcceptName?.Invoke(); // validate name with server
+            _uiElements.Block.gameObject.SetActive(false);
             if (result == null)
             {
                 DisplayWarning("Error code O1: Result null, Invalid action");
