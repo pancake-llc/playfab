@@ -54,6 +54,7 @@ namespace Pancake.GameService
         private const string LOGIN_REMEMBER_KEY = "PLAYFAB_LOGIN_REMEMBER";
         private const string AUTH_TYPE_KEY = "PLAYFAB_AUTH_TYPE";
         private const string CUSTOM_ID_STORE_KEY = "PLAYFAB_CUSTOM_ID_AUTH";
+        private const string COMPLETE_SETUP_NAME_STORE_KEY = "PLAYFAB_COMPLETE_SETUP_NAME";
         private static AuthService instance;
 #if UNITY_IOS
         public static byte[] identityToken;
@@ -101,6 +102,16 @@ namespace Pancake.GameService
                 return id;
             }
             set => PlayerPrefs.SetString(CUSTOM_ID_STORE_KEY, value);
+        }
+
+        public bool IsCompleteSetupName
+        {
+            get
+            {
+                int state = PlayerPrefs.GetInt(COMPLETE_SETUP_NAME_STORE_KEY, 0);
+                return state != 0;
+            }
+            set => PlayerPrefs.SetInt(COMPLETE_SETUP_NAME_STORE_KEY, value ? 1 : 0);
         }
 
         public void ClearData()

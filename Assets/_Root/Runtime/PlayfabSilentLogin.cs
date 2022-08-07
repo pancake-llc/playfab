@@ -4,9 +4,12 @@ using UnityEngine.Events;
 
 namespace Pancake.GameService
 {
+    [AddComponentMenu("")]
+    [DisallowMultipleComponent]
     public class PlayfabSilentLogin : MonoBehaviour
     {
         public UnityEvent<LoginResult> onLoginSuccess;
+
         private void OnEnable()
         {
             AuthService.Instance.infoRequestParams = ServiceSettings.InfoRequestParams;
@@ -15,20 +18,7 @@ namespace Pancake.GameService
 
         private void Start() { AuthService.Instance.Authenticate(EAuthType.Silent); }
 
-        private void AuthServiceOnLoginSuccess(LoginResult success)
-        {
-            Debug.Log("NewlyCreated:" + success.NewlyCreated);
-            // if (success.NewlyCreated)
-            // {
-            //     // enter name
-            // }
-            // else
-            // {
-            //     // goto menu
-            // }
-            
-            onLoginSuccess?.Invoke(success);
-        }
+        private void AuthServiceOnLoginSuccess(LoginResult success) { onLoginSuccess?.Invoke(success); }
 
         private void OnDisable() { AuthService.OnLoginSuccess -= AuthServiceOnLoginSuccess; }
     }

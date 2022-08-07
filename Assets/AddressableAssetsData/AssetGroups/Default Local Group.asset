@@ -18,7 +18,7 @@ MonoBehaviour:
   m_GUID: 04794eb7e9f68d14bbc827beca45b052
   m_SerializeEntries:
   - m_GUID: b56d9764a3626f449be4a6c3fdd61b07
-    m_Address: Popup
+    m_Address: PopupEnterName
     m_ReadOnly: 0
     m_SerializedLabels:
     - ui_popup
