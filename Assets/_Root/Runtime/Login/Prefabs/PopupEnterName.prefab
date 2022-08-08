@@ -3049,7 +3049,8 @@ MonoBehaviour:
   closeByClickContainer: 0
   closeByClickBackground: 0
   closeByBackButton: 0
-  closeButtons: []
+  closeButtons:
+  - {fileID: 5987690423777928611}
   startScale: {x: 0, y: 0}
   motionAffectDisplay: 0
   endValueDisplay: {x: 1, y: 1}

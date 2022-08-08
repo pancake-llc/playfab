@@ -25,7 +25,7 @@ namespace Pancake.GameService
             }
             else
             {
-                
+                // goto menu
             }
         }
     }
