@@ -22,8 +22,6 @@ namespace Pancake.Editor
             _btnSpriteLocked = serializedObject.FindProperty("btnSpriteLocked");
         }
 
-        public override void OnInspectorGUI() { base.OnInspectorGUI(); }
-
         protected override void OnDrawExtraSetting()
         {
             Uniform.SpaceOneLine();
