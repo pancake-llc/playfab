@@ -16,7 +16,7 @@ MonoBehaviour:
   secretKey: HCCP3Q879FOZ3DTTX546EJB45X9H1DOF6RIIDSOPG8KY41TT6Y
   requestType: 0
   useCustomIdAsDefault: 1
-  enableAdminApi: 0
+  enableAdminApi: 1
   enableClientApi: 1
   enableEntityApi: 1
   enableServerApi: 0
@@ -24,26 +24,27 @@ MonoBehaviour:
   infoRequestParams:
     GetCharacterInventories: 0
     GetCharacterList: 0
-    GetPlayerProfile: 0
-    GetPlayerStatistics: 0
+    GetPlayerProfile: 1
+    GetPlayerStatistics: 1
     GetTitleData: 0
     GetUserAccountInfo: 0
     GetUserData: 0
     GetUserInventory: 0
     GetUserReadOnlyData: 0
     GetUserVirtualCurrency: 0
-    PlayerStatisticNames: []
+    PlayerStatisticNames:
+    - HallOfFame
     ProfileConstraints:
       ShowAvatarUrl: 0
       ShowBannedUntil: 0
       ShowCampaignAttributions: 0
       ShowContactEmailAddresses: 0
       ShowCreated: 0
-      ShowDisplayName: 0
+      ShowDisplayName: 1
       ShowExperimentVariants: 0
       ShowLastLogin: 0
       ShowLinkedAccounts: 0
-      ShowLocations: 0
+      ShowLocations: 1
       ShowMemberships: 0
       ShowOrigination: 0
       ShowPushNotificationRegistrations: 0

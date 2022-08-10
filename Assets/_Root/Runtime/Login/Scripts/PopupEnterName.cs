@@ -70,7 +70,7 @@ namespace Pancake.GameService
             _uiElements.BtnOk.onClick.RemoveListener(OnButtonOkClicked);
             _uiElements.BtnOk.onClick.AddListener(OnButtonOkClicked);
             _uiElements.TxtWarning.gameObject.SetActive(false);
-            var countryData = countryCode.Get(ServiceSettings.GetCurrentCountryCode);
+            var countryData = countryCode.Get(LoginResultModel.countryCode);
             _uiElements.ImgCurrentCountryIcon.sprite = countryData.icon;
             _uiElements.ImgCurrentCountryIcon.color = Color.white;
             _uiElements.TxtCurrentCountryName.text = countryData.name;
@@ -101,9 +101,9 @@ namespace Pancake.GameService
 
             if (result.Value)
             {
-                if (string.IsNullOrEmpty(_selectedCountry)) _selectedCountry = Locale.GetRegion();
-                ServiceSettings.SetCurrentCountryCode(_selectedCountry);
-                ServiceSettings.SetCurrentName(_userName);
+                // store user choose country code
+                
+                //ServiceSettings.SetCurrentName(_userName);
             }
         }
 
@@ -230,7 +230,7 @@ namespace Pancake.GameService
             _uiElements.TxtCurrentCountryName.text = view.Data.name;
         }
 
-        private bool IsElementSelected(string code) { return ServiceSettings.GetCurrentCountryCode.Equals(code); }
+        private bool IsElementSelected(string code) { return LoginResultModel.countryCode.Equals(code); } // todo
 
         #endregion
     }

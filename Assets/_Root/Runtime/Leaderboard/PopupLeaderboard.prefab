@@ -1102,7 +1102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.764151, g: 0.5514863, b: 0.5514863, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1546,7 +1546,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.764151, g: 0.5514863, b: 0.5514863, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1720,7 +1720,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.764151, g: 0.5514863, b: 0.5514863, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3439,7 +3439,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.764151, g: 0.5514863, b: 0.5514863, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3824,7 +3824,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.764151, g: 0.5514863, b: 0.5514863, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4262,7 +4262,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.764151, g: 0.5514863, b: 0.5514863, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5381,7 +5381,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.764151, g: 0.5514863, b: 0.5514863, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5801,7 +5801,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.764151, g: 0.5514863, b: 0.5514863, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6112,7 +6112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.764151, g: 0.5514863, b: 0.5514863, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -8739,7 +8739,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.764151, g: 0.5514863, b: 0.5514863, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -9218,21 +9218,22 @@ MonoBehaviour:
   btnBackPage: {fileID: 1360225608852489844}
   btnWorld: {fileID: 591296554394406335}
   btnCountry: {fileID: 2922047769588132866}
-  btnFriend: {fileID: 0}
+  btnFriend: {fileID: 3567877197152064846}
   txtName: {fileID: 247317887685801646}
   txtRank: {fileID: 4771016074063199106}
   txtCurrentPage: {fileID: 8149415070157372176}
   content: {fileID: 7175851055336043194}
-  rankSlot1: {fileID: 1991743862}
-  rankSlot2: {fileID: 1015254691}
-  rankSlot3: {fileID: 1856395972}
-  rankSlot4: {fileID: 478839003}
-  rankSlot5: {fileID: 1647065752}
-  rankSlot6: {fileID: 285923806}
-  rankSlot7: {fileID: 1537342495}
-  rankSlot8: {fileID: 1365720500}
-  rankSlot9: {fileID: 561302774}
-  rankSlot10: {fileID: 2048013740}
+  rankSlots:
+  - {fileID: 1991743862}
+  - {fileID: 1015254691}
+  - {fileID: 1856395972}
+  - {fileID: 478839003}
+  - {fileID: 1647065752}
+  - {fileID: 285923806}
+  - {fileID: 1537342495}
+  - {fileID: 1365720500}
+  - {fileID: 561302774}
+  - {fileID: 2048013740}
   colorRank1: {r: 1, g: 0.8, b: 0.25, a: 1}
   colorRank2: {r: 0.65, g: 0.75, b: 0.84, a: 1}
   colorRank3: {r: 0.75, g: 0.58, b: 0.38, a: 1}
@@ -9240,6 +9241,8 @@ MonoBehaviour:
   colorHightlight: {r: 0.57, g: 0.85, b: 0.63, a: 1}
   txtWarning: {fileID: 804866521195910185}
   block: {fileID: 5993624841693934215}
+  nameTableLeaderboard: RANK_LEVEL
+  numberElementInPage: 10
 --- !u!114 &4506647062667835260
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -82,17 +82,5 @@ namespace Pancake.GameService
         public static bool UseCustomIdAsDefault => Instance.useCustomIdAsDefault;
 
         public static ServiceSettings LoadSettings() { return Resources.Load<ServiceSettings>("GameServiceSettings"); }
-
-        #region help
-
-        private const string STORAGE_CURRENT_COUNTRY_KEY = "login_current_country_code";
-        public static string GetCurrentCountryCode => PlayerPrefs.GetString(STORAGE_CURRENT_COUNTRY_KEY, Locale.GetRegion());
-        public static void SetCurrentCountryCode(string value) => PlayerPrefs.SetString(STORAGE_CURRENT_COUNTRY_KEY, value.ToUpper());
-
-        private const string STORAGE_CURRENT_NAME_KEY = "login_current_name_code";
-        public static string GetCurrentName => PlayerPrefs.GetString(STORAGE_CURRENT_NAME_KEY, "");
-        public static void SetCurrentName(string value) => PlayerPrefs.SetString(STORAGE_CURRENT_NAME_KEY, value);
-
-        #endregion
     }
 }

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 #if UNITY_IOS
 using AppleAuth;
 using AppleAuth.Interfaces;
@@ -8,10 +10,17 @@ using AppleAuth.Native;
 #endif
 using Pancake.Common;
 using PlayFab;
+using PlayFab.AdminModels;
 using PlayFab.ClientModels;
+using PlayFab.Json;
 using UnityEngine;
+using GetUserDataResult = PlayFab.ClientModels.GetUserDataResult;
 using Random = UnityEngine.Random;
 using LoginResult = PlayFab.ClientModels.LoginResult;
+using PlayerProfileViewConstraints = PlayFab.ClientModels.PlayerProfileViewConstraints;
+using UpdateUserDataResult = PlayFab.ClientModels.UpdateUserDataResult;
+using UpdateUserTitleDisplayNameRequest = PlayFab.ClientModels.UpdateUserTitleDisplayNameRequest;
+using UpdateUserTitleDisplayNameResult = PlayFab.ClientModels.UpdateUserTitleDisplayNameResult;
 
 namespace Pancake.GameService
 {
@@ -502,10 +511,10 @@ namespace Pancake.GameService
         /// </summary>
         /// <param name="value"></param>
         /// <param name="nameTable"></param>
-        public void UpdatePlayerStatistics(int value, string nameTable)
+        public static void UpdatePlayerStatistics(int value, string nameTable)
         {
             PlayFabClientAPI.UpdatePlayerStatistics(
-                new UpdatePlayerStatisticsRequest {Statistics = new List<StatisticUpdate> {new() {StatisticName = nameTable, Value = value}}},
+                new UpdatePlayerStatisticsRequest {Statistics = new List<StatisticUpdate> {new() {StatisticName = nameTable, Value = value}},},
                 result => { OnUpdatePlayerStatisticsSuccess?.Invoke(result); },
                 error => { OnPlayFabError?.Invoke(error); });
         }
@@ -555,11 +564,71 @@ namespace Pancake.GameService
         private static void OnAppleLoginFail(IAppleError error) { Debug.LogWarning("[Login Apple]: failed by " + error); }
 #endif
 
-        private static void UpdateUserTitleDisplayName(string name)
+        public static void UpdateUserTitleDisplayName(string name)
         {
             PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest {DisplayName = name},
-                result => { OnUpdateUserTitleDisplayNameSuccess?.Invoke(result); },
+                result =>
+                {
+                    OnUpdateUserTitleDisplayNameSuccess?.Invoke(result);
+                    LoginResultModel.playerDisplayName = name;
+                },
                 error => { OnPlayFabError?.Invoke(error); });
+        }
+
+        public static void RequestLeaderboard(
+            string nameTable,
+            Action<GetLeaderboardResult> callbackResult,
+            Action<PlayFabError> callbackError,
+            int startPosition = 0,
+            int maxResultQuery = 100)
+        {
+            PlayFabClientAPI.GetLeaderboard(new GetLeaderboardRequest
+                {
+                    StatisticName = nameTable,
+                    StartPosition = startPosition,
+                    MaxResultsCount = maxResultQuery,
+                    ProfileConstraints = new PlayerProfileViewConstraints() {ShowDisplayName = true, ShowLocations = true,}
+                },
+                callbackResult,
+                callbackError);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="resultCallback"></param>
+        /// <param name="errorCallback"></param>
+        public static void UpdateUserData<T>(string key, T value, Action<UpdateUserDataResult> resultCallback, Action<PlayFabError> errorCallback)
+        {
+            var changes = new Dictionary<string, string>() {{key, PlayFabSimpleJson.SerializeObject(value)}};
+
+            PlayFabClientAPI.UpdateUserData(new PlayFab.ClientModels.UpdateUserDataRequest {Data = changes}, resultCallback, errorCallback);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="resultCallback"></param>
+        /// <param name="errorCallback"></param>
+        /// <typeparam name="T"></typeparam>
+        public static async UniTask<T> GetUserData<T>(string key, Action<GetUserDataResult> resultCallback, Action<PlayFabError> errorCallback)
+        {
+            T t = default;
+            bool flag = false;
+            PlayFabClientAPI.GetUserData(new PlayFab.ClientModels.GetUserDataRequest() { },
+                result =>
+                {
+                    flag = true;
+                    t = PlayFabSimpleJson.DeserializeObject<T>(result.Data[key].Value);
+                    resultCallback?.Invoke(result);
+                },
+                errorCallback);
+            await UniTask.WaitUntil(() => flag);
+            return t;
         }
     }
 }

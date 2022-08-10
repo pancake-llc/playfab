@@ -13,7 +13,7 @@ namespace Pancake.GameService
         [SerializeField] private TextMeshProUGUI txtScore;
         [SerializeField] private Image imgForcegound;
 
-        public void Init(int rank, Sprite icon, string userName, string score, Func<int, Color> get)
+        public void Init(int rank, Sprite icon, string userName, string score, Func<int, Color> get, bool self)
         {
             txtRank.text = $"{rank}";
             txtUserName.text = userName;
@@ -30,15 +30,7 @@ namespace Pancake.GameService
                     imgForcegound.color = get(2);
                     break;
                 default:
-                    if (ServiceSettings.GetCurrentName.Equals(userName))
-                    {
-                        imgForcegound.color = get(4);
-                    }
-                    else
-                    {
-                        imgForcegound.color = get(3);
-                    }
-
+                    imgForcegound.color = get(self ? 4 : 3);
                     break;
             }
 

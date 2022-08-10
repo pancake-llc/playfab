@@ -19,14 +19,24 @@ namespace Pancake.GameService
 
         private void OnLoginSuccess(LoginResult result)
         {
-            if (result.NewlyCreated || !AuthService.Instance.IsCompleteSetupName)
+            var r = result.InfoResultPayload.PlayerProfile;
+            var countryCode = "";
+            foreach (var location in r.Locations)
             {
-                Popup.Show<PopupEnterName>();
+                countryCode = location.CountryCode.ToString();
             }
-            else
-            {
-                // goto menu
-            }
+
+            //var r2 = result.InfoResultPayload.PlayerStatistics;
+            LoginResultModel.Init(r.PlayerId, r.DisplayName, countryCode);
+            Popup.Show<PopupEnterName>();
+            // if (result.NewlyCreated || !AuthService.Instance.IsCompleteSetupName)
+            // {
+            //     Popup.Show<PopupEnterName>();
+            // }
+            // else
+            // {
+            //     // goto menu
+            // }
         }
     }
 }

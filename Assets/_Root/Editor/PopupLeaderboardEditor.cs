@@ -3,7 +3,9 @@ using Pancake.UI;
 using Pancake.UI.Editor;
 using TMPro;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
+using CountryCode = Pancake.GameService.CountryCode;
 
 namespace Pancake.Editor
 {
@@ -19,16 +21,7 @@ namespace Pancake.Editor
         private SerializedProperty _txtName;
         private SerializedProperty _txtRank;
         private SerializedProperty _txtCurrentPage;
-        private SerializedProperty _rankSlot1;
-        private SerializedProperty _rankSlot2;
-        private SerializedProperty _rankSlot3;
-        private SerializedProperty _rankSlot4;
-        private SerializedProperty _rankSlot5;
-        private SerializedProperty _rankSlot6;
-        private SerializedProperty _rankSlot7;
-        private SerializedProperty _rankSlot8;
-        private SerializedProperty _rankSlot9;
-        private SerializedProperty _rankSlot10;
+        private SerializedProperty _rankSlots;
         private SerializedProperty _colorRank1;
         private SerializedProperty _colorRank2;
         private SerializedProperty _colorRank3;
@@ -37,6 +30,8 @@ namespace Pancake.Editor
         private SerializedProperty _txtWarning;
         private SerializedProperty _block;
         private SerializedProperty _content;
+        private SerializedProperty _nameTableLeaderboard;
+        private ReorderableList _rankSlotList;
 
         protected override void OnEnable()
         {
@@ -50,16 +45,7 @@ namespace Pancake.Editor
             _txtName = serializedObject.FindProperty("txtName");
             _txtRank = serializedObject.FindProperty("txtRank");
             _txtCurrentPage = serializedObject.FindProperty("txtCurrentPage");
-            _rankSlot1 = serializedObject.FindProperty("rankSlot1");
-            _rankSlot2 = serializedObject.FindProperty("rankSlot2");
-            _rankSlot3 = serializedObject.FindProperty("rankSlot3");
-            _rankSlot4 = serializedObject.FindProperty("rankSlot4");
-            _rankSlot5 = serializedObject.FindProperty("rankSlot5");
-            _rankSlot6 = serializedObject.FindProperty("rankSlot6");
-            _rankSlot7 = serializedObject.FindProperty("rankSlot7");
-            _rankSlot8 = serializedObject.FindProperty("rankSlot8");
-            _rankSlot9 = serializedObject.FindProperty("rankSlot9");
-            _rankSlot10 = serializedObject.FindProperty("rankSlot10");
+            _rankSlots = serializedObject.FindProperty("rankSlots");
             _colorRank1 = serializedObject.FindProperty("colorRank1");
             _colorRank2 = serializedObject.FindProperty("colorRank2");
             _colorRank3 = serializedObject.FindProperty("colorRank3");
@@ -68,6 +54,27 @@ namespace Pancake.Editor
             _txtWarning = serializedObject.FindProperty("txtWarning");
             _block = serializedObject.FindProperty("block");
             _content = serializedObject.FindProperty("content");
+            _nameTableLeaderboard = serializedObject.FindProperty("nameTableLeaderboard");
+
+            _rankSlotList = new ReorderableList(serializedObject,
+                _rankSlots,
+                true,
+                true,
+                true,
+                true);
+            _rankSlotList.drawElementCallback = DrawListRankItem;
+            _rankSlotList.drawHeaderCallback = DrawRankHeader;
+        }
+
+        private void DrawRankHeader(Rect rect)
+        {
+            EditorGUI.LabelField(rect, "Rank Slots");
+        }
+
+        private void DrawListRankItem(Rect rect, int index, bool isactive, bool isfocused)
+        {
+            SerializedProperty element = _rankSlotList.serializedProperty.GetArrayElementAtIndex(index); //The element in the list
+            EditorGUI.PropertyField(rect, element, new GUIContent(element.displayName), element.isExpanded);
         }
 
         protected override void OnDrawExtraSetting()
@@ -123,56 +130,8 @@ namespace Pancake.Editor
             _txtCurrentPage.objectReferenceValue = EditorGUILayout.ObjectField(_txtCurrentPage.objectReferenceValue, typeof(TextMeshProUGUI), allowSceneObjects: true);
             EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Rank 1", GUILayout.Width(DEFAULT_LABEL_WIDTH));
-            _rankSlot1.objectReferenceValue = EditorGUILayout.ObjectField(_rankSlot1.objectReferenceValue, typeof(LeaderboardElement), allowSceneObjects: true);
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Rank 2", GUILayout.Width(DEFAULT_LABEL_WIDTH));
-            _rankSlot2.objectReferenceValue = EditorGUILayout.ObjectField(_rankSlot2.objectReferenceValue, typeof(LeaderboardElement), allowSceneObjects: true);
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Rank 3", GUILayout.Width(DEFAULT_LABEL_WIDTH));
-            _rankSlot3.objectReferenceValue = EditorGUILayout.ObjectField(_rankSlot3.objectReferenceValue, typeof(LeaderboardElement), allowSceneObjects: true);
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Rank 4", GUILayout.Width(DEFAULT_LABEL_WIDTH));
-            _rankSlot4.objectReferenceValue = EditorGUILayout.ObjectField(_rankSlot4.objectReferenceValue, typeof(LeaderboardElement), allowSceneObjects: true);
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Rank 5", GUILayout.Width(DEFAULT_LABEL_WIDTH));
-            _rankSlot5.objectReferenceValue = EditorGUILayout.ObjectField(_rankSlot5.objectReferenceValue, typeof(LeaderboardElement), allowSceneObjects: true);
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Rank 6", GUILayout.Width(DEFAULT_LABEL_WIDTH));
-            _rankSlot6.objectReferenceValue = EditorGUILayout.ObjectField(_rankSlot6.objectReferenceValue, typeof(LeaderboardElement), allowSceneObjects: true);
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Rank 7", GUILayout.Width(DEFAULT_LABEL_WIDTH));
-            _rankSlot7.objectReferenceValue = EditorGUILayout.ObjectField(_rankSlot7.objectReferenceValue, typeof(LeaderboardElement), allowSceneObjects: true);
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Rank 8", GUILayout.Width(DEFAULT_LABEL_WIDTH));
-            _rankSlot8.objectReferenceValue = EditorGUILayout.ObjectField(_rankSlot8.objectReferenceValue, typeof(LeaderboardElement), allowSceneObjects: true);
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Rank 9", GUILayout.Width(DEFAULT_LABEL_WIDTH));
-            _rankSlot9.objectReferenceValue = EditorGUILayout.ObjectField(_rankSlot9.objectReferenceValue, typeof(LeaderboardElement), allowSceneObjects: true);
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Rank 10", GUILayout.Width(DEFAULT_LABEL_WIDTH));
-            _rankSlot10.objectReferenceValue = EditorGUILayout.ObjectField(_rankSlot10.objectReferenceValue, typeof(LeaderboardElement), allowSceneObjects: true);
-            EditorGUILayout.EndHorizontal();
-
+            _rankSlotList.DoLayoutList();
+            
             _colorRank1 = serializedObject.FindProperty("colorRank1");
             _colorRank2 = serializedObject.FindProperty("colorRank2");
             _colorRank3 = serializedObject.FindProperty("colorRank3");
@@ -208,15 +167,21 @@ namespace Pancake.Editor
             GUILayout.Label("Warning Text", GUILayout.Width(DEFAULT_LABEL_WIDTH));
             _txtWarning.objectReferenceValue = EditorGUILayout.ObjectField(_txtWarning.objectReferenceValue, typeof(TextMeshProUGUI), allowSceneObjects: true);
             EditorGUILayout.EndHorizontal();
-            
+
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Block", GUILayout.Width(DEFAULT_LABEL_WIDTH));
             _block.objectReferenceValue = EditorGUILayout.ObjectField(_block.objectReferenceValue, typeof(GameObject), allowSceneObjects: true);
-            EditorGUILayout.EndHorizontal();     
-            
+            EditorGUILayout.EndHorizontal();
+
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Content", GUILayout.Width(DEFAULT_LABEL_WIDTH));
             _content.objectReferenceValue = EditorGUILayout.ObjectField(_content.objectReferenceValue, typeof(GameObject), allowSceneObjects: true);
+            EditorGUILayout.EndHorizontal();
+
+            Uniform.SpaceOneLine();
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Table Name", GUILayout.Width(DEFAULT_LABEL_WIDTH));
+            _nameTableLeaderboard.stringValue = EditorGUILayout.TextField(_nameTableLeaderboard.stringValue);
             EditorGUILayout.EndHorizontal();
         }
     }
