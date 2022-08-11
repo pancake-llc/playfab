@@ -155,6 +155,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
+    Android: com.DefaultCompany.playfab
     Standalone: com.DefaultCompany.playfab
   buildNumber:
     Standalone: 0

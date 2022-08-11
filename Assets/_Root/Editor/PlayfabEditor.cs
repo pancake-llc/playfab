@@ -1,3 +1,4 @@
+using System;
 using Pancake.GameService;
 using UnityEditor;
 using UnityEngine;
@@ -33,6 +34,12 @@ namespace Pancake.Editor
             _enableRequestTimesApi = new Uniform.Property(serializedObject.FindProperty("enableRequestTimesApi"),
                 new GUIContent("Request Times API", "Enable request time api"));
             _infoRequestParams = new Uniform.Property(serializedObject.FindProperty("infoRequestParams"), new GUIContent("Info Request Param"));
+        }
+
+        private void OnDisable()
+        {
+            EditorUtility.SetDirty(ServiceSettings.SharedSettings);
+            AssetDatabase.SaveAssets();
         }
 
         public override void OnInspectorGUI()

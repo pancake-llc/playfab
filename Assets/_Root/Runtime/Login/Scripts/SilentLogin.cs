@@ -1,5 +1,4 @@
-﻿using Pancake.UI;
-using PlayFab.ClientModels;
+﻿using PlayFab.ClientModels;
 using UnityEngine;
 
 namespace Pancake.GameService
@@ -16,6 +15,7 @@ namespace Pancake.GameService
             _playfabSilentLogin.onLoginSuccess.RemoveAllListeners();
             _playfabSilentLogin.onLoginSuccess.AddListener(OnLoginSuccess);
         }
+        
 
         private void OnLoginSuccess(LoginResult result)
         {
@@ -28,7 +28,6 @@ namespace Pancake.GameService
 
             //var r2 = result.InfoResultPayload.PlayerStatistics;
             LoginResultModel.Init(r.PlayerId, r.DisplayName, countryCode);
-            Popup.Show<PopupEnterName>();
             // if (result.NewlyCreated || !AuthService.Instance.IsCompleteSetupName)
             // {
             //     Popup.Show<PopupEnterName>();

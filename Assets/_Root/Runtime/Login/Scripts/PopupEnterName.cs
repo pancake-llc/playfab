@@ -105,6 +105,7 @@ namespace Pancake.GameService
                 // store user choose country code
                 
                 //ServiceSettings.SetCurrentName(_userName);
+                AuthService.Instance.IsCompleteSetupName = true;
             }
         }
 

@@ -31,6 +31,10 @@
         {
             "key": "UIPOPUP_LEADERBOARD",
             "state": true
+        },
+        {
+            "key": "UIPOPUP_NOTIFICATION",
+            "state": true
         }
     ]
 }
