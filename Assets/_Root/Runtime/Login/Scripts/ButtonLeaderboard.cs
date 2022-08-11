@@ -30,11 +30,7 @@ namespace Pancake.GameService
             AuthService.OnPlayFabError += AuthServiceOnError;
         }
 
-        private async void AuthServiceOnError(PlayFabError error)
-        {
-         var r = await Popup.Show<PopupNotification>();
-         r.Message("Loi dang nhap");
-        }
+        private async void AuthServiceOnError(PlayFabError error) { Popup.Show<PopupNotification>(_ => _.Message("Loi Dang Nhap")); }
 
         private void AuthServiceOnLoginSuccess(LoginResult result)
         {
@@ -99,7 +95,7 @@ namespace Pancake.GameService
 
             if (GUILayout.Button("Setup Fetch")) SetupFetch();
 
-            if (_buttonLeaderboard.Block != null)  _buttonLeaderboard.Block.transform.GetChild(0).transform.position = Vector3.zero;
+            if (_buttonLeaderboard.Block != null) _buttonLeaderboard.Block.transform.GetChild(0).transform.position = Vector3.zero;
 
             void SetupFetch()
             {
