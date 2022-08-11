@@ -33,7 +33,7 @@ MonoBehaviour:
     GetUserReadOnlyData: 0
     GetUserVirtualCurrency: 0
     PlayerStatisticNames:
-    - HallOfFame
+    - RANK_LEVEL_GLOBAL
     ProfileConstraints:
       ShowAvatarUrl: 0
       ShowBannedUntil: 0

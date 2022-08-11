@@ -76,6 +76,7 @@ namespace Pancake.GameService
             _uiElements.TxtCurrentCountryName.text = countryData.name;
             _defaultSprite = _uiElements.BtnOk.image.sprite;
             _uiElements.Block.gameObject.SetActive(false);
+            _selectedCountry = LoginResultModel.countryCode;
         }
 
         private void OnButtonOkClicked()
@@ -230,7 +231,7 @@ namespace Pancake.GameService
             _uiElements.TxtCurrentCountryName.text = view.Data.name;
         }
 
-        private bool IsElementSelected(string code) { return LoginResultModel.countryCode.Equals(code); } // todo
+        private bool IsElementSelected(string code) { return _selectedCountry.Equals(code); }
 
         #endregion
     }
