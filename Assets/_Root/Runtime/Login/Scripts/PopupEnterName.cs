@@ -141,8 +141,6 @@ namespace Pancake.GameService
             if (_uiElements.BtnCountry.AffectObject.localEulerAngles.z.Equals(0))
             {
                 _uiElements.BtnCountry.AffectObject.TweenLocalRotationZ(90, 0.3f, RotationMode.Beyond360).Play();
-                // show
-
                 InternalShowSelectCountry();
                 if (!_firstTime)
                 {
@@ -153,7 +151,6 @@ namespace Pancake.GameService
             else
             {
                 _uiElements.BtnCountry.AffectObject.TweenLocalRotationZ(0, 0.3f, RotationMode.Beyond360).Play();
-                // hide
                 InternalHideSelectCountry();
             }
         }
@@ -171,6 +168,7 @@ namespace Pancake.GameService
 
         private void InternalShowSelectCountry()
         {
+            ContainerTransform.SetPivot(new Vector2(0.5f, 1f));
             _uiElements.SelectCountryPopup.gameObject.SetActive(true);
             _uiElements.BtnOk.interactable = false;
             _uiElements.SelectCountryPopup.sizeDelta = _uiElements.SelectCountryPopup.sizeDelta.Change(y: 103);
@@ -181,6 +179,7 @@ namespace Pancake.GameService
                 {
                     _uiElements.Scroller.ScrollbarVisibility = EnhancedScroller.ScrollbarVisibilityEnum.Always;
                     _uiElements.BtnOk.interactable = true;
+                    ContainerTransform.SetPivot(new Vector2(0.5f, 0.5f));
                 })
                 .Play();
             ContainerTransform.TweenSizeDeltaY(1206f, 0.5f).Play();
@@ -188,6 +187,7 @@ namespace Pancake.GameService
 
         private void InternalHideSelectCountry()
         {
+            ContainerTransform.SetPivot(new Vector2(0.5f, 1f));
             _uiElements.Scroller.ScrollbarVisibility = EnhancedScroller.ScrollbarVisibilityEnum.Never;
             _uiElements.BtnOk.interactable = false;
             _tween?.Kill();
@@ -197,6 +197,7 @@ namespace Pancake.GameService
                 {
                     _uiElements.SelectCountryPopup.gameObject.SetActive(false);
                     _uiElements.BtnOk.interactable = true;
+                    ContainerTransform.SetPivot(new Vector2(0.5f, 0.5f));
                 })
                 .Play();
             ContainerTransform.TweenSizeDeltaY(940f, 0.5f).Play();
