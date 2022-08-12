@@ -513,7 +513,7 @@ namespace Pancake.GameService
         /// </summary>
         /// <param name="value"></param>
         /// <param name="nameTable"></param>
-        public static void UpdatePlayerStatistics(int value, string nameTable)
+        public static void UpdatePlayerStatistics(string nameTable, int value)
         {
             PlayFabClientAPI.UpdatePlayerStatistics(
                 new UpdatePlayerStatisticsRequest {Statistics = new List<StatisticUpdate> {new() {StatisticName = nameTable, Value = value}},},

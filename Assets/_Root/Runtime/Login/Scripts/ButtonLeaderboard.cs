@@ -40,7 +40,8 @@ namespace Pancake.GameService
                 AuthService.Instance.Authenticate(EAuthType.Silent);
                 return;
             }
-
+            
+            AuthService.UpdatePlayerStatistics("RANK_LEVEL", UnityEngine.Random.Range(1, 100));
             Block.SetActive(false);
             var countryCode = "";
             // ReSharper disable once PossibleNullReferenceException
