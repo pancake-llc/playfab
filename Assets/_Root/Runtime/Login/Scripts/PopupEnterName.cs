@@ -1,8 +1,9 @@
-using System;
 using Pancake.Common;
 using Pancake.Tween;
 using Pancake.UI;
 using Pancake.UIQuery;
+using PlayFab;
+using PlayFab.ClientModels;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -54,13 +55,9 @@ namespace Pancake.GameService
         private ISequence _sequenceTxtWarning;
         private Sprite _defaultSprite;
 
-        public Func<bool> onAcceptName;
-
         private void Start()
         {
-            _uiElements = new PopupUiElements(UIRoot);
-            _uiElements.Scroller.Delegate = this;
-            _uiElements.IpfEnterName.characterLimit = 17;
+            _uiElements = new PopupUiElements(UIRoot) {Scroller = {Delegate = this}, IpfEnterName = {characterLimit = 17}};
             _uiElements.IpfEnterName.onValueChanged.AddListener(OnInputNameCallback);
             _uiElements.IpfEnterName.text = "";
             _uiElements.IpfEnterName.ActivateInputField();
@@ -79,7 +76,39 @@ namespace Pancake.GameService
             _selectedCountry = LoginResultModel.countryCode;
         }
 
-        private void OnButtonOkClicked()
+        protected virtual void OnEnable()
+        {
+            AuthService.OnUpdateUserTitleDisplayNameSuccess += OnUpdateNameCallbackCompleted;
+            AuthService.OnUpdateUserTitleDisplayNameError += OnUpdateNameCallbackError;
+        }
+
+        protected virtual void OnDisable()
+        {
+            AuthService.OnUpdateUserTitleDisplayNameSuccess -= OnUpdateNameCallbackCompleted;
+            AuthService.OnUpdateUserTitleDisplayNameError -= OnUpdateNameCallbackError;
+        }
+
+        protected virtual void OnUpdateNameCallbackCompleted(UpdateUserTitleDisplayNameResult success)
+        {
+            AuthService.Instance.IsCompleteSetupName = true;
+            LoginResultModel.playerDisplayName = name;
+            _uiElements.Block.gameObject.SetActive(false);
+            Popup.Show<PopupLeaderboard>();
+        }
+
+        protected virtual void OnUpdateNameCallbackError(PlayFabError error)
+        {
+            _uiElements.Block.gameObject.SetActive(false);
+            DisplayWarning(error.ErrorMessage);
+
+            if (error.Error == PlayFabErrorCode.NameNotAvailable)
+            {
+                _uiElements.TxtCurrentCountryName.text = "";
+                _uiElements.IpfEnterName.Select();
+            }
+        }
+
+        protected virtual void OnButtonOkClicked()
         {
             if (string.IsNullOrEmpty(_uiElements.IpfEnterName.text))
             {
@@ -92,24 +121,12 @@ namespace Pancake.GameService
             _uiElements.BtnOk.interactable = false;
             _uiElements.Block.gameObject.SetActive(true);
             _uiElements.TxtWarning.gameObject.SetActive(false);
-            var result = onAcceptName?.Invoke(); // validate name with server
-            _uiElements.Block.gameObject.SetActive(false);
-            if (result == null)
-            {
-                DisplayWarning("Error code O1: Result null, Invalid action");
-                return;
-            }
 
-            if (result.Value)
-            {
-                // store user choose country code
-                
-                //ServiceSettings.SetCurrentName(_userName);
-                AuthService.Instance.IsCompleteSetupName = true;
-            }
+            string str = _uiElements.IpfEnterName.text.Trim();
+            AuthService.UpdateUserTitleDisplayName(str);
         }
 
-        private void OnInputNameCallback(string value)
+        protected virtual void OnInputNameCallback(string value)
         {
             if (value.Length >= 16)
             {

@@ -46,9 +46,11 @@ namespace Pancake.GameService
 
         public static event DisplayAuthenticationEvent OnDisplayAuthentication;
         public static event LoginSuccessEvent OnLoginSuccess;
-        public static event PlayFabErrorEvent OnPlayFabError;
+        public static event PlayFabErrorEvent OnLoginError;
         public static event UpdateUserTitleDisplayNameSuccessEvent OnUpdateUserTitleDisplayNameSuccess;
+        public static event PlayFabErrorEvent OnUpdateUserTitleDisplayNameError;
         public static event UpdatePlayerStatisticsSuccessEvent OnUpdatePlayerStatisticsSuccess;
+        public static event PlayFabErrorEvent OnUpdatePlayerStatisticsError;
 
         public string email;
         public string userName;
@@ -203,9 +205,9 @@ namespace Pancake.GameService
                 {
                     isLoggedIn = false;
                     isRequestCompleted = true;
-                    if (onSuccess == null && OnPlayFabError != null)
+                    if (onSuccess == null && OnLoginError != null)
                     {
-                        OnPlayFabError.Invoke(error);
+                        OnLoginError.Invoke(error);
                     }
                     else
                     {
@@ -241,9 +243,9 @@ namespace Pancake.GameService
                 {
                     isLoggedIn = false;
                     isRequestCompleted = true;
-                    if (onSuccess == null && OnPlayFabError != null)
+                    if (onSuccess == null && OnLoginError != null)
                     {
-                        OnPlayFabError.Invoke(error);
+                        OnLoginError.Invoke(error);
                     }
                     else
                     {
@@ -278,9 +280,9 @@ namespace Pancake.GameService
                 error =>
                 {
                     SetErrorInfo();
-                    if (onSuccess == null && OnPlayFabError != null)
+                    if (onSuccess == null && OnLoginError != null)
                     {
-                        OnPlayFabError.Invoke(error);
+                        OnLoginError.Invoke(error);
                     }
                     else
                     {
@@ -311,7 +313,7 @@ namespace Pancake.GameService
                     error =>
                     {
                         SetErrorInfo();
-                        OnPlayFabError?.Invoke(error);
+                        OnLoginError?.Invoke(error);
                     });
 
                 return;
@@ -348,7 +350,7 @@ namespace Pancake.GameService
                 error =>
                 {
                     SetErrorInfo();
-                    OnPlayFabError?.Invoke(error);
+                    OnLoginError?.Invoke(error);
                 });
         }
 
@@ -365,7 +367,7 @@ namespace Pancake.GameService
                 if (result == null)
                 {
                     //something went wrong with Silent Authentication, Check the debug console.
-                    OnPlayFabError?.Invoke(new PlayFabError() {Error = PlayFabErrorCode.UnknownError, ErrorMessage = "Silent Authentication by device failed"});
+                    OnLoginError?.Invoke(new PlayFabError() {Error = PlayFabErrorCode.UnknownError, ErrorMessage = "Silent Authentication by device failed"});
                 }
 
                 //Note: If silent auth is success, which is should always be and the following 
@@ -406,7 +408,7 @@ namespace Pancake.GameService
                     {
                         SetErrorInfo();
                         //Report error result back to subscriber
-                        OnPlayFabError?.Invoke(error);
+                        OnLoginError?.Invoke(error);
                     });
             });
         }
@@ -434,7 +436,7 @@ namespace Pancake.GameService
             {
                 SetErrorInfo();
                 //report errro back to the subscriber
-                OnPlayFabError?.Invoke(error);
+                OnLoginError?.Invoke(error);
             });
         }
         else
@@ -465,7 +467,7 @@ namespace Pancake.GameService
         {
             SetErrorInfo();
             //report errro back to the subscriber
-            OnPlayFabError?.Invoke(error);
+            OnLoginError?.Invoke(error);
         });
 #endif
         }
@@ -516,7 +518,7 @@ namespace Pancake.GameService
             PlayFabClientAPI.UpdatePlayerStatistics(
                 new UpdatePlayerStatisticsRequest {Statistics = new List<StatisticUpdate> {new() {StatisticName = nameTable, Value = value}},},
                 result => { OnUpdatePlayerStatisticsSuccess?.Invoke(result); },
-                error => { OnPlayFabError?.Invoke(error); });
+                error => { OnUpdatePlayerStatisticsError?.Invoke(error); });
         }
 
 #if UNITY_IOS
@@ -556,7 +558,7 @@ namespace Pancake.GameService
                     error =>
                     {
                         //report errro back to the subscriber
-                        OnPlayFabError?.Invoke(error);
+                        OnLoginError?.Invoke(error);
                     });
             }
         }
@@ -570,9 +572,8 @@ namespace Pancake.GameService
                 result =>
                 {
                     OnUpdateUserTitleDisplayNameSuccess?.Invoke(result);
-                    LoginResultModel.playerDisplayName = name;
                 },
-                error => { OnPlayFabError?.Invoke(error); });
+                error => { OnUpdateUserTitleDisplayNameError?.Invoke(error); });
         }
 
         public static void RequestLeaderboard(

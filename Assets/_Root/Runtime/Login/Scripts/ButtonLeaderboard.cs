@@ -27,16 +27,23 @@ namespace Pancake.GameService
             _button.onClick.AddListener(OnButtonClicked);
             AuthService.Instance.infoRequestParams = ServiceSettings.InfoRequestParams;
             AuthService.OnLoginSuccess += AuthServiceOnLoginSuccess;
-            AuthService.OnPlayFabError += AuthServiceOnError;
+            AuthService.OnLoginError += AuthServiceOnError;
         }
 
-        private async void AuthServiceOnError(PlayFabError error) { Popup.Show<PopupNotification>(_ => _.Message("Loi Dang Nhap")); }
+        private void AuthServiceOnError(PlayFabError error) { Popup.Show<PopupNotification>(_ => _.Message("Loi Dang Nhap")); }
 
         private void AuthServiceOnLoginSuccess(LoginResult result)
         {
-            Block.SetActive(false);
             var r = result.InfoResultPayload.PlayerProfile;
+            if (r == null && result.NewlyCreated) // new account need once more login
+            {
+                AuthService.Instance.Authenticate(EAuthType.Silent);
+                return;
+            }
+
+            Block.SetActive(false);
             var countryCode = "";
+            // ReSharper disable once PossibleNullReferenceException
             foreach (var location in r.Locations)
             {
                 countryCode = location.CountryCode.ToString();
@@ -50,7 +57,7 @@ namespace Pancake.GameService
             }
             else
             {
-                // goto menu
+                Popup.Show<PopupLeaderboard>();
             }
         }
 
@@ -76,7 +83,7 @@ namespace Pancake.GameService
         {
             _button.onClick.RemoveListener(OnButtonClicked);
             AuthService.OnLoginSuccess -= AuthServiceOnLoginSuccess;
-            AuthService.OnPlayFabError -= AuthServiceOnError;
+            AuthService.OnLoginError -= AuthServiceOnError;
         }
     }
 

@@ -177,7 +177,7 @@ namespace Pancake.GameService
         public void CreateOrUpdateAggregationLeaderboard()
         {
             if (UnityEditor.EditorUtility.DisplayDialog("Update Aggregation All Leaderboard",
-                    "Are you sure you wish to update aggregation for all leaderboard?\nThis action cannot be reversed.",
+                    "Are you sure you wish to update aggregation for all leaderboard to Maximum?\nThis action cannot be reversed.",
                     "Update",
                     "Cancel"))
             {
@@ -188,6 +188,7 @@ namespace Pancake.GameService
             void Call()
             {
                 var c = countryCode.countryCodeDatas[_internalIndex];
+                UnityEditor.EditorUtility.DisplayProgressBar("Update Aggregation Highest Value", $"Updating {c.code.ToString()}...", _internalIndex / (float)countryCode.countryCodeDatas.Length);
                 PlayFabAdminAPI.CreatePlayerStatisticDefinition(new PlayFab.AdminModels.CreatePlayerStatisticDefinitionRequest()
                     {
                         StatisticName = $"{nameTableLeaderboard}_{c.code.ToString()}",
@@ -204,6 +205,7 @@ namespace Pancake.GameService
                         else
                         {
                             Debug.Log("Update Aggregation Completed!");
+                            UnityEditor.EditorUtility.ClearProgressBar();
                         }
                     },
                     error =>
@@ -226,6 +228,7 @@ namespace Pancake.GameService
                                     else
                                     {
                                         Debug.Log("Update Aggregation Completed!");
+                                        UnityEditor.EditorUtility.ClearProgressBar();
                                     }
                                 },
                                 fabError => { Debug.LogError(fabError.Error); });

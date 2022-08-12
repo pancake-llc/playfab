@@ -9176,6 +9176,7 @@ MonoBehaviour:
   closeButtons:
   - {fileID: 4105724064707434147}
   startScale: {x: 0, y: 0}
+  uniqueId: 01GA8G5KC8MDQ3SKV4A3CZ6EFE
   motionAffectDisplay: 0
   endValueDisplay: {x: 1, y: 1}
   positionToDisplay: {x: 0, y: 0}
@@ -9242,7 +9243,6 @@ MonoBehaviour:
   txtWarning: {fileID: 804866521195910185}
   block: {fileID: 5993624841693934215}
   nameTableLeaderboard: RANK_LEVEL
-  numberElementInPage: 10
 --- !u!114 &4506647062667835260
 MonoBehaviour:
   m_ObjectHideFlags: 0
