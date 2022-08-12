@@ -17,13 +17,13 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 04794eb7e9f68d14bbc827beca45b052
   m_SerializeEntries:
-  - m_GUID: b56d9764a3626f449be4a6c3fdd61b07
-    m_Address: PopupEnterName
+  - m_GUID: 7c8ace9c06786994380e8560fe18fe82
+    m_Address: PopupLeaderboard
     m_ReadOnly: 0
     m_SerializedLabels:
     - ui_popup
-  - m_GUID: 7c8ace9c06786994380e8560fe18fe82
-    m_Address: PopupLeaderboard
+  - m_GUID: b56d9764a3626f449be4a6c3fdd61b07
+    m_Address: PopupEnterName
     m_ReadOnly: 0
     m_SerializedLabels:
     - ui_popup
