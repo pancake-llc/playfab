@@ -4,7 +4,6 @@ using Pancake.UI;
 using Pancake.UIQuery;
 using PlayFab;
 using PlayFab.ClientModels;
-using PlayFab.Json;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -118,7 +117,7 @@ namespace Pancake.GameService
             _uiElements.Block.gameObject.SetActive(false);
             Popup.Show<PopupLeaderboard>();
         }
-        
+
         private void OnUpdateInternalConfigError(PlayFabError error)
         {
             _uiElements.Block.gameObject.SetActive(false);

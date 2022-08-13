@@ -40,6 +40,17 @@ namespace Pancake.GameService
 
         public int CountInOnePage => rankSlots.Length;
 
+        private Color ColorDivision(int rank, string playerId)
+        {
+            switch (rank)
+            {
+                case 1: return colorRank1;
+                case 2: return colorRank2;
+                case 3: return colorRank3;
+                default: return playerId.Equals(LoginResultModel.playerId) ? colorHightlight : colorOutRank;
+            }
+        }
+
         private sealed class Data
         {
             public int currentPage;
@@ -148,17 +159,29 @@ namespace Pancake.GameService
             content.SetActive(true);
             for (int i = 0; i < pageData.Count; i++)
             {
-                AuthService.GetUserData<string>(pageData[i].PlayFabId,
-                    ServiceSettings.INTERNAL_CONFIG_KEY,
-                    result =>
-                    {
-                       Debug.Log(result);
-                    },
-                    error => { Debug.Log(error.ErrorMessage); });
-                
-                // if user data internal config equal null using location of profile
-                //rankSlots[i].Init(pageData[i].Position + 1, countryCode.Get(pageData[i].Profile.));
+                var entry = pageData[i];
+                RenderAsync(entry, i);
             }
+        }
+
+        private async void RenderAsync(PlayerLeaderboardEntry entry, int index)
+        {
+            var internalConfig = await AuthService.GetUserData<InternalConfig>(entry.PlayFabId,
+                ServiceSettings.INTERNAL_CONFIG_KEY,
+                errorCallback: error => Debug.LogError(error.ErrorMessage));
+
+            // if user data internal config equal null using location of profile
+            // to_do
+            
+            // render
+            rankSlots[index]
+            .Init(internalConfig,
+                entry.Position + 1,
+                countryCode.Get(internalConfig.countryCode).icon,
+                entry.DisplayName,
+                entry.StatValue,
+                ColorDivision(entry.Position + 1, entry.PlayFabId));
+            rankSlots[index].gameObject.SetActive(true);
         }
 
         private void OnFriendButtonClicked() { }

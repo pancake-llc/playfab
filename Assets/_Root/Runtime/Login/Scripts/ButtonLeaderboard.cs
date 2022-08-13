@@ -17,7 +17,9 @@ namespace Pancake.GameService
     {
         private UIButton _button;
         [SerializeField] private GameObject block;
+        [SerializeField] private string nameTable;
         public UnityEvent<LoginResult> onLoginSuccess;
+        public UnityEvent onFirstTimeOpenLeaderboard;
 
         public GameObject Block { get => block; set => block = value; }
 
@@ -62,10 +64,11 @@ namespace Pancake.GameService
                     }
                 }
             }
-
+            
             LoginResultModel.Init(r.PlayerId, r.DisplayName, countryCode);
             if (result.NewlyCreated || !AuthService.Instance.IsCompleteSetupName)
             {
+                //AuthService.UpdatePlayerStatistics(name, );
                 Popup.Show<PopupEnterName>();
             }
             else
