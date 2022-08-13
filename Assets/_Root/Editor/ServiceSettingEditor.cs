@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Pancake.Editor
 {
     [CustomEditor(typeof(ServiceSettings))]
-    public class PlayfabEditor : UnityEditor.Editor
+    public class ServiceSettingEditor : UnityEditor.Editor
     {
         public static bool callFromEditorWindow = false;
         private Uniform.Property _titleId;

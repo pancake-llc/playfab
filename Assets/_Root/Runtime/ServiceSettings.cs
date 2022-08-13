@@ -1,5 +1,4 @@
-﻿using Pancake.Common;
-using PlayFab;
+﻿using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine;
 
@@ -22,10 +21,10 @@ namespace Pancake.GameService
                 instance = LoadSettings();
                 if (instance == null)
                 {
-#if !UNITY_EDITOR
-                        Debug.LogError("Playfab settings not found! Please go to menu Tools > Pancake > Playfab to setup the plugin.");
+#if UNITY_EDITOR
+                    Debug.LogError("Playfab settings not found! Please go to menu Tools > Pancake > Playfab to setup the plugin.");
 #endif
-                    instance = CreateInstance<ServiceSettings>();
+                    instance = LoadSettings();
                 }
 
                 return instance;
@@ -40,10 +39,10 @@ namespace Pancake.GameService
                 sharedSettings = GetSharedSettingsObjectPrivate();
                 if (sharedSettings == null)
                 {
-#if !UNITY_EDITOR
-                        Debug.LogError("Playfab settings not found! Please go to menu Tools > Pancake > Playfab to setup the plugin.");
+#if UNITY_EDITOR
+                    Debug.LogError("Playfab settings not found! Please go to menu Tools > Pancake > Playfab to setup the plugin.");
 #endif
-                    sharedSettings = CreateInstance<PlayFabSharedSettings>();
+                    sharedSettings = GetSharedSettingsObjectPrivate();
                 }
 
                 return sharedSettings;
@@ -58,7 +57,7 @@ namespace Pancake.GameService
         [SerializeField] private WebRequestType requestType = WebRequestType.UnityWebRequest;
 
         [SerializeField] private bool useCustomIdAsDefault = true;
-        [SerializeField] private bool enableAdminApi;
+        [SerializeField] private bool enableAdminApi = true;
         [SerializeField] private bool enableClientApi = true;
         [SerializeField] private bool enableEntityApi = true;
         [SerializeField] private bool enableServerApi;
@@ -82,5 +81,13 @@ namespace Pancake.GameService
         public static bool UseCustomIdAsDefault => Instance.useCustomIdAsDefault;
 
         public static ServiceSettings LoadSettings() { return Resources.Load<ServiceSettings>("GameServiceSettings"); }
+
+        private void OnEnable()
+        {
+            if (InfoRequestParams != null && !InfoRequestParams.UserDataKeys.Exists(_ => _.Equals(PopupLeaderboard.INTERNAL_DATA_KEY)))
+            {
+                InfoRequestParams.UserDataKeys.Add(PopupLeaderboard.INTERNAL_DATA_KEY);
+            }
+        }
     }
 }

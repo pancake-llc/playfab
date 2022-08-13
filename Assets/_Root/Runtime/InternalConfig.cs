@@ -3,7 +3,7 @@
 namespace Pancake.GameService
 {
     [Serializable]
-    public class UserSetting
+    public class InternalConfig
     {
         public string countryCode;
     }

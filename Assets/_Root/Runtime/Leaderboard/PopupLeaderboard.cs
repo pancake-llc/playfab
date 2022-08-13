@@ -14,6 +14,7 @@ namespace Pancake.GameService
     {
         private const string LAST_TIME_FETCH_RANK_KEY = "last_time_fetch_rank";
         public static int delayFetchRank = 180;
+        public const string INTERNAL_DATA_KEY = "internal_config";
         [SerializeField] private CountryCode countryCode;
         [SerializeField] private UIButton btnNextPage;
         [SerializeField] private UIButton btnBackPage;
@@ -52,7 +53,7 @@ namespace Pancake.GameService
             public Data(string key)
             {
                 _key = key;
-                firstTime = false;
+                firstTime = true;
                 players = new List<PlayerLeaderboardEntry>();
                 currentPage = 0;
                 pageCount = 0;
@@ -88,10 +89,13 @@ namespace Pancake.GameService
                 _worldData.LastTimeRefreshLeaderboard = DateTime.UtcNow;
                 if (AuthService.Instance.isLoggedIn && AuthService.Instance.isRequestCompleted)
                 {
+                    // wait if need
+                    block.SetActive(true);
                     AuthService.RequestLeaderboard(nameTableLeaderboard, RequestWorldLeaderboardCallback, RequestWorldLeaderboardError);
                 }
                 else
                 {
+                    
                 }
             }
             else
@@ -104,11 +108,13 @@ namespace Pancake.GameService
 
         private void RequestWorldLeaderboardCallback(GetLeaderboardResult result)
         {
+            block.SetActive(false);
             if (result == null && _worldData.players.Count == 0) return;
 
             txtWarning.gameObject.SetActive(false);
             if (result != null) _worldData.players = result.Leaderboard;
             _worldData.pageCount = M.CeilToInt(_worldData.players.Count / (float) CountInOnePage);
+            Refresh(_worldData);
         }
 
         private void Refresh(Data data)
@@ -141,16 +147,15 @@ namespace Pancake.GameService
                 element.gameObject.SetActive(false);
             }
 
+            
             content.SetActive(true);
-            block.SetActive(true);
             for (int i = 0; i < pageData.Count; i++)
             {
-                //pageData[i].Profile.Locations
-                //rankSlots[i].Init(pageData[i].Position + 1, countryCode.Get());
+                Debug.Log(pageData[i].Profile);
+                //rankSlots[i].Init(pageData[i].Position + 1, countryCode.Get(pageData[i].Profile.));
             }
         }
-
-
+        
         private void OnFriendButtonClicked() { }
 
         private void OnCountryButtonClicked() { }

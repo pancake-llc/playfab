@@ -19,14 +19,14 @@ namespace Pancake.Editor
                 return;
             }
 
-            PlayfabEditor.callFromEditorWindow = true;
+            ServiceSettingEditor.callFromEditorWindow = true;
             _editor.DrawHeader();
             _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
             EditorGUILayout.BeginVertical(new GUIStyle {padding = new RectOffset(6, 3, 3, 3)});
             _editor.OnInspectorGUI();
             EditorGUILayout.EndVertical();
             EditorGUILayout.EndScrollView();
-            PlayfabEditor.callFromEditorWindow = false;
+            ServiceSettingEditor.callFromEditorWindow = false;
         }
 
         private static PlayfabWindow GetWindow()
