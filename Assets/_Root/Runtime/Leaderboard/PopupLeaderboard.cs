@@ -13,8 +13,6 @@ namespace Pancake.GameService
     public class PopupLeaderboard : UIPopup
     {
         private const string LAST_TIME_FETCH_RANK_KEY = "last_time_fetch_rank";
-        public static int delayFetchRank = 180;
-        public const string INTERNAL_DATA_KEY = "internal_config";
         [SerializeField] private CountryCode countryCode;
         [SerializeField] private UIButton btnNextPage;
         [SerializeField] private UIButton btnBackPage;
@@ -82,7 +80,7 @@ namespace Pancake.GameService
             btnCountry.onClick.AddListener(OnCountryButtonClicked);
             btnFriend.onClick.AddListener(OnFriendButtonClicked);
 
-            if (_worldData.IsCanRefresh(delayFetchRank))
+            if (_worldData.IsCanRefresh(ServiceSettings.delayFetchRank))
             {
                 _worldData.firstTime = false;
                 _worldData.players.Clear();
@@ -95,7 +93,6 @@ namespace Pancake.GameService
                 }
                 else
                 {
-                    
                 }
             }
             else
@@ -147,15 +144,23 @@ namespace Pancake.GameService
                 element.gameObject.SetActive(false);
             }
 
-            
+
             content.SetActive(true);
             for (int i = 0; i < pageData.Count; i++)
             {
-                Debug.Log(pageData[i].Profile);
+                AuthService.GetUserData<string>(pageData[i].PlayFabId,
+                    ServiceSettings.INTERNAL_CONFIG_KEY,
+                    result =>
+                    {
+                       Debug.Log(result);
+                    },
+                    error => { Debug.Log(error.ErrorMessage); });
+                
+                // if user data internal config equal null using location of profile
                 //rankSlots[i].Init(pageData[i].Position + 1, countryCode.Get(pageData[i].Profile.));
             }
         }
-        
+
         private void OnFriendButtonClicked() { }
 
         private void OnCountryButtonClicked() { }
@@ -193,7 +198,9 @@ namespace Pancake.GameService
             void Call()
             {
                 var c = countryCode.countryCodeDatas[_internalIndex];
-                UnityEditor.EditorUtility.DisplayProgressBar("Update Aggregation Highest Value", $"Updating {c.code.ToString()}...", _internalIndex / (float)countryCode.countryCodeDatas.Length);
+                UnityEditor.EditorUtility.DisplayProgressBar("Update Aggregation Highest Value",
+                    $"Updating {c.code.ToString()}...",
+                    _internalIndex / (float) countryCode.countryCodeDatas.Length);
                 PlayFabAdminAPI.CreatePlayerStatisticDefinition(new PlayFab.AdminModels.CreatePlayerStatisticDefinitionRequest()
                     {
                         StatisticName = $"{nameTableLeaderboard}_{c.code.ToString()}",

@@ -30,9 +30,14 @@ namespace Pancake.GameService
         public CountryCodeData Data => _data;
         private Func<string, bool> _isSelected;
 
-        public void Init(CountryData data, Action<CountryView> onClicked, Func<string, bool> isSelected, Func<string, CountryCodeData> get)
+        private Action _onClickedAdvance;
+        private Action<CountryView> _onClicked;
+
+        public void Init(CountryData data, Action<CountryView> onClicked, Func<string, bool> isSelected, Func<string, CountryCodeData> get, Action onClickedAdvance)
         {
             _isSelected = isSelected;
+            _onClicked = onClicked;
+            _onClickedAdvance = onClickedAdvance;
             _data = get?.Invoke(((ECountryCode) data.id).ToString());
             if (Data == null)
             {
@@ -46,7 +51,7 @@ namespace Pancake.GameService
 #endif
 
             btnSelect.onClick.RemoveAllListeners();
-            btnSelect.onClick.AddListener(() => { onClicked?.Invoke(this); });
+            btnSelect.onClick.AddListener(() => { _onClicked?.Invoke(this); });
 
             selectedHightLight.SetActive(_isSelected.Invoke(Data.code.ToString()));
         }
@@ -58,7 +63,7 @@ namespace Pancake.GameService
             if (selectedHightLight.activeInHierarchy)
             {
                 selectedHightLight.transform.SetLocalScale(x: 0);
-                _tweenSelect = selectedHightLight.transform.TweenLocalScaleX(1, 0.25f);
+                _tweenSelect = selectedHightLight.transform.TweenLocalScaleX(1, 0.25f).OnComplete(() => _onClickedAdvance?.Invoke());
                 _tweenSelect.Play();
             }
         }

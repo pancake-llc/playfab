@@ -45,11 +45,11 @@
       "hash": "75df4edd13dcb389dd9b1956da6c1982e58f9594"
     },
     "com.pancake.simplejson": {
-      "version": "https://github.com/pancake-llc/SimpleJSON.git?path=Assets/_Root#1.0.2",
+      "version": "https://github.com/pancake-llc/SimpleJSON.git?path=Assets/_Root#1.0.3",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "cb8168a6e41f6531649d5befb3f895381365e1a3"
+      "hash": "5a156898894cd9362217564f6e82eed4aa8b6591"
     },
     "com.pancake.tween": {
       "version": "https://github.com/pancake-llc/tween.git?path=Assets/_Root#1.4.0",

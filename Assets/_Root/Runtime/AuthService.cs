@@ -8,19 +8,18 @@ using AppleAuth;
 using AppleAuth.Interfaces;
 using AppleAuth.Native;
 #endif
-using Pancake.Common;
 using PlayFab;
 using PlayFab.AdminModels;
 using PlayFab.ClientModels;
 using PlayFab.Json;
 using UnityEngine;
 using GetUserDataResult = PlayFab.ClientModels.GetUserDataResult;
-using Random = UnityEngine.Random;
 using LoginResult = PlayFab.ClientModels.LoginResult;
 using PlayerProfileViewConstraints = PlayFab.ClientModels.PlayerProfileViewConstraints;
 using UpdateUserDataResult = PlayFab.ClientModels.UpdateUserDataResult;
 using UpdateUserTitleDisplayNameRequest = PlayFab.ClientModels.UpdateUserTitleDisplayNameRequest;
 using UpdateUserTitleDisplayNameResult = PlayFab.ClientModels.UpdateUserTitleDisplayNameResult;
+using UserDataPermission = PlayFab.ClientModels.UserDataPermission;
 
 namespace Pancake.GameService
 {
@@ -569,10 +568,7 @@ namespace Pancake.GameService
         public static void UpdateUserTitleDisplayName(string name)
         {
             PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest {DisplayName = name},
-                result =>
-                {
-                    OnUpdateUserTitleDisplayNameSuccess?.Invoke(result);
-                },
+                result => { OnUpdateUserTitleDisplayNameSuccess?.Invoke(result); },
                 error => { OnUpdateUserTitleDisplayNameError?.Invoke(error); });
         }
 
@@ -593,20 +589,30 @@ namespace Pancake.GameService
                 callbackResult,
                 callbackError);
         }
-
-
+        
         /// <summary>
         /// 
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
+        /// <param name="permission"></param>
         /// <param name="resultCallback"></param>
         /// <param name="errorCallback"></param>
-        public static void UpdateUserData<T>(string key, T value, Action<UpdateUserDataResult> resultCallback, Action<PlayFabError> errorCallback)
+        public static void UpdateUserData<T>(
+            string key,
+            T value,
+            UserDataPermission permission,
+            Action<UpdateUserDataResult> resultCallback,
+            Action<PlayFabError> errorCallback)
         {
             var changes = new Dictionary<string, string>() {{key, PlayFabSimpleJson.SerializeObject(value)}};
 
-            PlayFabClientAPI.UpdateUserData(new PlayFab.ClientModels.UpdateUserDataRequest {Data = changes}, resultCallback, errorCallback);
+            PlayFabClientAPI.UpdateUserData(new PlayFab.ClientModels.UpdateUserDataRequest {Data = changes, Permission = permission}, resultCallback, errorCallback);
+        }
+
+        public static void GetUserData(Action<GetUserDataResult> resultCallback, Action<PlayFabError> errorCallback)
+        {
+            PlayFabClientAPI.GetUserData(new PlayFab.ClientModels.GetUserDataRequest() { }, resultCallback, errorCallback);
         }
 
         /// <summary>
@@ -616,7 +622,7 @@ namespace Pancake.GameService
         /// <param name="resultCallback"></param>
         /// <param name="errorCallback"></param>
         /// <typeparam name="T"></typeparam>
-        public static async UniTask<T> GetUserData<T>(string key, Action<GetUserDataResult> resultCallback, Action<PlayFabError> errorCallback)
+        public static async UniTask<T> GetUserData<T>(string key, Action<T> resultCallback = null, Action<PlayFabError> errorCallback = null) where T : class
         {
             T t = default;
             bool flag = false;
@@ -625,7 +631,39 @@ namespace Pancake.GameService
                 {
                     flag = true;
                     t = PlayFabSimpleJson.DeserializeObject<T>(result.Data[key].Value);
-                    resultCallback?.Invoke(result);
+                    resultCallback?.Invoke(t);
+                },
+                errorCallback);
+            await UniTask.WaitUntil(() => flag);
+            return t;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="key"></param>
+        /// <param name="resultCallback"></param>
+        /// <param name="errorCallback"></param>
+        /// <typeparam name="T"></typeparam>
+        public static async UniTask<T> GetUserData<T>(string userId, string key, Action<T> resultCallback = null, Action<PlayFabError> errorCallback = null)
+            where T : class
+        {
+            T t = default;
+            bool flag = false;
+            PlayFabClientAPI.GetUserData(new PlayFab.ClientModels.GetUserDataRequest() {PlayFabId = userId, Keys = new List<string> {key}},
+                result =>
+                {
+                    flag = true;
+                    if (result.Data.ContainsKey(key))
+                    {
+                        t = PlayFabSimpleJson.DeserializeObject<T>(result.Data[key].Value);
+                        resultCallback?.Invoke(t);
+                    }
+                    else
+                    {
+                        Debug.Log($"[PlayFab] Can not found {key} in user data");
+                    }
                 },
                 errorCallback);
             await UniTask.WaitUntil(() => flag);

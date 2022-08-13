@@ -2,6 +2,7 @@ using Pancake.Common;
 using Pancake.UI;
 using PlayFab;
 using PlayFab.ClientModels;
+using PlayFab.Json;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -49,7 +50,19 @@ namespace Pancake.GameService
                 countryCode = location.CountryCode.ToString();
             }
 
-            //var userData = result.InfoResultPayload.UserData;
+            bool condition = result.NewlyCreated || !AuthService.Instance.IsCompleteSetupName;
+            if (!condition)
+            {
+                foreach (var userData in result.InfoResultPayload.UserData)
+                {
+                    if (userData.Key.Equals(ServiceSettings.INTERNAL_CONFIG_KEY))
+                    {
+                        var config = PlayFabSimpleJson.DeserializeObject<InternalConfig>(userData.Value.Value);
+                        if (config != null) countryCode = config.countryCode;
+                    }
+                }
+            }
+
             LoginResultModel.Init(r.PlayerId, r.DisplayName, countryCode);
             if (result.NewlyCreated || !AuthService.Instance.IsCompleteSetupName)
             {

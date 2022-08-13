@@ -54,6 +54,5 @@ MonoBehaviour:
       ShowValuesToDate: 0
     TitleDataKeys: []
     UserDataKeys:
-    - internal_config
-    - water
+    - __internal_config
     UserReadOnlyDataKeys: []

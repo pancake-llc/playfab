@@ -4,6 +4,7 @@ using Pancake.UI;
 using Pancake.UIQuery;
 using PlayFab;
 using PlayFab.ClientModels;
+using PlayFab.Json;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -90,10 +91,12 @@ namespace Pancake.GameService
 
         protected virtual void OnUpdateNameCallbackCompleted(UpdateUserTitleDisplayNameResult success)
         {
-            AuthService.Instance.IsCompleteSetupName = true;
+            AuthService.UpdateUserData(ServiceSettings.INTERNAL_CONFIG_KEY,
+                ServiceSettings.Get(_selectedCountry),
+                UserDataPermission.Public,
+                OnUpdateInternalConfigCompleted,
+                OnUpdateInternalConfigError);
             LoginResultModel.playerDisplayName = name;
-            _uiElements.Block.gameObject.SetActive(false);
-            Popup.Show<PopupLeaderboard>();
         }
 
         protected virtual void OnUpdateNameCallbackError(PlayFabError error)
@@ -106,6 +109,20 @@ namespace Pancake.GameService
                 _uiElements.TxtCurrentCountryName.text = "";
                 _uiElements.IpfEnterName.Select();
             }
+        }
+
+        protected virtual void OnUpdateInternalConfigCompleted(UpdateUserDataResult success)
+        {
+            AuthService.Instance.IsCompleteSetupName = true;
+            LoginResultModel.countryCode = _selectedCountry;
+            _uiElements.Block.gameObject.SetActive(false);
+            Popup.Show<PopupLeaderboard>();
+        }
+        
+        private void OnUpdateInternalConfigError(PlayFabError error)
+        {
+            _uiElements.Block.gameObject.SetActive(false);
+            DisplayWarning(error.ErrorMessage);
         }
 
         protected virtual void OnButtonOkClicked()
@@ -233,7 +250,11 @@ namespace Pancake.GameService
             {
                 var code = (ECountryCode) dataIndex;
                 element.name = "Country_" + code;
-                element.Init(_data[dataIndex], OnButtonElementCountryClicked, IsElementSelected, countryCode.Get);
+                element.Init(_data[dataIndex],
+                    OnButtonElementCountryClicked,
+                    IsElementSelected,
+                    countryCode.Get,
+                    InternalHideSelectCountry);
                 return element;
             }
 
