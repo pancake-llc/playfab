@@ -513,6 +513,7 @@ namespace Pancake.GameService
 
         /// <summary>
         /// require enable put static score in setting dashboard
+        /// auto push score to country table
         /// </summary>
         /// <param name="value"></param>
         /// <param name="nameTable"></param>
@@ -520,6 +521,17 @@ namespace Pancake.GameService
         {
             PlayFabClientAPI.UpdatePlayerStatistics(
                 new UpdatePlayerStatisticsRequest {Statistics = new List<StatisticUpdate> {new() {StatisticName = nameTable, Value = value}},},
+                result => { UpdatePlayerStatisticsCountry(nameTable, value); },
+                error => { OnUpdatePlayerStatisticsError?.Invoke(error); });
+        }
+
+        private static void UpdatePlayerStatisticsCountry(string nameTable, int value)
+        {
+            PlayFabClientAPI.UpdatePlayerStatistics(
+                new UpdatePlayerStatisticsRequest
+                {
+                    Statistics = new List<StatisticUpdate> {new() {StatisticName = $"{nameTable}_{LoginResultModel.countryCode}", Value = value}},
+                },
                 result => { OnUpdatePlayerStatisticsSuccess?.Invoke(result); },
                 error => { OnUpdatePlayerStatisticsError?.Invoke(error); });
         }
@@ -674,7 +686,11 @@ namespace Pancake.GameService
             return t;
         }
 
-        public static void GetMyPosition(string playerId, string nameTable, Action<GetLeaderboardAroundUserResult> onGetLeaderboardAroundUserSuccess, Action<PlayFabError> onGetLeaderboardAroundUserError)
+        public static void GetMyPosition(
+            string playerId,
+            string nameTable,
+            Action<GetLeaderboardAroundUserResult> onGetLeaderboardAroundUserSuccess,
+            Action<PlayFabError> onGetLeaderboardAroundUserError)
         {
             PlayFabServerAPI.GetLeaderboardAroundUser(new GetLeaderboardAroundUserRequest() {PlayFabId = playerId, MaxResultsCount = 1, StatisticName = nameTable},
                 onGetLeaderboardAroundUserSuccess,

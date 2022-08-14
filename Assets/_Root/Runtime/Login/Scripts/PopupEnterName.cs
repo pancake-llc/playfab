@@ -117,11 +117,7 @@ namespace Pancake.GameService
             _uiElements.Block.gameObject.SetActive(false);
             DisplayWarning(error.ErrorMessage);
 
-            if (error.Error == PlayFabErrorCode.NameNotAvailable)
-            {
-                _uiElements.TxtCurrentCountryName.text = "";
-                _uiElements.IpfEnterName.Select();
-            }
+            if (error.Error == PlayFabErrorCode.NameNotAvailable) _uiElements.IpfEnterName.Select();
         }
 
         protected virtual void OnUpdateInternalConfigCompleted(UpdateUserDataResult success)
@@ -223,6 +219,7 @@ namespace Pancake.GameService
 
         private void InternalShowSelectCountry()
         {
+            _uiElements.TxtWarning.gameObject.SetActive(false);
             ContainerTransform.SetPivot(new Vector2(0.5f, 1f));
             _uiElements.SelectCountryPopup.gameObject.SetActive(true);
             _uiElements.BtnOk.interactable = false;
