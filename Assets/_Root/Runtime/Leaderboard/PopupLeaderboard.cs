@@ -6,6 +6,7 @@ using Pancake.Common;
 using Pancake.Tween;
 using Pancake.UI;
 using PlayFab;
+using PlayFab.ClientModels;
 using PlayFab.ServerModels;
 using TMPro;
 using UnityEngine;
@@ -277,7 +278,7 @@ namespace Pancake.GameService
                 Refresh(_worldData);
             }
         }
-        
+
         private void LogError()
         {
             if (AuthService.Instance.isLoggedIn)
@@ -359,6 +360,24 @@ namespace Pancake.GameService
                     break;
                 case ELeaderboardTab.Country:
                     _countryData.currentPage++;
+                    if (_countryData.currentPage == _countryData.pageCount)
+                    {
+                        if (_countryData.currentPage * CountInOnePage >= _countryData.players.Count && _worldData.players.Count > 0)
+                        {
+                            block.SetActive(true);
+                            content.SetActive(false);
+                            AuthService.RequestLeaderboard($"{nameTableLeaderboard}_{LoginResultModel.countryCode}",
+                                NextPageRequestCountryLeaderboardSuccess,
+                                NextPageRequestCountryLeaderboardError,
+                                _countryData.currentPage * CountInOnePage);
+                        }
+                    }
+                    else
+                    {
+                        btnNextPage.interactable = true;
+                        Refresh(_countryData);
+                    }
+
                     break;
                 case ELeaderboardTab.Friend:
                     _friendData.currentPage++;
@@ -443,10 +462,24 @@ namespace Pancake.GameService
             _worldData.pageCount = M.CeilToInt(_worldData.players.Count / (float) CountInOnePage);
             Refresh(_worldData);
         }
+
         #endregion
 
 
         #region country
+
+        private void NextPageRequestCountryLeaderboardSuccess(GetLeaderboardResult result)
+        {
+            btnNextPage.interactable = true;
+            if (result == null && _countryData.players.Count == 0) return;
+
+            txtWarning.gameObject.SetActive(false);
+            if (result != null) _countryData.players.AddRange(result.Leaderboard);
+            _countryData.pageCount = M.CeilToInt(_countryData.players.Count / (float) CountInOnePage);
+            Refresh(_countryData);
+        }
+
+        private void NextPageRequestCountryLeaderboardError(PlayFabError error) { btnNextPage.interactable = true; }
 
         private void OnGetLeaderboardAroundUserCountryError(PlayFabError error)
         {
@@ -459,7 +492,7 @@ namespace Pancake.GameService
             txtRank.text = $"Country Rank: {_countryData.myPosition + 1}";
             AuthService.RequestLeaderboard($"{nameTableLeaderboard}_{LoginResultModel.countryCode}", RequestCountryLeaderboardSuccess, RequestCountryLeaderboardError);
         }
-        
+
         private void RequestCountryLeaderboardError(PlayFabError error)
         {
             Popup.Show<PopupNotification>(_ => _.Message($"Retrieve country ranking information failed!\nError code: {error.Error}"));
