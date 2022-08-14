@@ -12,10 +12,11 @@ namespace Pancake.GameService
         [SerializeField] private TextMeshProUGUI txtUserName;
         [SerializeField] private TextMeshProUGUI txtScore;
         [SerializeField] private Image imgForcegound;
+        [SerializeField] private Outline outline;
 
         protected InternalConfig userInternalConfig;
 
-        public virtual void Init(InternalConfig userInternalConfig, int rank, Sprite icon, string userName, int score, Color color)
+        public virtual void Init(InternalConfig userInternalConfig, int rank, Sprite icon, string userName, int score, Color color, bool self)
         {
             this.userInternalConfig = userInternalConfig;
             txtRank.text = $"{rank}";
@@ -24,6 +25,7 @@ namespace Pancake.GameService
             txtScore.text = score.ToString();
             imgCountry.sprite = icon;
             imgCountry.gameObject.SetActive(true);
+            outline.enabled = self;
         }
     }
 }

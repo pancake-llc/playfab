@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using MEC;
 using Pancake.Common;
+using Pancake.Tween;
 using Pancake.UI;
 using PlayFab;
 using PlayFab.ClientModels;
@@ -32,6 +34,7 @@ namespace Pancake.GameService
         [SerializeField] private TextMeshProUGUI txtWarning;
         [SerializeField] private GameObject block;
         [SerializeField] private string nameTableLeaderboard;
+        [SerializeField] private AnimationCurve displayRankCurve;
 
 
         private Data _worldData = new Data("world");
@@ -116,7 +119,6 @@ namespace Pancake.GameService
 
         private void RequestWorldLeaderboardCallback(GetLeaderboardResult result)
         {
-            block.SetActive(false);
             if (result == null && _worldData.players.Count == 0) return;
 
             txtWarning.gameObject.SetActive(false);
@@ -132,11 +134,12 @@ namespace Pancake.GameService
                 btnNextPage.gameObject.SetActive(false);
                 txtWarning.text = "Nothing to show\nYou have reached the end of the rankings";
                 txtWarning.gameObject.SetActive(true);
-                block.gameObject.SetActive(false);
+                block.SetActive(false);
                 btnBackPage.gameObject.SetActive(data.currentPage != 0);
                 return;
             }
 
+            block.SetActive(true);
             var pageData = new List<PlayerLeaderboardEntry>();
             for (int i = 0; i < CountInOnePage; i++)
             {
@@ -147,7 +150,7 @@ namespace Pancake.GameService
             }
 
             btnBackPage.gameObject.SetActive(data.currentPage != 0);
-            btnNextPage.gameObject.SetActive(data.currentPage < data.pageCount);
+            btnNextPage.gameObject.SetActive(data.currentPage < data.pageCount && data.players.Count > CountInOnePage);
 
             content.SetActive(false);
             foreach (var element in rankSlots)
@@ -155,33 +158,44 @@ namespace Pancake.GameService
                 element.gameObject.SetActive(false);
             }
 
+            FetchInternalConfig(pageData, OnOnePageFetchInternalConfigCompleted);
+        }
 
+        private IEnumerator<float> OnOnePageFetchInternalConfigCompleted(List<PlayerLeaderboardEntry> entries, InternalConfig[] internalConfigs)
+        {
+            block.SetActive(false);
             content.SetActive(true);
-            for (int i = 0; i < pageData.Count; i++)
+
+            for (int i = 0; i < internalConfigs.Length; i++)
             {
-                var entry = pageData[i];
-                RenderAsync(entry, i);
+                rankSlots[i]
+                .Init(internalConfigs[i],
+                    entries[i].Position + 1,
+                    countryCode.Get(internalConfigs[i].countryCode).icon,
+                    entries[i].DisplayName,
+                    entries[i].StatValue,
+                    ColorDivision(entries[i].Position + 1, entries[i].PlayFabId),
+                    entries[i].PlayFabId.Equals(LoginResultModel.playerId));
+                rankSlots[i].gameObject.SetActive(true);
+                var sequense = TweenManager.Sequence();
+                sequense.Append(rankSlots[i].transform.TweenLocalScale(new Vector3(1.05f, 1.08f, 1), 0.18f).SetEase(Ease.Accelerate));
+                sequense.Append(rankSlots[i].transform.TweenLocalScale(Vector3.one, 0.07f).SetEase(Ease.Decelerate));
+                sequense.Play();
+                yield return Timing.WaitForSeconds(displayRankCurve.Evaluate(i / (float) internalConfigs.Length));
             }
         }
 
-        private async void RenderAsync(PlayerLeaderboardEntry entry, int index)
+        private async void FetchInternalConfig(List<PlayerLeaderboardEntry> entries, Func<List<PlayerLeaderboardEntry>, InternalConfig[], IEnumerator<float>> onCompleted)
         {
-            var internalConfig = await AuthService.GetUserData<InternalConfig>(entry.PlayFabId,
-                ServiceSettings.INTERNAL_CONFIG_KEY,
-                errorCallback: error => Debug.LogError(error.ErrorMessage));
+            InternalConfig[] configs = new InternalConfig[entries.Count];
+            for (int i = 0; i < entries.Count; i++)
+            {
+                configs[i] = await AuthService.GetUserData<InternalConfig>(entries[i].PlayFabId,
+                    ServiceSettings.INTERNAL_CONFIG_KEY,
+                    errorCallback: error => Debug.Log(error.ErrorMessage));
+            }
 
-            // if user data internal config equal null using location of profile
-            // to_do
-            
-            // render
-            rankSlots[index]
-            .Init(internalConfig,
-                entry.Position + 1,
-                countryCode.Get(internalConfig.countryCode).icon,
-                entry.DisplayName,
-                entry.StatValue,
-                ColorDivision(entry.Position + 1, entry.PlayFabId));
-            rankSlots[index].gameObject.SetActive(true);
+            Timing.RunCoroutine(onCompleted?.Invoke(entries, configs));
         }
 
         private void OnFriendButtonClicked() { }

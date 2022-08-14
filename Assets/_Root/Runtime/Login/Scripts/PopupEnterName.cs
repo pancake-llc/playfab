@@ -1,3 +1,4 @@
+using System;
 using Pancake.Common;
 using Pancake.Tween;
 using Pancake.UI;
@@ -54,6 +55,8 @@ namespace Pancake.GameService
         private string _userName;
         private ISequence _sequenceTxtWarning;
         private Sprite _defaultSprite;
+        private Func<int> _valueExpression;
+        private string _nameTable;
 
         private void Start()
         {
@@ -74,6 +77,17 @@ namespace Pancake.GameService
             _defaultSprite = _uiElements.BtnOk.image.sprite;
             _uiElements.Block.gameObject.SetActive(false);
             _selectedCountry = LoginResultModel.countryCode;
+        }
+
+        /// <summary>
+        /// use for init expression get value
+        /// </summary>
+        /// <param name="nameTable"></param>
+        /// <param name="valueExpression"></param>
+        public void Init(string nameTable, Func<int> valueExpression)
+        {
+            _nameTable = nameTable;
+            _valueExpression = valueExpression;
         }
 
         protected virtual void OnEnable()
@@ -114,6 +128,13 @@ namespace Pancake.GameService
         {
             AuthService.Instance.IsCompleteSetupName = true;
             LoginResultModel.countryCode = _selectedCountry;
+            AuthService.OnUpdatePlayerStatisticsSuccess += AuthServiceOnUpdatePlayerStatisticsSuccess;
+            AuthService.UpdatePlayerStatistics(_nameTable, _valueExpression.Invoke());
+        }
+        
+        protected virtual void AuthServiceOnUpdatePlayerStatisticsSuccess(UpdatePlayerStatisticsResult success)
+        {
+            AuthService.OnUpdatePlayerStatisticsSuccess -= AuthServiceOnUpdatePlayerStatisticsSuccess;
             _uiElements.Block.gameObject.SetActive(false);
             Popup.Show<PopupLeaderboard>();
         }

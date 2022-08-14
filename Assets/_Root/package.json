@@ -2,7 +2,7 @@
   "name": "com.pancake.gameservice",
   "displayName": "Playfab",
   "description": "UPM Unity C# SDKs for PlayFab ",
-  "version": "2.140.220718",
+  "version": "2.144.220804",
   "unity": "2019.1",
   "category": "pancake",
   "author": {

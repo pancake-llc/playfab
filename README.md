@@ -2,9 +2,9 @@
 
 Add 
 
-- for version 2.136.220523
+- for version 2.144.220804
 ```csharp
-"com.pancake.gameservice": "https://github.com/pancake-llc/game-service.git?path=Assets/_Root#2.136.220523",
+"com.pancake.gameservice": "https://github.com/pancake-llc/game-service.git?path=Assets/_Root#2.144.220804",
 "com.pancake.common": "https://github.com/pancake-llc/common.git?path=Assets/_Root#1.2.6",
 "com.lupidan.apple-signin-unity": "https://github.com/lupidan/apple-signin-unity.git#v1.4.2",
 "com.system-community.systemruntimecompilerservicesunsafe": "https://github.com/system-community/SystemRuntimeCompilerServicesUnsafe.git?path=Assets/_Root#4.5.3",

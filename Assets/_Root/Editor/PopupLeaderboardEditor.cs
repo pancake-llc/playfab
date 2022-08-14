@@ -31,6 +31,7 @@ namespace Pancake.Editor
         private SerializedProperty _block;
         private SerializedProperty _content;
         private SerializedProperty _nameTableLeaderboard;
+        private SerializedProperty _displayRankCurve;
         private ReorderableList _rankSlotList;
 
         protected override void OnEnable()
@@ -55,6 +56,7 @@ namespace Pancake.Editor
             _block = serializedObject.FindProperty("block");
             _content = serializedObject.FindProperty("content");
             _nameTableLeaderboard = serializedObject.FindProperty("nameTableLeaderboard");
+            _displayRankCurve = serializedObject.FindProperty("displayRankCurve");
 
             _rankSlotList = new ReorderableList(serializedObject,
                 _rankSlots,
@@ -177,11 +179,15 @@ namespace Pancake.Editor
             GUILayout.Label("Content", GUILayout.Width(DEFAULT_LABEL_WIDTH));
             _content.objectReferenceValue = EditorGUILayout.ObjectField(_content.objectReferenceValue, typeof(GameObject), allowSceneObjects: true);
             EditorGUILayout.EndHorizontal();
-
-            Uniform.SpaceOneLine();
+            
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Table Name", GUILayout.Width(DEFAULT_LABEL_WIDTH));
             _nameTableLeaderboard.stringValue = EditorGUILayout.TextField(_nameTableLeaderboard.stringValue);
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Curve", GUILayout.Width(DEFAULT_LABEL_WIDTH));
+            _displayRankCurve.animationCurveValue = EditorGUILayout.CurveField(_displayRankCurve.animationCurveValue);
             EditorGUILayout.EndHorizontal();
         }
     }
