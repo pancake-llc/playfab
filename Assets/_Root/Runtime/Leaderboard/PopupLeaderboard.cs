@@ -14,6 +14,13 @@ namespace Pancake.GameService
 {
     public class PopupLeaderboard : UIPopup
     {
+        public enum ELeaderboardTab
+        {
+            World = 0,
+            Country = 1,
+            Friend = 2
+        }
+
         private const string LAST_TIME_FETCH_RANK_KEY = "last_time_fetch_rank";
         [SerializeField] private CountryCode countryCode;
         [SerializeField] private UIButton btnNextPage;
@@ -40,6 +47,7 @@ namespace Pancake.GameService
         private Data _worldData = new Data("world");
         private Data _countryData = new Data("country");
         private Data _friendData = new Data("friend");
+        private ELeaderboardTab _currentTab = ELeaderboardTab.World;
 
         public int CountInOnePage => rankSlots.Length;
 
@@ -103,7 +111,7 @@ namespace Pancake.GameService
                 {
                     // wait if need
                     block.SetActive(true);
-                    AuthService.RequestLeaderboard(nameTableLeaderboard, RequestWorldLeaderboardCallback, RequestWorldLeaderboardError);
+                    AuthService.RequestLeaderboard(nameTableLeaderboard, RequestWorldLeaderboardSuccess, RequestWorldLeaderboardError);
                 }
                 else
                 {
@@ -117,7 +125,7 @@ namespace Pancake.GameService
 
         private void RequestWorldLeaderboardError(PlayFabError error) { }
 
-        private void RequestWorldLeaderboardCallback(GetLeaderboardResult result)
+        private void RequestWorldLeaderboardSuccess(GetLeaderboardResult result)
         {
             if (result == null && _worldData.players.Count == 0) return;
 
@@ -150,7 +158,7 @@ namespace Pancake.GameService
             }
 
             btnBackPage.gameObject.SetActive(data.currentPage != 0);
-            btnNextPage.gameObject.SetActive(data.currentPage < data.pageCount && data.players.Count > CountInOnePage);
+            btnNextPage.gameObject.SetActive(data.currentPage < data.pageCount && !(data.players.Count < 100 && data.currentPage == data.pageCount - 1));
 
             content.SetActive(false);
             foreach (var element in rankSlots)
@@ -204,9 +212,71 @@ namespace Pancake.GameService
 
         private void OnWorldButtonClicked() { }
 
-        private void OnNextPageButtonClicked() { }
+        /// <summary>
+        /// next page
+        /// </summary>
+        private void OnNextPageButtonClicked()
+        {
+            btnNextPage.interactable = false;
+            txtWarning.gameObject.SetActive(false);
+            switch (_currentTab)
+            {
+                case ELeaderboardTab.World:
+                    _worldData.currentPage++;
+                    if (_worldData.currentPage == _worldData.pageCount)
+                    {
+                        if (_worldData.currentPage * CountInOnePage >= _worldData.players.Count && _worldData.players.Count > 0)
+                        {
+                            block.SetActive(true);
+                            content.SetActive(false);
+                            AuthService.RequestLeaderboard(nameTableLeaderboard,
+                                NextPageRequestWorldLeaderboardSuccess,
+                                NextPageRequestWorldLeaderboardError,
+                                _worldData.currentPage * CountInOnePage);
+                        }
+                    }
+                    else
+                    {
+                        btnNextPage.interactable = true;
+                        Refresh(_worldData);
+                    }
 
+                    break;
+                case ELeaderboardTab.Country:
+                    _countryData.currentPage++;
+                    break;
+                case ELeaderboardTab.Friend:
+                    _friendData.currentPage++;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// previous page
+        /// </summary>
         private void OnBackPageButtonClicked() { }
+
+
+        #region world
+
+        private void NextPageRequestWorldLeaderboardSuccess(GetLeaderboardResult result)
+        {
+            btnNextPage.interactable = true;
+            if (result == null && _worldData.players.Count == 0) return;
+
+            txtWarning.gameObject.SetActive(false);
+            if (result != null) _worldData.players.AddRange(result.Leaderboard);
+            _worldData.pageCount = M.CeilToInt(_worldData.players.Count / (float) CountInOnePage);
+            Refresh(_worldData);
+        }
+
+
+        private void NextPageRequestWorldLeaderboardError(PlayFabError error)
+        {
+            btnNextPage.interactable = true;
+        }
+
+        #endregion
 
         private void OnDisable()
         {
