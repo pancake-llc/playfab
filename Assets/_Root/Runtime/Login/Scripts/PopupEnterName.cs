@@ -136,6 +136,7 @@ namespace Pancake.GameService
         {
             AuthService.OnUpdatePlayerStatisticsSuccess -= AuthServiceOnUpdatePlayerStatisticsSuccess;
             _uiElements.Block.gameObject.SetActive(false);
+            Popup.Close();// close current popup enter name
             Popup.Show<PopupLeaderboard>();
         }
 
