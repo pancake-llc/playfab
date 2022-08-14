@@ -34,7 +34,7 @@ namespace Pancake.GameService
             AuthService.OnLoginError += AuthServiceOnError;
         }
 
-        private void AuthServiceOnError(PlayFabError error) { Popup.Show<PopupNotification>(_ => _.Message("Loi Dang Nhap")); }
+        private void AuthServiceOnError(PlayFabError error) { Popup.Show<PopupNotification>(_ => _.Message("An unexpected problem has occurred.\nPlease try again later!")); }
 
         private void AuthServiceOnLoginSuccess(LoginResult result)
         {
