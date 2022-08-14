@@ -14,7 +14,7 @@
         },
         {
             "key": "UIPOPUP_CLOSE",
-            "state": true
+            "state": false
         },
         {
             "key": "UIPOPUP_SETTING_DISPLAY",

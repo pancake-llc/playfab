@@ -6,9 +6,11 @@ using Pancake.Common;
 using Pancake.Tween;
 using Pancake.UI;
 using PlayFab;
-using PlayFab.ClientModels;
+using PlayFab.ServerModels;
 using TMPro;
 using UnityEngine;
+using GetLeaderboardResult = PlayFab.ClientModels.GetLeaderboardResult;
+using PlayerLeaderboardEntry = PlayFab.ClientModels.PlayerLeaderboardEntry;
 
 namespace Pancake.GameService
 {
@@ -25,9 +27,9 @@ namespace Pancake.GameService
         [SerializeField] private CountryCode countryCode;
         [SerializeField] private UIButton btnNextPage;
         [SerializeField] private UIButton btnBackPage;
-        [SerializeField] private UIButton btnWorld;
-        [SerializeField] private UIButton btnCountry;
-        [SerializeField] private UIButton btnFriend;
+        [SerializeField] private UIButtonTMP btnWorld;
+        [SerializeField] private UIButtonTMP btnCountry;
+        [SerializeField] private UIButtonTMP btnFriend;
         [SerializeField] private TextMeshProUGUI txtName;
         [SerializeField] private TextMeshProUGUI txtRank;
         [SerializeField] private TextMeshProUGUI txtCurrentPage;
@@ -42,12 +44,17 @@ namespace Pancake.GameService
         [SerializeField] private GameObject block;
         [SerializeField] private string nameTableLeaderboard;
         [SerializeField] private AnimationCurve displayRankCurve;
-        
+        [SerializeField] private Sprite spriteTabSelected;
+        [SerializeField] private Sprite spriteTabNormal;
+        [SerializeField] private Color colorTabTextSelected;
+        [SerializeField] private Color colorTabTextNormal;
+
         private Data _worldData = new Data("world");
         private Data _countryData = new Data("country");
         private Data _friendData = new Data("friend");
         private Dictionary<string, InternalConfig> _userInternalConfig = new Dictionary<string, InternalConfig>();
         private ELeaderboardTab _currentTab = ELeaderboardTab.World;
+        private bool _sessionFirstTime;
 
         public int CountInOnePage => rankSlots.Length;
 
@@ -68,6 +75,7 @@ namespace Pancake.GameService
             public List<PlayerLeaderboardEntry> players;
             public bool firstTime;
             public int pageCount;
+            public int myPosition;
             private readonly string _key;
 
             public Data(string key)
@@ -77,6 +85,7 @@ namespace Pancake.GameService
                 players = new List<PlayerLeaderboardEntry>();
                 currentPage = 0;
                 pageCount = 0;
+                myPosition = -1;
             }
 
             public DateTime LastTimeRefreshLeaderboard
@@ -101,18 +110,24 @@ namespace Pancake.GameService
             btnWorld.onClick.AddListener(OnWorldButtonClicked);
             btnCountry.onClick.AddListener(OnCountryButtonClicked);
             btnFriend.onClick.AddListener(OnFriendButtonClicked);
+            txtName.text = LoginResultModel.playerDisplayName;
+
+            if (!_sessionFirstTime)
+            {
+                _sessionFirstTime = true;
+                _userInternalConfig.Clear();
+            }
 
             if (_worldData.IsCanRefresh(ServiceSettings.delayFetchRank))
             {
                 _worldData.firstTime = false;
                 _worldData.players.Clear();
-                _userInternalConfig.Clear();
                 _worldData.LastTimeRefreshLeaderboard = DateTime.UtcNow;
                 if (AuthService.Instance.isLoggedIn && AuthService.Instance.isRequestCompleted)
                 {
                     // wait if need
                     block.SetActive(true);
-                    AuthService.RequestLeaderboard(nameTableLeaderboard, RequestWorldLeaderboardSuccess, RequestWorldLeaderboardError);
+                    AuthService.GetMyPosition(LoginResultModel.playerId, nameTableLeaderboard, OnGetLeaderboardAroundUserWorldSuccess, OnGetLeaderboardAroundUserWorldError);
                 }
                 else
                 {
@@ -123,6 +138,16 @@ namespace Pancake.GameService
                 // display with old data
             }
         }
+
+        private void OnGetLeaderboardAroundUserWorldError(PlayFabError error) { }
+
+        private void OnGetLeaderboardAroundUserWorldSuccess(GetLeaderboardAroundUserResult success)
+        {
+            _worldData.myPosition = success.Leaderboard[0].Position;
+            txtRank.text = $"Rank: {_worldData.myPosition + 1}";
+            AuthService.RequestLeaderboard(nameTableLeaderboard, RequestWorldLeaderboardSuccess, RequestWorldLeaderboardError);
+        }
+
 
         private void RequestWorldLeaderboardError(PlayFabError error) { }
 
@@ -215,11 +240,83 @@ namespace Pancake.GameService
             Timing.RunCoroutine(onCompleted?.Invoke(entries, configs));
         }
 
-        private void OnFriendButtonClicked() { }
+        private void OnFriendButtonClicked()
+        {
+            _currentTab = ELeaderboardTab.Friend;
+            UpdateDisplayTab();
+        }
 
-        private void OnCountryButtonClicked() { }
+        private void OnCountryButtonClicked()
+        {
+            _currentTab = ELeaderboardTab.Country;
+            UpdateDisplayTab();
+        }
 
-        private void OnWorldButtonClicked() { }
+        private void OnWorldButtonClicked()
+        {
+            _currentTab = ELeaderboardTab.World;
+            UpdateDisplayTab();
+            content.SetActive(false);
+
+            if (_worldData.IsCanRefresh(ServiceSettings.delayFetchRank))
+            {
+                Debug.Log("Can refresh");
+                _worldData.firstTime = false;
+                _worldData.players.Clear();
+                _worldData.LastTimeRefreshLeaderboard = DateTime.UtcNow;
+                if (AuthService.Instance.isLoggedIn && AuthService.Instance.isRequestCompleted)
+                {
+                    // wait if need
+                    block.SetActive(true);
+                    AuthService.GetMyPosition(LoginResultModel.playerId, nameTableLeaderboard, OnGetLeaderboardAroundUserWorldSuccess, OnGetLeaderboardAroundUserWorldError);
+                }
+                else
+                {
+                }
+            }
+            else
+            {
+                // display with old data
+                Refresh(_worldData);
+            }
+        }
+
+        private void UpdateDisplayTab()
+        {
+            switch (_currentTab)
+            {
+                case ELeaderboardTab.World:
+                    btnWorld.image.sprite = spriteTabSelected;
+                    btnWorld.Label.color = colorTabTextSelected;
+
+                    btnCountry.image.sprite = spriteTabNormal;
+                    btnCountry.Label.color = colorTabTextNormal;
+
+                    btnFriend.image.sprite = spriteTabNormal;
+                    btnFriend.Label.color = colorTabTextNormal;
+                    break;
+                case ELeaderboardTab.Country:
+                    btnWorld.image.sprite = spriteTabNormal;
+                    btnWorld.Label.color = colorTabTextNormal;
+
+                    btnCountry.image.sprite = spriteTabSelected;
+                    btnCountry.Label.color = colorTabTextSelected;
+
+                    btnFriend.image.sprite = spriteTabNormal;
+                    btnFriend.Label.color = colorTabTextNormal;
+                    break;
+                case ELeaderboardTab.Friend:
+                    btnWorld.image.sprite = spriteTabNormal;
+                    btnWorld.Label.color = colorTabTextNormal;
+
+                    btnCountry.image.sprite = spriteTabNormal;
+                    btnCountry.Label.color = colorTabTextNormal;
+
+                    btnFriend.image.sprite = spriteTabSelected;
+                    btnFriend.Label.color = colorTabTextSelected;
+                    break;
+            }
+        }
 
         /// <summary>
         /// next page

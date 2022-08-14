@@ -30,6 +30,10 @@ namespace Pancake.Editor
         private SerializedProperty _txtWarning;
         private SerializedProperty _block;
         private SerializedProperty _content;
+        private SerializedProperty _spriteTabNormal;
+        private SerializedProperty _spriteTabSelected;
+        private SerializedProperty _colorTabTextNormal;
+        private SerializedProperty _colorTabTextSelected;
         private SerializedProperty _nameTableLeaderboard;
         private SerializedProperty _displayRankCurve;
         private ReorderableList _rankSlotList;
@@ -57,6 +61,10 @@ namespace Pancake.Editor
             _content = serializedObject.FindProperty("content");
             _nameTableLeaderboard = serializedObject.FindProperty("nameTableLeaderboard");
             _displayRankCurve = serializedObject.FindProperty("displayRankCurve");
+            _spriteTabNormal = serializedObject.FindProperty("spriteTabNormal");
+            _spriteTabSelected = serializedObject.FindProperty("spriteTabSelected");
+            _colorTabTextNormal = serializedObject.FindProperty("colorTabTextNormal");
+            _colorTabTextSelected = serializedObject.FindProperty("colorTabTextSelected");
 
             _rankSlotList = new ReorderableList(serializedObject,
                 _rankSlots,
@@ -179,7 +187,7 @@ namespace Pancake.Editor
             GUILayout.Label("Content", GUILayout.Width(DEFAULT_LABEL_WIDTH));
             _content.objectReferenceValue = EditorGUILayout.ObjectField(_content.objectReferenceValue, typeof(GameObject), allowSceneObjects: true);
             EditorGUILayout.EndHorizontal();
-            
+
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Table Name", GUILayout.Width(DEFAULT_LABEL_WIDTH));
             _nameTableLeaderboard.stringValue = EditorGUILayout.TextField(_nameTableLeaderboard.stringValue);
@@ -188,6 +196,28 @@ namespace Pancake.Editor
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Curve", GUILayout.Width(DEFAULT_LABEL_WIDTH));
             _displayRankCurve.animationCurveValue = EditorGUILayout.CurveField(_displayRankCurve.animationCurveValue);
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Tab Normal", GUILayout.Width(DEFAULT_LABEL_WIDTH));
+            _spriteTabNormal.objectReferenceValue = EditorGUILayout.ObjectField(_spriteTabNormal.objectReferenceValue, typeof(Sprite), allowSceneObjects: false);
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Text Color", GUILayout.Width(DEFAULT_LABEL_WIDTH));
+            _colorTabTextNormal.colorValue = EditorGUILayout.ColorField(_colorTabTextNormal.colorValue);
+            EditorGUILayout.EndHorizontal();
+            
+            Uniform.SpaceOneLine();
+            
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Tab Selected", GUILayout.Width(DEFAULT_LABEL_WIDTH));
+            _spriteTabSelected.objectReferenceValue = EditorGUILayout.ObjectField(_spriteTabSelected.objectReferenceValue, typeof(Sprite), allowSceneObjects: false);
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Text Color", GUILayout.Width(DEFAULT_LABEL_WIDTH));
+            _colorTabTextSelected.colorValue = EditorGUILayout.ColorField(_colorTabTextSelected.colorValue);
             EditorGUILayout.EndHorizontal();
         }
     }

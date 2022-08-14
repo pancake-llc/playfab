@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 #if UNITY_IOS
 using AppleAuth;
@@ -9,13 +7,19 @@ using AppleAuth.Interfaces;
 using AppleAuth.Native;
 #endif
 using PlayFab;
-using PlayFab.AdminModels;
 using PlayFab.ClientModels;
 using PlayFab.Json;
+using PlayFab.ServerModels;
 using UnityEngine;
+using GetLeaderboardRequest = PlayFab.ClientModels.GetLeaderboardRequest;
+using GetLeaderboardResult = PlayFab.ClientModels.GetLeaderboardResult;
+using GetPlayerCombinedInfoRequestParams = PlayFab.ClientModels.GetPlayerCombinedInfoRequestParams;
 using GetUserDataResult = PlayFab.ClientModels.GetUserDataResult;
 using LoginResult = PlayFab.ClientModels.LoginResult;
 using PlayerProfileViewConstraints = PlayFab.ClientModels.PlayerProfileViewConstraints;
+using StatisticUpdate = PlayFab.ClientModels.StatisticUpdate;
+using UpdatePlayerStatisticsRequest = PlayFab.ClientModels.UpdatePlayerStatisticsRequest;
+using UpdatePlayerStatisticsResult = PlayFab.ClientModels.UpdatePlayerStatisticsResult;
 using UpdateUserDataResult = PlayFab.ClientModels.UpdateUserDataResult;
 using UpdateUserTitleDisplayNameRequest = PlayFab.ClientModels.UpdateUserTitleDisplayNameRequest;
 using UpdateUserTitleDisplayNameResult = PlayFab.ClientModels.UpdateUserTitleDisplayNameResult;
@@ -589,7 +593,7 @@ namespace Pancake.GameService
                 callbackResult,
                 callbackError);
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -668,6 +672,13 @@ namespace Pancake.GameService
                 errorCallback);
             await UniTask.WaitUntil(() => flag);
             return t;
+        }
+
+        public static void GetMyPosition(string playerId, string nameTable, Action<GetLeaderboardAroundUserResult> onGetLeaderboardAroundUserSuccess, Action<PlayFabError> onGetLeaderboardAroundUserError)
+        {
+            PlayFabServerAPI.GetLeaderboardAroundUser(new GetLeaderboardAroundUserRequest() {PlayFabId = playerId, MaxResultsCount = 1, StatisticName = nameTable},
+                onGetLeaderboardAroundUserSuccess,
+                onGetLeaderboardAroundUserError);
         }
     }
 }

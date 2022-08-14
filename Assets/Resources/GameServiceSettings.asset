@@ -19,7 +19,7 @@ MonoBehaviour:
   enableAdminApi: 1
   enableClientApi: 1
   enableEntityApi: 1
-  enableServerApi: 0
+  enableServerApi: 1
   enableRequestTimesApi: 0
   infoRequestParams:
     GetCharacterInventories: 0

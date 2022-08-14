@@ -2499,7 +2499,7 @@ GameObject:
   - component: {fileID: 5353044041221905300}
   - component: {fileID: 870196833769640383}
   - component: {fileID: 7883254155580212960}
-  - component: {fileID: 3567877197152064846}
+  - component: {fileID: 2715033227095576141}
   m_Layer: 5
   m_Name: BtnFriend
   m_TagString: Untagged
@@ -2566,7 +2566,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3567877197152064846
+--- !u!114 &2715033227095576141
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2575,7 +2575,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3089691788243065854}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d327287640dac41b4aaade109e3242c0, type: 3}
+  m_Script: {fileID: 11500000, guid: a1e37a80e97cd4e76bd0f22963167f05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -2675,6 +2675,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+  label: {fileID: 666971943565510188}
 --- !u!1 &3626100612239810035
 GameObject:
   m_ObjectHideFlags: 0
@@ -6483,7 +6484,7 @@ GameObject:
   - component: {fileID: 4530251568121923400}
   - component: {fileID: 8880866157219702382}
   - component: {fileID: 1419566027399084244}
-  - component: {fileID: 591296554394406335}
+  - component: {fileID: 6451467783883010727}
   m_Layer: 5
   m_Name: BtnWorld
   m_TagString: Untagged
@@ -6550,7 +6551,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &591296554394406335
+--- !u!114 &6451467783883010727
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6559,7 +6560,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6606049041284182020}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d327287640dac41b4aaade109e3242c0, type: 3}
+  m_Script: {fileID: 11500000, guid: a1e37a80e97cd4e76bd0f22963167f05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -6659,6 +6660,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+  label: {fileID: 2700911142890754078}
 --- !u!1 &6622722754796693807
 GameObject:
   m_ObjectHideFlags: 0
@@ -8517,7 +8519,7 @@ GameObject:
   - component: {fileID: 6230849735898825611}
   - component: {fileID: 7439023322282169057}
   - component: {fileID: 1401795626219382309}
-  - component: {fileID: 2922047769588132866}
+  - component: {fileID: 3155111450159319606}
   m_Layer: 5
   m_Name: BtnCountry
   m_TagString: Untagged
@@ -8584,7 +8586,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2922047769588132866
+--- !u!114 &3155111450159319606
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8593,7 +8595,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8483417666894446069}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d327287640dac41b4aaade109e3242c0, type: 3}
+  m_Script: {fileID: 11500000, guid: a1e37a80e97cd4e76bd0f22963167f05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -8693,6 +8695,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+  label: {fileID: 8778213182111160604}
 --- !u!1 &8491437661163611677
 GameObject:
   m_ObjectHideFlags: 0
@@ -9387,9 +9390,9 @@ MonoBehaviour:
   countryCode: {fileID: 11400000, guid: a8b68d3469e81bb4d80003d99cd5e951, type: 2}
   btnNextPage: {fileID: 44330832979041728}
   btnBackPage: {fileID: 1360225608852489844}
-  btnWorld: {fileID: 591296554394406335}
-  btnCountry: {fileID: 2922047769588132866}
-  btnFriend: {fileID: 3567877197152064846}
+  btnWorld: {fileID: 6451467783883010727}
+  btnCountry: {fileID: 3155111450159319606}
+  btnFriend: {fileID: 2715033227095576141}
   txtName: {fileID: 247317887685801646}
   txtRank: {fileID: 4771016074063199106}
   txtCurrentPage: {fileID: 8149415070157372176}
@@ -9446,6 +9449,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  spriteTabSelected: {fileID: 21300000, guid: a081393ca092557488d76effd423777e, type: 3}
+  spriteTabNormal: {fileID: 21300000, guid: 7919b4690abaaad4b842e9d399f99b2f, type: 3}
+  colorTabTextSelected: {r: 1, g: 1, b: 1, a: 1}
+  colorTabTextNormal: {r: 0.8705883, g: 0.62352943, b: 0.18039216, a: 1}
 --- !u!114 &4506647062667835260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9615,6 +9622,10 @@ MonoBehaviour:
     Path: 1b9857c4
   - GameObject: {fileID: 127734466122738561}
     Path: e0bac1fd1b9857c4
+  - GameObject: {fileID: 5993624841693934215}
+    Path: 8c495f3b
+  - GameObject: {fileID: 6323159741475775757}
+    Path: 4b65a9af8c495f3b
 --- !u!1 &9202680740885399324
 GameObject:
   m_ObjectHideFlags: 0
