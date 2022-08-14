@@ -234,6 +234,7 @@ namespace Pancake.GameService
             }
             else
             {
+                txtRank.text = $"Country Rank: {_countryData.myPosition + 1}";
                 Refresh(_countryData);
             }
         }
@@ -243,7 +244,6 @@ namespace Pancake.GameService
             if (_currentTab == ELeaderboardTab.World) return;
             _currentTab = ELeaderboardTab.World;
             UpdateDisplayTab();
-
             WorldButtonInvokeImpl();
         }
 
@@ -273,6 +273,7 @@ namespace Pancake.GameService
             else
             {
                 // display with old data
+                txtRank.text = $"World Rank: {_worldData.myPosition + 1}";
                 Refresh(_worldData);
             }
         }
