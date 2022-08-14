@@ -121,27 +121,6 @@ namespace Pancake.GameService
             WorldButtonInvokeImpl();
         }
 
-        private void OnGetLeaderboardAroundUserWorldError(PlayFabError error) { }
-
-        private void OnGetLeaderboardAroundUserWorldSuccess(GetLeaderboardAroundUserResult success)
-        {
-            _worldData.myPosition = success.Leaderboard[0].Position;
-            txtRank.text = $"Rank: {_worldData.myPosition + 1}";
-            AuthService.RequestLeaderboard(nameTableLeaderboard, RequestWorldLeaderboardSuccess, RequestWorldLeaderboardError);
-        }
-        
-        private void RequestWorldLeaderboardError(PlayFabError error) { }
-
-        private void RequestWorldLeaderboardSuccess(GetLeaderboardResult result)
-        {
-            if (result == null && _worldData.players.Count == 0) return;
-
-            txtWarning.gameObject.SetActive(false);
-            if (result != null) _worldData.players = result.Leaderboard;
-            _worldData.pageCount = M.CeilToInt(_worldData.players.Count / (float) CountInOnePage);
-            Refresh(_worldData);
-        }
-
         private void Refresh(Data data)
         {
             if (data.currentPage >= data.pageCount) // reach the end
@@ -235,6 +214,28 @@ namespace Pancake.GameService
             _currentTab = ELeaderboardTab.Country;
             UpdateDisplayTab();
             content.SetActive(false);
+            if (_countryData.IsCanRefresh(ServiceSettings.delayFetchRank))
+            {
+                _countryData.firstTime = false;
+                _countryData.players.Clear();
+                _countryData.LastTimeRefreshLeaderboard = DateTime.UtcNow;
+                if (AuthService.Instance.isLoggedIn && AuthService.Instance.isRequestCompleted)
+                {
+                    block.SetActive(true);
+                    AuthService.GetMyPosition(LoginResultModel.playerId,
+                        $"{nameTableLeaderboard}_{LoginResultModel.countryCode}",
+                        OnGetLeaderboardAroundUserCountrySuccess,
+                        OnGetLeaderboardAroundUserCountryError);
+                }
+                else
+                {
+                    LogError();
+                }
+            }
+            else
+            {
+                Refresh(_countryData);
+            }
         }
 
         private void OnWorldButtonClicked()
@@ -266,14 +267,25 @@ namespace Pancake.GameService
                 }
                 else
                 {
-                    // login failed
-                    Popup.Show<PopupNotification>(_ => _.Message("Server login failed.\nPlease check again!"));
+                    LogError();
                 }
             }
             else
             {
                 // display with old data
                 Refresh(_worldData);
+            }
+        }
+        
+        private void LogError()
+        {
+            if (AuthService.Instance.isLoggedIn)
+            {
+                Popup.Show<PopupNotification>(_ => _.Message("An error occurred,\nYou seem to have not completed entering your name and selecting your country"));
+            }
+            else
+            {
+                Popup.Show<PopupNotification>(_ => _.Message("Login failed for unknown reason!"));
             }
         }
 
@@ -388,7 +400,7 @@ namespace Pancake.GameService
                     break;
             }
         }
-        
+
         #region world
 
         private void NextPageRequestWorldLeaderboardSuccess(GetLeaderboardResult result)
@@ -402,8 +414,69 @@ namespace Pancake.GameService
             Refresh(_worldData);
         }
 
-
         private void NextPageRequestWorldLeaderboardError(PlayFabError error) { btnNextPage.interactable = true; }
+
+        private void OnGetLeaderboardAroundUserWorldError(PlayFabError error)
+        {
+            Popup.Show<PopupNotification>(_ => _.Message($"Retrieve your position in the failed world ranking!\nError code: {error.Error}"));
+        }
+
+        private void OnGetLeaderboardAroundUserWorldSuccess(GetLeaderboardAroundUserResult success)
+        {
+            _worldData.myPosition = success.Leaderboard[0].Position;
+            txtRank.text = $"World Rank: {_worldData.myPosition + 1}";
+            AuthService.RequestLeaderboard(nameTableLeaderboard, RequestWorldLeaderboardSuccess, RequestWorldLeaderboardError);
+        }
+
+        private void RequestWorldLeaderboardError(PlayFabError error)
+        {
+            Popup.Show<PopupNotification>(_ => _.Message($"Retrieve world ranking information failed!\nError code: {error.Error}"));
+        }
+
+        private void RequestWorldLeaderboardSuccess(GetLeaderboardResult result)
+        {
+            if (result == null && _worldData.players.Count == 0) return;
+
+            txtWarning.gameObject.SetActive(false);
+            if (result != null) _worldData.players = result.Leaderboard;
+            _worldData.pageCount = M.CeilToInt(_worldData.players.Count / (float) CountInOnePage);
+            Refresh(_worldData);
+        }
+        #endregion
+
+
+        #region country
+
+        private void OnGetLeaderboardAroundUserCountryError(PlayFabError error)
+        {
+            Popup.Show<PopupNotification>(_ => _.Message($"Retrieve your position in the failed country ranking!\nError code: {error.Error}"));
+        }
+
+        private void OnGetLeaderboardAroundUserCountrySuccess(GetLeaderboardAroundUserResult success)
+        {
+            _countryData.myPosition = success.Leaderboard[0].Position;
+            txtRank.text = $"Country Rank: {_countryData.myPosition + 1}";
+            AuthService.RequestLeaderboard($"{nameTableLeaderboard}_{LoginResultModel.countryCode}", RequestCountryLeaderboardSuccess, RequestCountryLeaderboardError);
+        }
+        
+        private void RequestCountryLeaderboardError(PlayFabError error)
+        {
+            Popup.Show<PopupNotification>(_ => _.Message($"Retrieve country ranking information failed!\nError code: {error.Error}"));
+        }
+
+        private void RequestCountryLeaderboardSuccess(GetLeaderboardResult result)
+        {
+            if (result == null && _countryData.players.Count == 0) return;
+
+            txtWarning.gameObject.SetActive(false);
+            if (result != null) _countryData.players = result.Leaderboard;
+            _countryData.pageCount = M.CeilToInt(_countryData.players.Count / (float) CountInOnePage);
+            Refresh(_countryData);
+        }
+
+        #endregion
+
+        #region friend
 
         #endregion
 
