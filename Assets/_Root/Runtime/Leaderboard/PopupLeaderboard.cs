@@ -42,11 +42,11 @@ namespace Pancake.GameService
         [SerializeField] private GameObject block;
         [SerializeField] private string nameTableLeaderboard;
         [SerializeField] private AnimationCurve displayRankCurve;
-
-
+        
         private Data _worldData = new Data("world");
         private Data _countryData = new Data("country");
         private Data _friendData = new Data("friend");
+        private Dictionary<string, InternalConfig> _userInternalConfig = new Dictionary<string, InternalConfig>();
         private ELeaderboardTab _currentTab = ELeaderboardTab.World;
 
         public int CountInOnePage => rankSlots.Length;
@@ -106,6 +106,7 @@ namespace Pancake.GameService
             {
                 _worldData.firstTime = false;
                 _worldData.players.Clear();
+                _userInternalConfig.Clear();
                 _worldData.LastTimeRefreshLeaderboard = DateTime.UtcNow;
                 if (AuthService.Instance.isLoggedIn && AuthService.Instance.isRequestCompleted)
                 {
@@ -198,9 +199,17 @@ namespace Pancake.GameService
             InternalConfig[] configs = new InternalConfig[entries.Count];
             for (int i = 0; i < entries.Count; i++)
             {
-                configs[i] = await AuthService.GetUserData<InternalConfig>(entries[i].PlayFabId,
-                    ServiceSettings.INTERNAL_CONFIG_KEY,
-                    errorCallback: error => Debug.Log(error.ErrorMessage));
+                if (!_userInternalConfig.ContainsKey(entries[i].PlayFabId))
+                {
+                    configs[i] = await AuthService.GetUserData<InternalConfig>(entries[i].PlayFabId,
+                        ServiceSettings.INTERNAL_CONFIG_KEY,
+                        errorCallback: error => Debug.Log(error.ErrorMessage));
+                    _userInternalConfig.Add(entries[i].PlayFabId, configs[i]);
+                }
+                else
+                {
+                    configs[i] = _userInternalConfig[entries[i].PlayFabId];
+                }
             }
 
             Timing.RunCoroutine(onCompleted?.Invoke(entries, configs));
@@ -254,7 +263,38 @@ namespace Pancake.GameService
         /// <summary>
         /// previous page
         /// </summary>
-        private void OnBackPageButtonClicked() { }
+        private void OnBackPageButtonClicked()
+        {
+            btnBackPage.interactable = false;
+            txtWarning.gameObject.SetActive(false);
+            switch (_currentTab)
+            {
+                case ELeaderboardTab.World:
+                    if (_worldData.currentPage > 0)
+                    {
+                        _worldData.currentPage--;
+                        Refresh(_worldData);
+                    }
+
+                    break;
+                case ELeaderboardTab.Country:
+                    if (_countryData.currentPage > 0)
+                    {
+                        _countryData.currentPage--;
+                        Refresh(_countryData);
+                    }
+
+                    break;
+                case ELeaderboardTab.Friend:
+                    if (_friendData.currentPage > 0)
+                    {
+                        _friendData.currentPage--;
+                        Refresh(_friendData);
+                    }
+
+                    break;
+            }
+        }
 
 
         #region world
@@ -271,10 +311,7 @@ namespace Pancake.GameService
         }
 
 
-        private void NextPageRequestWorldLeaderboardError(PlayFabError error)
-        {
-            btnNextPage.interactable = true;
-        }
+        private void NextPageRequestWorldLeaderboardError(PlayFabError error) { btnNextPage.interactable = true; }
 
         #endregion
 

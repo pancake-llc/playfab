@@ -5687,7 +5687,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5145637106948831034
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7128,7 +7128,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1888014707592755097
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9426,13 +9426,22 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.10038609
     - serializedVersion: 3
-      time: 0.9626465
-      value: 0.11363602
-      inSlope: 0.36887425
-      outSlope: 0.36887425
+      time: 0.72068757
+      value: 0.11601737
+      inSlope: 0.4384163
+      outSlope: 0.4384163
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.034749143
+      inWeight: 0.33333334
+      outWeight: 0.23543483
+    - serializedVersion: 3
+      time: 1
+      value: 0.17909211
+      inSlope: -0.02000771
+      outSlope: -0.02000771
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.36861986
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
