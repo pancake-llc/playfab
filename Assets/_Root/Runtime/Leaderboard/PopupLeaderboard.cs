@@ -187,8 +187,8 @@ namespace Pancake.GameService
                     entries[i].PlayFabId.Equals(LoginResultModel.playerId));
                 rankSlots[i].gameObject.SetActive(true);
                 var sequense = TweenManager.Sequence();
-                sequense.Append(rankSlots[i].transform.TweenLocalScale(new Vector3(1.05f, 1.08f, 1), 0.18f).SetEase(Ease.Accelerate));
-                sequense.Append(rankSlots[i].transform.TweenLocalScale(Vector3.one, 0.07f).SetEase(Ease.Decelerate));
+                sequense.Append(rankSlots[i].transform.TweenLocalScale(new Vector3(1.04f, 1.06f, 1), 0.15f).SetEase(Ease.OutQuad));
+                sequense.Append(rankSlots[i].transform.TweenLocalScale(Vector3.one, 0.08f).SetEase(Ease.InQuad));
                 sequense.Play();
                 yield return Timing.WaitForSeconds(displayRankCurve.Evaluate(i / (float) internalConfigs.Length));
             }
