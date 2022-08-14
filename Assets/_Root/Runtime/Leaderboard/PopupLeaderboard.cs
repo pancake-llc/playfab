@@ -140,7 +140,7 @@ namespace Pancake.GameService
                 int index = data.currentPage * CountInOnePage + i;
                 if (data.players.Count <= index) break;
 
-                pageData.Add(_worldData.players[index]);
+                pageData.Add(data.players[index]);
             }
 
             btnBackPage.gameObject.SetActive(data.currentPage != 0);
