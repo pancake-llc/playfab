@@ -104,7 +104,6 @@ namespace Pancake.GameService
 
         private void OnEnable()
         {
-            content.SetActive(false);
             btnBackPage.onClick.AddListener(OnBackPageButtonClicked);
             btnNextPage.onClick.AddListener(OnNextPageButtonClicked);
             btnWorld.onClick.AddListener(OnWorldButtonClicked);
@@ -118,25 +117,8 @@ namespace Pancake.GameService
                 _userInternalConfig.Clear();
             }
 
-            if (_worldData.IsCanRefresh(ServiceSettings.delayFetchRank))
-            {
-                _worldData.firstTime = false;
-                _worldData.players.Clear();
-                _worldData.LastTimeRefreshLeaderboard = DateTime.UtcNow;
-                if (AuthService.Instance.isLoggedIn && AuthService.Instance.isRequestCompleted)
-                {
-                    // wait if need
-                    block.SetActive(true);
-                    AuthService.GetMyPosition(LoginResultModel.playerId, nameTableLeaderboard, OnGetLeaderboardAroundUserWorldSuccess, OnGetLeaderboardAroundUserWorldError);
-                }
-                else
-                {
-                }
-            }
-            else
-            {
-                // display with old data
-            }
+            _currentTab = ELeaderboardTab.World;
+            WorldButtonInvokeImpl();
         }
 
         private void OnGetLeaderboardAroundUserWorldError(PlayFabError error) { }
@@ -147,8 +129,7 @@ namespace Pancake.GameService
             txtRank.text = $"Rank: {_worldData.myPosition + 1}";
             AuthService.RequestLeaderboard(nameTableLeaderboard, RequestWorldLeaderboardSuccess, RequestWorldLeaderboardError);
         }
-
-
+        
         private void RequestWorldLeaderboardError(PlayFabError error) { }
 
         private void RequestWorldLeaderboardSuccess(GetLeaderboardResult result)
@@ -242,25 +223,35 @@ namespace Pancake.GameService
 
         private void OnFriendButtonClicked()
         {
+            if (_currentTab == ELeaderboardTab.Friend) return;
             _currentTab = ELeaderboardTab.Friend;
             UpdateDisplayTab();
+            content.SetActive(false);
         }
 
         private void OnCountryButtonClicked()
         {
+            if (_currentTab == ELeaderboardTab.Country) return;
             _currentTab = ELeaderboardTab.Country;
             UpdateDisplayTab();
+            content.SetActive(false);
         }
 
         private void OnWorldButtonClicked()
         {
+            if (_currentTab == ELeaderboardTab.World) return;
             _currentTab = ELeaderboardTab.World;
             UpdateDisplayTab();
+
+            WorldButtonInvokeImpl();
+        }
+
+        private void WorldButtonInvokeImpl()
+        {
             content.SetActive(false);
 
             if (_worldData.IsCanRefresh(ServiceSettings.delayFetchRank))
             {
-                Debug.Log("Can refresh");
                 _worldData.firstTime = false;
                 _worldData.players.Clear();
                 _worldData.LastTimeRefreshLeaderboard = DateTime.UtcNow;
@@ -268,10 +259,15 @@ namespace Pancake.GameService
                 {
                     // wait if need
                     block.SetActive(true);
-                    AuthService.GetMyPosition(LoginResultModel.playerId, nameTableLeaderboard, OnGetLeaderboardAroundUserWorldSuccess, OnGetLeaderboardAroundUserWorldError);
+                    AuthService.GetMyPosition(LoginResultModel.playerId,
+                        nameTableLeaderboard,
+                        OnGetLeaderboardAroundUserWorldSuccess,
+                        OnGetLeaderboardAroundUserWorldError);
                 }
                 else
                 {
+                    // login failed
+                    Popup.Show<PopupNotification>(_ => _.Message("Server login failed.\nPlease check again!"));
                 }
             }
             else
@@ -392,8 +388,7 @@ namespace Pancake.GameService
                     break;
             }
         }
-
-
+        
         #region world
 
         private void NextPageRequestWorldLeaderboardSuccess(GetLeaderboardResult result)
