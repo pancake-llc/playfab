@@ -109,7 +109,7 @@ namespace Pancake.GameService
                 UserDataPermission.Public,
                 OnUpdateInternalConfigCompleted,
                 OnUpdateInternalConfigError);
-            LoginResultModel.playerDisplayName = name;
+            LoginResultModel.playerDisplayName = success.DisplayName;
         }
 
         protected virtual void OnUpdateNameCallbackError(PlayFabError error)
