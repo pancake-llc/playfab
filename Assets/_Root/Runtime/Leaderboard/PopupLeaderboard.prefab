@@ -1949,8 +1949,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6547736709313874319}
-  - component: {fileID: 3381174549691772398}
-  - component: {fileID: 2185301840557297158}
   - component: {fileID: 5876646751362734999}
   - component: {fileID: 2719557453579168087}
   - component: {fileID: 9200105521294055995}
@@ -1995,44 +1993,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -58.46997}
   m_SizeDelta: {x: 854.84, y: 1221.8398}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!223 &3381174549691772398
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2549488487945944842}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 2
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 25
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
---- !u!114 &2185301840557297158
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2549488487945944842}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!225 &5876646751362734999
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -3953,8 +3913,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5389408804530259617}
-  - component: {fileID: 2723212385888948371}
-  - component: {fileID: 1059815748171522359}
   - component: {fileID: 4521684965667389831}
   - component: {fileID: 5980890924612525717}
   - component: {fileID: 2709945750901820416}
@@ -3985,44 +3943,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!223 &2723212385888948371
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4573587340774913696}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 2
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
---- !u!114 &1059815748171522359
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4573587340774913696}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!225 &4521684965667389831
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -9380,12 +9300,8 @@ MonoBehaviour:
   canvas: {fileID: 0}
   graphicRaycaster: {fileID: 0}
   backgroundTransform: {fileID: 0}
-  backgroundCanvas: {fileID: 0}
-  backgroundGraphicRaycaster: {fileID: 0}
   backgroundCanvasGroup: {fileID: 0}
   containerTransform: {fileID: 0}
-  containerCanvas: {fileID: 0}
-  containerGraphicRaycaster: {fileID: 0}
   containerCanvasGroup: {fileID: 0}
   countryCode: {fileID: 11400000, guid: a8b68d3469e81bb4d80003d99cd5e951, type: 2}
   btnNextPage: {fileID: 44330832979041728}
