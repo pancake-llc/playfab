@@ -7,6 +7,13 @@
       "dependencies": {},
       "hash": "b43e40508b167d143330d8b9eff0d5c9965cdf3c"
     },
+    "com.coffee.ui-particle": {
+      "version": "https://github.com/mob-sakai/ParticleEffectForUGUI.git#4.1.6",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "5e6da2e158cd4438a66d7ce47b12e435305c3b20"
+    },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.3.1",
       "depth": 0,
@@ -59,13 +66,13 @@
       "hash": "61323c5a6f8a5ca701c69ae86c0d11e2aefeab7b"
     },
     "com.pancake.ui": {
-      "version": "https://github.com/pancake-llc/ui.git?path=Assets/_Root#1.0.13",
+      "version": "https://github.com/pancake-llc/ui.git?path=Assets/_Root#1.0.14",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.addressables": "1.19.19"
       },
-      "hash": "20e8ba6e751efb1160f068ac0ec74ef14844d7ba"
+      "hash": "ea1640b35c72a64983e4c9d9b51d8c24218ec0fe"
     },
     "com.system-community.systemruntimecompilerservicesunsafe": {
       "version": "https://github.com/system-community/SystemRuntimeCompilerServicesUnsafe.git?path=Assets/_Root#4.5.3",
