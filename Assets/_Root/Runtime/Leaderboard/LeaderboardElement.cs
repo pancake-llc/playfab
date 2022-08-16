@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Coffee.UIEffects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,16 +21,36 @@ namespace Pancake.GameService
 
         protected InternalConfig userInternalConfig;
 
-        public virtual void Init(InternalConfig userInternalConfig, int rank, Sprite icon, string userName, int score, Color color, bool self)
+        public virtual void Init(InternalConfig userInternalConfig, int rank, Sprite icon, string userName, int score, PopupLeaderboard.ElementColor color, bool self)
         {
             this.userInternalConfig = userInternalConfig;
             txtRank.text = $"{rank}";
             txtUserName.text = userName;
-            imgForcegound.color = color;
+            txtScore.color = color.colorText;
+            txtUserName.color = color.colorText;
+            imgForcegound.color = color.colorBackground;
+            imgOverlay1.color = color.colorOverlay;
+            imgOverlay2.color = color.colorBoder;
+            imgHeader.color = color.colorHeader;
             txtScore.text = score.ToString();
             imgCountry.sprite = icon;
             imgCountry.gameObject.SetActive(true);
-            you.SetActive(true);
+            you.SetActive(self);
+            if (rank != 1 && rank != 2 && rank != 3)
+            {
+                imgCircleRank.gameObject.SetActive(true);
+                txtRank.gameObject.SetActive(true);
+                decor.SetActive(false);
+            }
+            else
+            {
+                imgCircleRank.gameObject.SetActive(false);
+                txtRank.gameObject.SetActive(false);
+                decor.SetActive(true);
+            }
+
+            TryGetComponent<UIShiny>(out var uiShiny);
+            if (uiShiny != null) uiShiny.enabled = (rank == 1 || rank == 2 || rank == 3);
         }
     }
 }

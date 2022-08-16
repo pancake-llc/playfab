@@ -23,6 +23,34 @@ namespace Pancake.GameService
             Friend = 2
         }
 
+        [Serializable]
+        public class ElementColor
+        {
+            public Color colorBackground;
+            public Color colorOverlay;
+            public Color colorBoder;
+            public Color colorHeader;
+            public Color colorText;
+
+            public ElementColor(Color colorBackground, Color colorOverlay, Color colorBoder, Color colorHeader, Color colorText)
+            {
+                this.colorBackground = colorBackground;
+                this.colorOverlay = colorOverlay;
+                this.colorBoder = colorBoder;
+                this.colorHeader = colorHeader;
+                this.colorText = colorText;
+            }
+
+            public ElementColor()
+            {
+                colorBackground = new Color(0.99f, 0.96f, 0.82f);
+                colorOverlay = new Color(0.8f, 0.66f, 0.33f);
+                colorBoder = new Color(0.99f, 0.96f, 0.82f);
+                colorHeader = new Color(1f, 0.67f, 0.26f);
+                colorText = new Color(0.68f, 0.3f, 0.01f);
+            }
+        }
+
         private const string LAST_TIME_FETCH_RANK_KEY = "last_time_fetch_rank";
         [SerializeField] private CountryCode countryCode;
         [SerializeField] private UIButton btnNextPage;
@@ -35,11 +63,33 @@ namespace Pancake.GameService
         [SerializeField] private TextMeshProUGUI txtCurrentPage;
         [SerializeField] private GameObject content;
         [SerializeField] private LeaderboardElement[] rankSlots;
-        [SerializeField] private Color colorRank1 = new Color(1f, 0.8f, 0.25f, 1f);
-        [SerializeField] private Color colorRank2 = new Color(0.65f, 0.75f, 0.84f, 1f);
-        [SerializeField] private Color colorRank3 = new Color(0.75f, 0.58f, 0.38f, 1f);
-        [SerializeField] private Color colorOutRank = new Color(0.86f, 0.84f, 0.69f, 1f);
-        [SerializeField] private Color colorHightlight = new Color(0.57f, 0.85f, 0.63f, 1f);
+
+        [SerializeField] private ElementColor colorRank1 = new ElementColor(new Color(1f, 0.82f, 0f),
+            new Color(0.44f, 0.33f, 0f),
+            new Color(0.99f, 0.96f, 0.82f),
+            new Color(1f, 0.55f, 0.01f),
+            new Color(0.47f, 0.31f, 0f));
+
+        [SerializeField] private ElementColor colorRank2 = new ElementColor(new Color(0.79f, 0.84f, 0.91f),
+            new Color(0.29f, 0.4f, 0.6f),
+            new Color(0.94f, 0.94f, 0.94f),
+            new Color(0.45f, 0.54f, 0.56f),
+            new Color(0.18f, 0.31f, 0.48f));
+
+        [SerializeField] private ElementColor colorRank3 = new ElementColor(new Color(0.8f, 0.59f, 0.31f),
+            new Color(0.34f, 0.23f, 0.09f),
+            new Color(1f, 0.82f, 0.57f),
+            new Color(0.3f, 0.22f, 0.12f),
+            new Color(0.4f, 0.25f, 0.1f));
+
+        [SerializeField] private ElementColor colorRankYou = new ElementColor(new Color(0.47f, 0.76f, 0.92f),
+            new Color(0.08f, 0.53f, 0.71f),
+            new Color(0.09f, 0.53f, 0.71f),
+            new Color(0.22f, 0.58f, 0.85f),
+            new Color(0.08f, 0.27f, 0.42f));
+
+        [SerializeField] private ElementColor colorOutRank = new ElementColor();
+
         [SerializeField] private TextMeshProUGUI txtWarning;
         [SerializeField] private GameObject block;
         [SerializeField] private string nameTableLeaderboard;
@@ -55,17 +105,27 @@ namespace Pancake.GameService
         private Dictionary<string, InternalConfig> _userInternalConfig = new Dictionary<string, InternalConfig>();
         private ELeaderboardTab _currentTab = ELeaderboardTab.World;
         private bool _sessionFirstTime;
+        private HandleIconFacebook _handleIconFacebook;
+
+        public HandleIconFacebook HandleIconFacebook
+        {
+            get
+            {
+                if (_handleIconFacebook == null) _handleIconFacebook = btnFriend.GetComponent<HandleIconFacebook>();
+                return _handleIconFacebook;
+            }
+        }
 
         public int CountInOnePage => rankSlots.Length;
 
-        private Color ColorDivision(int rank, string playerId)
+        private ElementColor ColorDivision(int rank, string playerId)
         {
             switch (rank)
             {
                 case 1: return colorRank1;
                 case 2: return colorRank2;
                 case 3: return colorRank3;
-                default: return playerId.Equals(LoginResultModel.playerId) ? colorHightlight : colorOutRank;
+                default: return playerId.Equals(LoginResultModel.playerId) ? colorRankYou : colorOutRank;
             }
         }
 
@@ -303,6 +363,7 @@ namespace Pancake.GameService
 
                     btnFriend.image.sprite = spriteTabNormal;
                     btnFriend.Label.color = colorTabTextNormal;
+                    HandleIconFacebook.DeSelect();
                     break;
                 case ELeaderboardTab.Country:
                     btnWorld.image.sprite = spriteTabNormal;
@@ -313,6 +374,7 @@ namespace Pancake.GameService
 
                     btnFriend.image.sprite = spriteTabNormal;
                     btnFriend.Label.color = colorTabTextNormal;
+                    HandleIconFacebook.DeSelect();
                     break;
                 case ELeaderboardTab.Friend:
                     btnWorld.image.sprite = spriteTabNormal;
@@ -323,6 +385,7 @@ namespace Pancake.GameService
 
                     btnFriend.image.sprite = spriteTabSelected;
                     btnFriend.Label.color = colorTabTextSelected;
+                    HandleIconFacebook.Select();
                     break;
             }
         }
@@ -463,8 +526,7 @@ namespace Pancake.GameService
         }
 
         #endregion
-
-
+        
         #region country
 
         private void NextPageRequestCountryLeaderboardSuccess(GetLeaderboardResult result)
