@@ -20,7 +20,6 @@ namespace Pancake.GameService
     {
         public enum ELeaderboardTab
         {
-            None = -1,
             World = 0,
             Country = 1,
             Friend = 2
@@ -595,17 +594,22 @@ namespace Pancake.GameService
 
         private void OnFacebookLoginError()
         {
-            _currentTab = ELeaderboardTab.None;
             block.SetActive(false);
-            Popup.Show<PopupNotification>(_ => _.Message("Error to login Facebook!\nPlease try again!"));
+            Popup.Show<PopupNotification>(_ =>
+            {
+                _.Message("Error to login Facebook!\nPlease try again!");
+                _.Ok(OnWorldButtonClicked);
+            });
         }
 
         private void OnFacebookLoginFaild()
         {
-            Debug.Log(AuthService.Instance.CustomId);
-            _currentTab = ELeaderboardTab.None;
             block.SetActive(false);
-            Popup.Show<PopupNotification>(_ => _.Message("Faild to login Facebook!\nPlease try again!"));
+            Popup.Show<PopupNotification>(_ =>
+            {
+                _.Message("Faild to login Facebook!\nPlease try again!");
+                _.Ok(OnWorldButtonClicked);
+            });
         }
 
         private void OnFacebookLoginCompleted()
@@ -630,6 +634,7 @@ namespace Pancake.GameService
             {
                 foreach (var friendData in FacebookManager.Instance.FriendDatas)
                 {
+                    //
                 }
             }
         }
