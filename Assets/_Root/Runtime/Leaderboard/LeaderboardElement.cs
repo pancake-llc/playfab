@@ -21,7 +21,7 @@ namespace Pancake.GameService
 
         protected InternalConfig userInternalConfig;
 
-        public virtual void Init(InternalConfig userInternalConfig, int rank, Sprite icon, string userName, int score, PopupLeaderboard.ElementColor color, bool self)
+        public virtual void Init(InternalConfig userInternalConfig, int rank, Sprite icon, string userName, int score, PopupLeaderboard.ElementColor color, Canvas root, bool self)
         {
             this.userInternalConfig = userInternalConfig;
             txtRank.text = $"{rank}";
@@ -47,6 +47,12 @@ namespace Pancake.GameService
                 imgCircleRank.gameObject.SetActive(false);
                 txtRank.gameObject.SetActive(false);
                 decor.SetActive(true);
+                var eff = decor.GetComponentInChildren<ParticleSystemRenderer>();
+                if (eff != null)
+                {
+                    eff.sortingLayerName = root.sortingLayerName;
+                    eff.sortingOrder = root.sortingOrder + 1;
+                }
             }
 
             TryGetComponent<UIShiny>(out var uiShiny);

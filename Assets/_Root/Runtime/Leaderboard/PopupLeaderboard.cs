@@ -229,6 +229,7 @@ namespace Pancake.GameService
                     entries[i].DisplayName,
                     entries[i].StatValue,
                     ColorDivision(entries[i].Position + 1, entries[i].PlayFabId),
+                    Canvas,
                     entries[i].PlayFabId.Equals(LoginResultModel.playerId));
                 rankSlots[i].gameObject.SetActive(true);
                 var sequense = TweenManager.Sequence();
