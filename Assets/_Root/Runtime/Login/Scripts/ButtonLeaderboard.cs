@@ -1,5 +1,6 @@
 using System;
 using Pancake.Common;
+using Pancake.Facebook;
 using Pancake.UI;
 using PlayFab;
 using PlayFab.ClientModels;

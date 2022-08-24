@@ -45,11 +45,11 @@
       "hash": "3906dd1a9a1842f9004fcb407a4dc5785c3905b1"
     },
     "com.pancake.facebook": {
-      "version": "https://github.com/pancake-llc/facebook.git?path=Assets/_Root#1.0.0",
+      "version": "https://github.com/pancake-llc/facebook.git?path=Assets/_Root#1.0.1",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "75df4edd13dcb389dd9b1956da6c1982e58f9594"
+      "hash": "cd991001760e0756769b2a372ea38fc0d8b6d845"
     },
     "com.pancake.simplejson": {
       "version": "https://github.com/pancake-llc/SimpleJSON.git?path=Assets/_Root#1.0.3",

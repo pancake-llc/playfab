@@ -16295,6 +16295,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Meteor
       objectReference: {fileID: 0}
+    - target: {fileID: 8056741447939895724, guid: 2345a1956d85da44b887446ae85e9a3c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8056741447939895725, guid: 2345a1956d85da44b887446ae85e9a3c, type: 3}
       propertyPath: CollisionModule.m_Planes.Array.data[0]
       value: 

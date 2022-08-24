@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using MEC;
 using Pancake.Common;
+using Pancake.Facebook;
 using Pancake.Tween;
 using Pancake.UI;
 using PlayFab;
+using PlayFab.ClientModels;
 using PlayFab.ServerModels;
 using TMPro;
 using UnityEngine;
@@ -52,6 +54,9 @@ namespace Pancake.GameService
         }
 
         private const string LAST_TIME_FETCH_RANK_KEY = "last_time_fetch_rank";
+
+        #region field
+
         [SerializeField] private CountryCode countryCode;
         [SerializeField] private UIButton btnNextPage;
         [SerializeField] private UIButton btnBackPage;
@@ -98,6 +103,8 @@ namespace Pancake.GameService
         [SerializeField] private Sprite spriteTabNormal;
         [SerializeField] private Color colorTabTextSelected;
         [SerializeField] private Color colorTabTextNormal;
+
+        #endregion
 
         private Data _worldData = new Data("world");
         private Data _countryData = new Data("country");
@@ -267,6 +274,16 @@ namespace Pancake.GameService
             _currentTab = ELeaderboardTab.Friend;
             UpdateDisplayTab();
             content.SetActive(false);
+            // validate status login facebook
+            if (!FacebookManager.Instance.IsLoggedIn)
+            {
+                block.SetActive(true);
+                FacebookManager.Instance.Login(OnFacebookLoginCompleted, OnFacebookLoginFaild, OnFacebookLoginError);
+            }
+            else
+            {
+                FetchFriendDataFb();
+            }
         }
 
         private void OnCountryButtonClicked()
@@ -306,37 +323,6 @@ namespace Pancake.GameService
             _currentTab = ELeaderboardTab.World;
             UpdateDisplayTab();
             WorldButtonInvokeImpl();
-        }
-
-        private void WorldButtonInvokeImpl()
-        {
-            content.SetActive(false);
-
-            if (_worldData.IsCanRefresh(ServiceSettings.delayFetchRank))
-            {
-                _worldData.firstTime = false;
-                _worldData.players.Clear();
-                _worldData.LastTimeRefreshLeaderboard = DateTime.UtcNow;
-                if (AuthService.Instance.isLoggedIn && AuthService.Instance.isRequestCompleted)
-                {
-                    // wait if need
-                    block.SetActive(true);
-                    AuthService.GetMyPosition(LoginResultModel.playerId,
-                        nameTableLeaderboard,
-                        OnGetLeaderboardAroundUserWorldSuccess,
-                        OnGetLeaderboardAroundUserWorldError);
-                }
-                else
-                {
-                    LogError();
-                }
-            }
-            else
-            {
-                // display with old data
-                txtRank.text = $"World Rank: {_worldData.myPosition + 1}";
-                Refresh(_worldData);
-            }
         }
 
         private void LogError()
@@ -526,8 +512,39 @@ namespace Pancake.GameService
             Refresh(_worldData);
         }
 
+        private void WorldButtonInvokeImpl()
+        {
+            content.SetActive(false);
+
+            if (_worldData.IsCanRefresh(ServiceSettings.delayFetchRank))
+            {
+                _worldData.firstTime = false;
+                _worldData.players.Clear();
+                _worldData.LastTimeRefreshLeaderboard = DateTime.UtcNow;
+                if (AuthService.Instance.isLoggedIn && AuthService.Instance.isRequestCompleted)
+                {
+                    // wait if need
+                    block.SetActive(true);
+                    AuthService.GetMyPosition(LoginResultModel.playerId,
+                        nameTableLeaderboard,
+                        OnGetLeaderboardAroundUserWorldSuccess,
+                        OnGetLeaderboardAroundUserWorldError);
+                }
+                else
+                {
+                    LogError();
+                }
+            }
+            else
+            {
+                // display with old data
+                txtRank.text = $"World Rank: {_worldData.myPosition + 1}";
+                Refresh(_worldData);
+            }
+        }
+
         #endregion
-        
+
         #region country
 
         private void NextPageRequestCountryLeaderboardSuccess(GetLeaderboardResult result)
@@ -573,6 +590,42 @@ namespace Pancake.GameService
         #endregion
 
         #region friend
+
+        private void OnFacebookLoginError()
+        {
+            block.SetActive(false);
+            Popup.Show<PopupNotification>(_ => _.Message("Error to login Facebook!\nPlease try again!"));
+        }
+
+        private void OnFacebookLoginFaild()
+        {
+            block.SetActive(false);
+            Popup.Show<PopupNotification>(_ => _.Message("Faild to login Facebook!\nPlease try again!"));
+        }
+
+        private void OnFacebookLoginCompleted()
+        {
+            // link account with facebook.
+            AuthService.LinkFacebook(FacebookManager.Instance.Token, OnLinkFacebookCompleted, null);
+        }
+
+        private void OnLinkFacebookCompleted(LinkFacebookAccountResult obj)
+        {
+            FetchFriendDataFb();
+            block.SetActive(false);
+        }
+
+        private async void FetchFriendDataFb()
+        {
+            FacebookManager.Instance.GetMeFriend();
+            bool result = await FacebookManager.Instance.LoadProfileAllFriend();
+            if (result)
+            {
+                foreach (var friendData in FacebookManager.Instance.FriendDatas)
+                {
+                }
+            }
+        }
 
         #endregion
 
