@@ -37,6 +37,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - ui_popup
+  - m_GUID: da32ef5f6b136da4db4c3dd5a0a11581
+    m_Address: PopupOption
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ui_popup
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: c332dcbd13190f3468432e6627620e80, type: 2}
   m_SchemaSet:

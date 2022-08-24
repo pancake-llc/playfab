@@ -70,6 +70,7 @@ namespace Pancake.GameService
                 }
             }
 
+            
             LoginResultModel.Init(r.PlayerId, r.DisplayName, countryCode);
             if (result.NewlyCreated || !AuthService.Instance.IsCompleteSetupName)
             {

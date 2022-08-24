@@ -602,6 +602,7 @@ namespace Pancake.GameService
 
         private void OnFacebookLoginFaild()
         {
+            Debug.Log(AuthService.Instance.CustomId);
             _currentTab = ELeaderboardTab.None;
             block.SetActive(false);
             Popup.Show<PopupNotification>(_ => _.Message("Faild to login Facebook!\nPlease try again!"));
@@ -610,7 +611,7 @@ namespace Pancake.GameService
         private void OnFacebookLoginCompleted()
         {
             // link account with facebook.
-            AuthService.LinkFacebook(FacebookManager.Instance.Token, OnLinkFacebookCompleted, null);
+            AuthService.LinkFacebook(FacebookManager.Instance.Token, OnLinkFacebookCompleted, OnLinkFacebookError);
         }
 
         private void OnLinkFacebookCompleted(LinkFacebookAccountResult obj)
@@ -618,6 +619,8 @@ namespace Pancake.GameService
             FetchFriendDataFb();
             block.SetActive(false);
         }
+
+        private void OnLinkFacebookError(PlayFabError error) { Popup.Show<PopupNotification>(_ => _.Message(error.ErrorMessage)); }
 
         private async void FetchFriendDataFb()
         {

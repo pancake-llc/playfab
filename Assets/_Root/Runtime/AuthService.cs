@@ -709,13 +709,7 @@ namespace Pancake.GameService
         /// </summary>
         public static void LinkFacebook(string token, Action<LinkFacebookAccountResult> onLinkCompleted, Action<PlayFabError> onLinkError)
         {
-            void OnLinkCompleted(LinkFacebookAccountResult result)
-            {
-                onLinkCompleted?.Invoke(result);
-                Instance.UnlinkSilentAuth();
-            }
-
-            PlayFabClientAPI.LinkFacebookAccount(new LinkFacebookAccountRequest() {AccessToken = token}, OnLinkCompleted, onLinkError);
+            PlayFabClientAPI.LinkFacebookAccount(new LinkFacebookAccountRequest() {AccessToken = token}, onLinkCompleted, onLinkError);
         }
     }
 }
