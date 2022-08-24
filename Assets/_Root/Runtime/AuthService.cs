@@ -493,6 +493,12 @@ namespace Pancake.GameService
         {
             SilentlyAuthenticate(result =>
             {
+                if (ServiceSettings.UseCustomIdAsDefault)
+                {
+                    PlayFabClientAPI.UnlinkCustomID(new UnlinkCustomIDRequest {CustomId = CustomId}, null, null);
+                }
+                else
+                {
 #if UNITY_ANDROID && !UNITY_EDITOR
                 //Fire and forget, unlink this android device.
                 PlayFabClientAPI.UnlinkAndroidDeviceID(new UnlinkAndroidDeviceIDRequest() {AndroidDeviceId = CustomId}, null, null);
@@ -500,8 +506,9 @@ namespace Pancake.GameService
 #elif (UNITY_IPHONE || UNITY_IOS) && !UNITY_EDITOR
                 PlayFabClientAPI.UnlinkIOSDeviceID(new UnlinkIOSDeviceIDRequest() {DeviceId = CustomId}, null, null);
 #else
-                PlayFabClientAPI.UnlinkCustomID(new UnlinkCustomIDRequest {CustomId = CustomId}, null, null);
+                    PlayFabClientAPI.UnlinkCustomID(new UnlinkCustomIDRequest {CustomId = CustomId}, null, null);
 #endif
+                }
             });
         }
 
@@ -695,6 +702,20 @@ namespace Pancake.GameService
             PlayFabServerAPI.GetLeaderboardAroundUser(new GetLeaderboardAroundUserRequest() {PlayFabId = playerId, MaxResultsCount = 1, StatisticName = nameTable},
                 onGetLeaderboardAroundUserSuccess,
                 onGetLeaderboardAroundUserError);
+        }
+
+        /// <summary>
+        /// use to link current account to facebook
+        /// </summary>
+        public static void LinkFacebook(string token, Action<LinkFacebookAccountResult> onLinkCompleted, Action<PlayFabError> onLinkError)
+        {
+            void OnLinkCompleted(LinkFacebookAccountResult result)
+            {
+                onLinkCompleted?.Invoke(result);
+                Instance.UnlinkSilentAuth();
+            }
+
+            PlayFabClientAPI.LinkFacebookAccount(new LinkFacebookAccountRequest() {AccessToken = token}, OnLinkCompleted, onLinkError);
         }
     }
 }
