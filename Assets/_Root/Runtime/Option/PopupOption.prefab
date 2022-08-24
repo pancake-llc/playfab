@@ -795,10 +795,16 @@ MonoBehaviour:
     Path: 234afeb8c4c936d8
   - GameObject: {fileID: 7962514723660373224}
     Path: 76ed1083c4c936d8
+  - GameObject: {fileID: 3846926658224536953}
+    Path: baf0a296c4c936d8
   - GameObject: {fileID: 5946320354044878407}
-    Path: ef0f096dc4c936d8
+    Path: ef0f096dbaf0a296c4c936d8
   - GameObject: {fileID: 2526775802413897248}
-    Path: 417fd798ef0f096dc4c936d8
+    Path: 417fd798ef0f096dbaf0a296c4c936d8
+  - GameObject: {fileID: 1495332422700000554}
+    Path: ab03665dbaf0a296c4c936d8
+  - GameObject: {fileID: 85123243249346621}
+    Path: 417fd798ab03665dbaf0a296c4c936d8
 --- !u!114 &3693320543033520789
 MonoBehaviour:
   m_ObjectHideFlags: 0
