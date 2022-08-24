@@ -752,7 +752,7 @@ MonoBehaviour:
   publicProfile: 1
   email: 1
   gamingProfile: 1
-  gamingUserPicture: 0
+  gamingUserPicture: 1
   userAgeRange: 0
   userBirthday: 0
   userFriends: 1

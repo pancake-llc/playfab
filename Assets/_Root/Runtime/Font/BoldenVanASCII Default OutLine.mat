@@ -66,7 +66,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _FaceDilate: -0.2
+    - _FaceDilate: 0.3
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -77,12 +77,12 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _OutlineSoftness: 0
-    - _OutlineWidth: 0.15
+    - _OutlineWidth: 0.3
     - _Parallax: 0.02
     - _PerspectiveFilter: 0.875
     - _ScaleRatioA: 0.8
     - _ScaleRatioB: 1
-    - _ScaleRatioC: 0.32724506
+    - _ScaleRatioC: 0.17692308
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0
@@ -101,7 +101,7 @@ Material:
     - _UnderlayDilate: 1
     - _UnderlayOffsetX: 0
     - _UnderlayOffsetY: -1
-    - _UnderlaySoftness: 0.628
+    - _UnderlaySoftness: 0.6
     - _VertexOffsetX: 0
     - _VertexOffsetY: 0
     - _WeightBold: 0.5
@@ -112,6 +112,6 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FaceColor: {r: 1, g: 1, b: 1, a: 1}
-    - _OutlineColor: {r: 0.45842838, g: 0, b: 0.6226415, a: 1}
-    - _UnderlayColor: {r: 0.25446868, g: 0, b: 0.38679248, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _UnderlayColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

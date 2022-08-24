@@ -20,6 +20,7 @@ namespace Pancake.GameService
     {
         public enum ELeaderboardTab
         {
+            None = -1,
             World = 0,
             Country = 1,
             Friend = 2
@@ -593,12 +594,14 @@ namespace Pancake.GameService
 
         private void OnFacebookLoginError()
         {
+            _currentTab = ELeaderboardTab.None;
             block.SetActive(false);
             Popup.Show<PopupNotification>(_ => _.Message("Error to login Facebook!\nPlease try again!"));
         }
 
         private void OnFacebookLoginFaild()
         {
+            _currentTab = ELeaderboardTab.None;
             block.SetActive(false);
             Popup.Show<PopupNotification>(_ => _.Message("Faild to login Facebook!\nPlease try again!"));
         }
