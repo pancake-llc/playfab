@@ -191,6 +191,7 @@ namespace Pancake.GameService
 
         private void Refresh(Data data)
         {
+            txtCurrentPage.text = $"PAGE {data.currentPage + 1}";
             if (data.currentPage >= data.pageCount) // reach the end
             {
                 btnNextPage.gameObject.SetActive(false);
