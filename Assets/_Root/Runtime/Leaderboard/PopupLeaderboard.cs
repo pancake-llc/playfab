@@ -113,7 +113,7 @@ namespace Pancake.GameService
                 firstTime = true;
                 players = new List<Entry>();
                 currentPage = 0;
-                pageCount = 0;
+                pageCount = 1;
                 myPosition = -1;
             }
 
@@ -792,6 +792,7 @@ namespace Pancake.GameService
 
         private void Refresh(FriendData data)
         {
+            data.pageCount = M.CeilToInt(data.players.Count / (float) CountInOnePage);
             txtCurrentPage.text = $"PAGE {data.currentPage + 1}";
             if (data.currentPage >= data.pageCount) // reach the end
             {
@@ -832,8 +833,10 @@ namespace Pancake.GameService
 
             for (int i = 0; i < entries.Count; i++)
             {
+                InternalConfig interConfig = null;
+                if (internalConfigs != null && internalConfigs.Length - 1 > i) interConfig = internalConfigs[i];
                 rankSlots[i]
-                .Init(internalConfigs[i],
+                .Init(interConfig,
                     i + 1,
                     entries[i].sprite,
                     entries[i].displayName,
