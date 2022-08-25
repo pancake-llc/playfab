@@ -834,7 +834,16 @@ namespace Pancake.GameService
             for (int i = 0; i < entries.Count; i++)
             {
                 InternalConfig interConfig = null;
-                if (internalConfigs != null && internalConfigs.Length - 1 > i) interConfig = internalConfigs[i];
+                float c = 0;
+                if (internalConfigs != null)
+                {
+                    c = internalConfigs.Length > 0 ? internalConfigs.Length : 1;
+                    if (internalConfigs.Length - 1 > i)interConfig = internalConfigs[i];
+                }
+                else
+                {
+                    c = 1;
+                }
                 rankSlots[i]
                 .Init(interConfig,
                     i + 1,
@@ -849,7 +858,7 @@ namespace Pancake.GameService
                 sequense.Append(rankSlots[i].transform.TweenLocalScale(new Vector3(1.04f, 1.06f, 1), 0.15f).SetEase(Ease.OutQuad));
                 sequense.Append(rankSlots[i].transform.TweenLocalScale(Vector3.one, 0.08f).SetEase(Ease.InQuad));
                 sequense.Play();
-                yield return Timing.WaitForSeconds(displayRankCurve.Evaluate(i / (float) internalConfigs.Length));
+                yield return Timing.WaitForSeconds(displayRankCurve.Evaluate(i / c));
             }
         }
 
