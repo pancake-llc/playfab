@@ -14,6 +14,8 @@ using UnityEngine;
 using GetLeaderboardRequest = PlayFab.ClientModels.GetLeaderboardRequest;
 using GetLeaderboardResult = PlayFab.ClientModels.GetLeaderboardResult;
 using GetPlayerCombinedInfoRequestParams = PlayFab.ClientModels.GetPlayerCombinedInfoRequestParams;
+using GetPlayFabIDsFromFacebookIDsRequest = PlayFab.ClientModels.GetPlayFabIDsFromFacebookIDsRequest;
+using GetPlayFabIDsFromFacebookIDsResult = PlayFab.ClientModels.GetPlayFabIDsFromFacebookIDsResult;
 using GetUserDataResult = PlayFab.ClientModels.GetUserDataResult;
 using LoginResult = PlayFab.ClientModels.LoginResult;
 using PlayerProfileViewConstraints = PlayFab.ClientModels.PlayerProfileViewConstraints;
@@ -693,7 +695,7 @@ namespace Pancake.GameService
             return t;
         }
 
-        public static void GetMyPosition(
+        public static void GetStatistic(
             string playerId,
             string nameTable,
             Action<GetLeaderboardAroundUserResult> onGetLeaderboardAroundUserSuccess,
@@ -710,6 +712,11 @@ namespace Pancake.GameService
         public static void LinkFacebook(string token, Action<LinkFacebookAccountResult> onLinkCompleted, Action<PlayFabError> onLinkError)
         {
             PlayFabClientAPI.LinkFacebookAccount(new LinkFacebookAccountRequest() {AccessToken = token}, onLinkCompleted, onLinkError);
+        }
+
+        public static void GetPlayFabIDsFromFacebook(List<string> facebookIDs, Action<GetPlayFabIDsFromFacebookIDsResult> onCompleted, Action<PlayFabError> onError)
+        {
+            PlayFabClientAPI.GetPlayFabIDsFromFacebookIDs(new GetPlayFabIDsFromFacebookIDsRequest() {FacebookIDs = facebookIDs}, onCompleted, onError);
         }
     }
 }

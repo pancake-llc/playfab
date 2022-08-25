@@ -27,7 +27,7 @@ MonoBehaviour:
     GetPlayerProfile: 1
     GetPlayerStatistics: 1
     GetTitleData: 0
-    GetUserAccountInfo: 0
+    GetUserAccountInfo: 1
     GetUserData: 1
     GetUserInventory: 0
     GetUserReadOnlyData: 0
@@ -43,7 +43,7 @@ MonoBehaviour:
       ShowDisplayName: 1
       ShowExperimentVariants: 0
       ShowLastLogin: 0
-      ShowLinkedAccounts: 0
+      ShowLinkedAccounts: 1
       ShowLocations: 1
       ShowMemberships: 0
       ShowOrigination: 0

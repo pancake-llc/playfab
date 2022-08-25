@@ -1,4 +1,5 @@
-﻿using PlayFab.ClientModels;
+﻿using Pancake.Linq;
+using PlayFab.ClientModels;
 using UnityEngine;
 
 namespace Pancake.GameService
@@ -15,7 +16,7 @@ namespace Pancake.GameService
             _playfabSilentLogin.onLoginSuccess.RemoveAllListeners();
             _playfabSilentLogin.onLoginSuccess.AddListener(OnLoginSuccess);
         }
-        
+
 
         private void OnLoginSuccess(LoginResult result)
         {
@@ -27,7 +28,7 @@ namespace Pancake.GameService
             }
 
             //var r2 = result.InfoResultPayload.PlayerStatistics;
-            LoginResultModel.Init(r.PlayerId, r.DisplayName, countryCode);
+            LoginResultModel.Init(r.PlayerId, r.DisplayName, countryCode, r.LinkedAccounts.Any(_ => _.Platform == LoginIdentityProvider.Facebook));
             // if (result.NewlyCreated || !AuthService.Instance.IsCompleteSetupName)
             // {
             //     Popup.Show<PopupEnterName>();

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Cysharp.Threading.Tasks;
 using MEC;
 using Pancake.Common;
 using Pancake.Facebook;
+using Pancake.Linq;
 using Pancake.Tween;
 using Pancake.UI;
 using PlayFab;
@@ -12,6 +14,7 @@ using PlayFab.ServerModels;
 using TMPro;
 using UnityEngine;
 using GetLeaderboardResult = PlayFab.ClientModels.GetLeaderboardResult;
+using GetPlayFabIDsFromFacebookIDsResult = PlayFab.ClientModels.GetPlayFabIDsFromFacebookIDsResult;
 using PlayerLeaderboardEntry = PlayFab.ClientModels.PlayerLeaderboardEntry;
 
 namespace Pancake.GameService
@@ -51,6 +54,81 @@ namespace Pancake.GameService
                 colorHeader = new Color(1f, 0.67f, 0.26f);
                 colorText = new Color(0.68f, 0.3f, 0.01f);
             }
+        }
+
+        private sealed class Data
+        {
+            public int currentPage;
+            public List<PlayerLeaderboardEntry> players;
+            public bool firstTime;
+            public int pageCount;
+            public int myPosition;
+            private readonly string _key;
+
+            public Data(string key)
+            {
+                _key = key;
+                firstTime = true;
+                players = new List<PlayerLeaderboardEntry>();
+                currentPage = 0;
+                pageCount = 0;
+                myPosition = -1;
+            }
+
+            public DateTime LastTimeRefreshLeaderboard
+            {
+                get
+                {
+                    DateTime.TryParse(PlayerPrefs.GetString($"{LAST_TIME_FETCH_RANK_KEY}_{_key}", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)),
+                        out var result);
+                    return result;
+                }
+                set => PlayerPrefs.SetString($"{LAST_TIME_FETCH_RANK_KEY}_{_key}", value.ToString(CultureInfo.InvariantCulture));
+            }
+
+            public bool IsCanRefresh(int limitTime) => (DateTime.UtcNow - LastTimeRefreshLeaderboard).TotalSeconds >= limitTime || firstTime;
+        }
+
+        private sealed class FriendData
+        {
+            public sealed class Entry
+            {
+                public Sprite sprite;
+                public string displayName;
+                public string playfabId;
+                public string facebookId;
+                public int statValue;
+            }
+
+            public int currentPage;
+            public List<Entry> players;
+            public bool firstTime;
+            public int pageCount;
+            public int myPosition;
+            private readonly string _key;
+
+            public FriendData(string key)
+            {
+                _key = key;
+                firstTime = true;
+                players = new List<Entry>();
+                currentPage = 0;
+                pageCount = 0;
+                myPosition = -1;
+            }
+
+            public DateTime LastTimeRefreshLeaderboard
+            {
+                get
+                {
+                    DateTime.TryParse(PlayerPrefs.GetString($"{LAST_TIME_FETCH_RANK_KEY}_{_key}", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)),
+                        out var result);
+                    return result;
+                }
+                set => PlayerPrefs.SetString($"{LAST_TIME_FETCH_RANK_KEY}_{_key}", value.ToString(CultureInfo.InvariantCulture));
+            }
+
+            public bool IsCanRefresh(int limitTime) => (DateTime.UtcNow - LastTimeRefreshLeaderboard).TotalSeconds >= limitTime || firstTime;
         }
 
         private const string LAST_TIME_FETCH_RANK_KEY = "last_time_fetch_rank";
@@ -108,8 +186,9 @@ namespace Pancake.GameService
 
         private Data _worldData = new Data("world");
         private Data _countryData = new Data("country");
-        private Data _friendData = new Data("friend");
+        private FriendData _friendData = new FriendData("friend");
         private Dictionary<string, InternalConfig> _userInternalConfig = new Dictionary<string, InternalConfig>();
+        private Dictionary<string, Sprite> _friendCacheAvatar = new Dictionary<string, Sprite>();
         private ELeaderboardTab _currentTab = ELeaderboardTab.World;
         private bool _sessionFirstTime;
         private HandleIconFacebook _handleIconFacebook;
@@ -136,39 +215,6 @@ namespace Pancake.GameService
             }
         }
 
-        private sealed class Data
-        {
-            public int currentPage;
-            public List<PlayerLeaderboardEntry> players;
-            public bool firstTime;
-            public int pageCount;
-            public int myPosition;
-            private readonly string _key;
-
-            public Data(string key)
-            {
-                _key = key;
-                firstTime = true;
-                players = new List<PlayerLeaderboardEntry>();
-                currentPage = 0;
-                pageCount = 0;
-                myPosition = -1;
-            }
-
-            public DateTime LastTimeRefreshLeaderboard
-            {
-                get
-                {
-                    DateTime.TryParse(PlayerPrefs.GetString($"{LAST_TIME_FETCH_RANK_KEY}_{_key}", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)),
-                        out var result);
-                    return result;
-                }
-                set => PlayerPrefs.SetString($"{LAST_TIME_FETCH_RANK_KEY}_{_key}", value.ToString(CultureInfo.InvariantCulture));
-            }
-
-            public bool IsCanRefresh(int limitTime) => (DateTime.UtcNow - LastTimeRefreshLeaderboard).TotalSeconds >= limitTime || firstTime;
-        }
-
         private void OnEnable()
         {
             btnBackPage.onClick.AddListener(OnBackPageButtonClicked);
@@ -182,6 +228,7 @@ namespace Pancake.GameService
             {
                 _sessionFirstTime = true;
                 _userInternalConfig.Clear();
+                _friendCacheAvatar.Clear();
             }
 
             _currentTab = ELeaderboardTab.World;
@@ -301,7 +348,7 @@ namespace Pancake.GameService
                 if (AuthService.Instance.isLoggedIn && AuthService.Instance.isRequestCompleted)
                 {
                     block.SetActive(true);
-                    AuthService.GetMyPosition(LoginResultModel.playerId,
+                    AuthService.GetStatistic(LoginResultModel.playerId,
                         $"{nameTableLeaderboard}_{LoginResultModel.countryCode}",
                         OnGetLeaderboardAroundUserCountrySuccess,
                         OnGetLeaderboardAroundUserCountryError);
@@ -526,7 +573,7 @@ namespace Pancake.GameService
                 {
                     // wait if need
                     block.SetActive(true);
-                    AuthService.GetMyPosition(LoginResultModel.playerId,
+                    AuthService.GetStatistic(LoginResultModel.playerId,
                         nameTableLeaderboard,
                         OnGetLeaderboardAroundUserWorldSuccess,
                         OnGetLeaderboardAroundUserWorldError);
@@ -615,27 +662,191 @@ namespace Pancake.GameService
         private void OnFacebookLoginCompleted()
         {
             // link account with facebook.
-            AuthService.LinkFacebook(FacebookManager.Instance.Token, OnLinkFacebookCompleted, OnLinkFacebookError);
+            if (!LoginResultModel.facebookAuth)
+            {
+                AuthService.LinkFacebook(FacebookManager.Instance.Token, OnLinkFacebookCompleted, OnLinkFacebookError);
+            }
+            else
+            {
+                FetchFriendDataFb();
+                block.SetActive(false);
+            }
         }
 
         private void OnLinkFacebookCompleted(LinkFacebookAccountResult obj)
         {
             FetchFriendDataFb();
             block.SetActive(false);
+            LoginResultModel.facebookAuth = true;
         }
 
         private void OnLinkFacebookError(PlayFabError error) { Popup.Show<PopupNotification>(_ => _.Message(error.ErrorMessage)); }
 
+        private async void OnGetPlayfabIDsFromFacebookIDsCompleted(GetPlayFabIDsFromFacebookIDsResult result)
+        {
+            foreach (var idPair in result.Data)
+            {
+                bool status = false;
+                
+                AuthService.GetStatistic(idPair.PlayFabId,
+                    nameTableLeaderboard,
+                    userResult =>
+                    {
+                        Debug.Log("Display Name: " + userResult.Leaderboard[0].DisplayName + "    Score: " + userResult.Leaderboard[0].StatValue + "   Facebook Id:" + idPair.FacebookId);
+                        _friendData.players.Add(new FriendData.Entry()
+                        {
+                            playfabId = userResult.Leaderboard[0].PlayFabId,
+                            facebookId = idPair.FacebookId,
+                            sprite = null,
+                            displayName = userResult.Leaderboard[0].DisplayName,
+                            statValue = userResult.Leaderboard[0].StatValue
+                        });
+                        status = true;
+                    },
+                    error => { status = true; });
+                await UniTask.WaitUntil(() => status);
+            }
+
+            AddMyDataInFriendScope(() => Refresh(_friendData));
+        }
+
+        private async void AddMyDataInFriendScope(Action onCompleted)
+        {
+            await UniTask.WaitUntil(() => !FacebookManager.Instance.IsRequestingProfile);
+            bool localFlag = false;
+            AuthService.GetStatistic(LoginResultModel.playerId,
+                nameTableLeaderboard,
+                userResult =>
+                {
+                    _friendData.players.Add(new FriendData.Entry()
+                    {
+                        playfabId = LoginResultModel.playerId,
+                        facebookId = FacebookManager.Instance.UserId,
+                        sprite = FacebookManager.CreateSprite(FacebookManager.Instance.ProfilePicture, Vector2.one * 0.5f),
+                        displayName = LoginResultModel.playerDisplayName,
+                        statValue = userResult.Leaderboard[0].StatValue
+                    });
+                    localFlag = true;
+                },
+                error =>
+                {
+                    Debug.LogError(error.Error);
+                    localFlag = true;
+                });
+
+            await UniTask.WaitUntil(() => localFlag);
+            onCompleted?.Invoke();
+        }
+
+        private void OnGetPlayFabIDsFromFacebookIDsError(PlayFabError error) { }
+
         private async void FetchFriendDataFb()
         {
+            _friendData.players.Clear();
             FacebookManager.Instance.GetMeFriend();
             bool result = await FacebookManager.Instance.LoadProfileAllFriend();
             if (result)
             {
-                foreach (var friendData in FacebookManager.Instance.FriendDatas)
+                Debug.Log("Friend Count = " + FacebookManager.Instance.FriendDatas.Count);
+                var friendIds = FacebookManager.Instance.FriendDatas.Map(_ => _.id);
+
+                if (friendIds.Count == 0)
                 {
-                    //
+                    AddMyDataInFriendScope(() => Refresh(_friendData));
                 }
+                else
+                {
+                    AuthService.GetPlayFabIDsFromFacebook(friendIds, OnGetPlayfabIDsFromFacebookIDsCompleted, OnGetPlayFabIDsFromFacebookIDsError);
+                }
+            }
+        }
+
+        private async void FetchFriendConfig(List<FriendData.Entry> entries, Func<List<FriendData.Entry>, InternalConfig[], IEnumerator<float>> onCompleted)
+        {
+            // TO_DO
+            for (int i = 0; i < entries.Count; i++)
+            {
+                if (entries[i].sprite == null)
+                {
+                    var fbId = entries[i].facebookId;
+                    if (!_friendCacheAvatar.ContainsKey(fbId))
+                    {
+                        var status =  await FacebookManager.Instance.LoadTextureInternal(FacebookManager.Instance.FriendDatas.First(_ => _.id.Equals(fbId)).pictureUrl);
+                        if (status)
+                        {
+                            entries[i].sprite = FacebookManager.CreateSprite(FacebookManager.Instance.FriendDatas.First(_ => _.id.Equals(fbId)).avatar, Vector2.one * 0.5f);
+                            _friendCacheAvatar.Add(fbId, entries[i].sprite);
+                        }
+                    }
+                    else
+                    {
+                        entries[i].sprite = _friendCacheAvatar[entries[i].facebookId];
+                    }
+                }
+            }
+
+            entries.OrderByDescending(_ => _.statValue);
+
+            Timing.RunCoroutine(onCompleted?.Invoke(entries, null));
+        }
+
+        private void Refresh(FriendData data)
+        {
+            txtCurrentPage.text = $"PAGE {data.currentPage + 1}";
+            if (data.currentPage >= data.pageCount) // reach the end
+            {
+                btnNextPage.gameObject.SetActive(false);
+                txtWarning.text = "Nothing to show\nYou have reached the end of the rankings";
+                txtWarning.gameObject.SetActive(true);
+                block.SetActive(false);
+                btnBackPage.gameObject.SetActive(data.currentPage != 0);
+                return;
+            }
+
+            block.SetActive(true);
+            var pageData = new List<FriendData.Entry>();
+            for (int i = 0; i < CountInOnePage; i++)
+            {
+                int index = data.currentPage * CountInOnePage + i;
+                if (data.players.Count <= index) break;
+
+                pageData.Add(data.players[index]);
+            }
+
+            btnBackPage.gameObject.SetActive(data.currentPage != 0);
+            btnNextPage.gameObject.SetActive(data.currentPage < data.pageCount && !(data.players.Count < 100 && data.currentPage == data.pageCount - 1));
+
+            content.SetActive(false);
+            foreach (var element in rankSlots)
+            {
+                element.gameObject.SetActive(false);
+            }
+
+            FetchFriendConfig(pageData, OnOnePageFetchFriendConfigCompleted);
+        }
+
+        private IEnumerator<float> OnOnePageFetchFriendConfigCompleted(List<FriendData.Entry> entries, InternalConfig[] internalConfigs)
+        {
+            block.SetActive(false);
+            content.SetActive(true);
+
+            for (int i = 0; i < entries.Count; i++)
+            {
+                rankSlots[i]
+                .Init(internalConfigs[i],
+                    i + 1,
+                    entries[i].sprite,
+                    entries[i].displayName,
+                    entries[i].statValue,
+                    ColorDivision(i + 1, entries[i].playfabId),
+                    Canvas,
+                    entries[i].playfabId.Equals(LoginResultModel.playerId));
+                rankSlots[i].gameObject.SetActive(true);
+                var sequense = TweenManager.Sequence();
+                sequense.Append(rankSlots[i].transform.TweenLocalScale(new Vector3(1.04f, 1.06f, 1), 0.15f).SetEase(Ease.OutQuad));
+                sequense.Append(rankSlots[i].transform.TweenLocalScale(Vector3.one, 0.08f).SetEase(Ease.InQuad));
+                sequense.Play();
+                yield return Timing.WaitForSeconds(displayRankCurve.Evaluate(i / (float) internalConfigs.Length));
             }
         }
 

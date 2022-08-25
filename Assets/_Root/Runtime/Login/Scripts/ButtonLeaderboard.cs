@@ -1,6 +1,7 @@
 using System;
 using Pancake.Common;
 using Pancake.Facebook;
+using Pancake.Linq;
 using Pancake.UI;
 using PlayFab;
 using PlayFab.ClientModels;
@@ -70,8 +71,8 @@ namespace Pancake.GameService
                 }
             }
 
-            
-            LoginResultModel.Init(r.PlayerId, r.DisplayName, countryCode);
+
+            LoginResultModel.Init(r.PlayerId, r.DisplayName, countryCode, r.LinkedAccounts.Any(_ => _.Platform == LoginIdentityProvider.Facebook));
             if (result.NewlyCreated || !AuthService.Instance.IsCompleteSetupName)
             {
                 Popup.Show<PopupEnterName>(_ => _.Init(nameTable, valueExpression));
