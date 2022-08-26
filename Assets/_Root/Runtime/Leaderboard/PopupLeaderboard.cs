@@ -206,12 +206,13 @@ namespace Pancake.GameService
 
         private ElementColor ColorDivision(int rank, string playerId)
         {
+            if (playerId.Equals(LoginResultModel.playerId)) return colorRankYou;
             switch (rank)
             {
                 case 1: return colorRank1;
                 case 2: return colorRank2;
                 case 3: return colorRank3;
-                default: return playerId.Equals(LoginResultModel.playerId) ? colorRankYou : colorOutRank;
+                default: return colorOutRank;
             }
         }
 
