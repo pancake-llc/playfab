@@ -35,26 +35,6 @@
         {
             "key": "UIPOPUP_NOTIFICATION",
             "state": true
-        },
-        {
-            "key": "LB_COLOR_RANK1",
-            "state": false
-        },
-        {
-            "key": "LB_COLOR_RANK2",
-            "state": false
-        },
-        {
-            "key": "LB_COLOR_RANK3",
-            "state": false
-        },
-        {
-            "key": "LB_COLOR_RANKYOU",
-            "state": false
-        },
-        {
-            "key": "LB_COLOR_OUTRANK",
-            "state": false
         }
     ]
 }

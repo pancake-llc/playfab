@@ -323,15 +323,21 @@ namespace Pancake.GameService
             _currentTab = ELeaderboardTab.Friend;
             UpdateDisplayTab();
             content.SetActive(false);
+            block.SetActive(true);
+            _friendData.players.Clear();
+
             // validate status login facebook
             if (!FacebookManager.Instance.IsLoggedIn)
             {
-                block.SetActive(true);
                 FacebookManager.Instance.Login(OnFacebookLoginCompleted, OnFacebookLoginFaild, OnFacebookLoginError);
             }
             else
             {
-                FetchFriendDataFb();
+                if (!FacebookManager.Instance.IsCompletedGetFriendData) FacebookManager.Instance.GetMeFriend(FetchFriendDataFb);
+                else
+                {
+                    FetchFriendDataFb();
+                }
             }
         }
 
@@ -669,14 +675,28 @@ namespace Pancake.GameService
             }
             else
             {
-                FetchFriendDataFb();
-                block.SetActive(false);
+                if (!FacebookManager.Instance.IsCompletedGetFriendData)
+                {
+                    FacebookManager.Instance.GetMeFriend(FetchFriendDataFb);
+                }
+                else
+                {
+                    FetchFriendDataFb();
+                }
             }
         }
 
         private void OnLinkFacebookCompleted(LinkFacebookAccountResult obj)
         {
-            FetchFriendDataFb();
+            if (!FacebookManager.Instance.IsCompletedGetFriendData)
+            {
+                FacebookManager.Instance.GetMeFriend(FetchFriendDataFb);
+            }
+            else
+            {
+                FetchFriendDataFb();
+            }
+
             block.SetActive(false);
             LoginResultModel.facebookAuth = true;
         }
@@ -688,12 +708,13 @@ namespace Pancake.GameService
             foreach (var idPair in result.Data)
             {
                 bool status = false;
-                
+
                 AuthService.GetStatistic(idPair.PlayFabId,
                     nameTableLeaderboard,
                     userResult =>
                     {
-                        Debug.Log("Display Name: " + userResult.Leaderboard[0].DisplayName + "    Score: " + userResult.Leaderboard[0].StatValue + "   Facebook Id:" + idPair.FacebookId);
+                        Debug.Log("Display Name: " + userResult.Leaderboard[0].DisplayName + "    Score: " + userResult.Leaderboard[0].StatValue + "   Facebook Id:" +
+                                  idPair.FacebookId);
                         _friendData.players.Add(new FriendData.Entry()
                         {
                             playfabId = userResult.Leaderboard[0].PlayFabId,
@@ -713,8 +734,19 @@ namespace Pancake.GameService
 
         private async void AddMyDataInFriendScope(Action onCompleted)
         {
+            bool validate = false;
+            foreach (var player in _friendData.players)
+            {
+                if (player.facebookId.Equals(FacebookManager.Instance.UserId)) validate = true;
+            }
+            if (validate)
+            {
+                onCompleted?.Invoke();
+                return;
+            }
+
             await UniTask.WaitUntil(() => !FacebookManager.Instance.IsRequestingProfile);
-            bool localFlag = false;
+            var localFlag = false;
             AuthService.GetStatistic(LoginResultModel.playerId,
                 nameTableLeaderboard,
                 userResult =>
@@ -743,22 +775,20 @@ namespace Pancake.GameService
 
         private async void FetchFriendDataFb()
         {
-            _friendData.players.Clear();
-            FacebookManager.Instance.GetMeFriend();
-            bool result = await FacebookManager.Instance.LoadProfileAllFriend();
-            if (result)
+            if (FacebookManager.Instance.IsRequestingFriend || FacebookManager.Instance.FriendDatas == null)
             {
-                Debug.Log("Friend Count = " + FacebookManager.Instance.FriendDatas.Count);
-                var friendIds = FacebookManager.Instance.FriendDatas.Map(_ => _.id);
+                await UniTask.WaitUntil(() => !FacebookManager.Instance.IsRequestingFriend && FacebookManager.Instance.FriendDatas != null);
+            }
+            
+            var friendIds = FacebookManager.Instance.FriendDatas.Map(_ => _.id).Filter(_=>!_friendCacheAvatar.ContainsKey(_));
 
-                if (friendIds.Count == 0)
-                {
-                    AddMyDataInFriendScope(() => Refresh(_friendData));
-                }
-                else
-                {
-                    AuthService.GetPlayFabIDsFromFacebook(friendIds, OnGetPlayfabIDsFromFacebookIDsCompleted, OnGetPlayFabIDsFromFacebookIDsError);
-                }
+            if (friendIds.Count == 0)
+            {
+                AddMyDataInFriendScope(() => Refresh(_friendData));
+            }
+            else
+            {
+                AuthService.GetPlayFabIDsFromFacebook(friendIds, OnGetPlayfabIDsFromFacebookIDsCompleted, OnGetPlayFabIDsFromFacebookIDsError);
             }
         }
 
@@ -772,10 +802,11 @@ namespace Pancake.GameService
                     var fbId = entries[i].facebookId;
                     if (!_friendCacheAvatar.ContainsKey(fbId))
                     {
-                        var status =  await FacebookManager.Instance.LoadTextureInternal(FacebookManager.Instance.FriendDatas.First(_ => _.id.Equals(fbId)).pictureUrl);
+                        var status = await FacebookManager.Instance.LoadTextureInternal(FacebookManager.Instance.FriendDatas.First(_ => _.id.Equals(fbId)).pictureUrl);
                         if (status)
                         {
-                            entries[i].sprite = FacebookManager.CreateSprite(FacebookManager.Instance.FriendDatas.First(_ => _.id.Equals(fbId)).avatar, Vector2.one * 0.5f);
+                            entries[i].sprite =
+                                FacebookManager.CreateSprite(FacebookManager.Instance.FriendDatas.First(_ => _.id.Equals(fbId)).avatar, Vector2.one * 0.5f);
                             _friendCacheAvatar.Add(fbId, entries[i].sprite);
                         }
                     }
@@ -839,12 +870,13 @@ namespace Pancake.GameService
                 if (internalConfigs != null)
                 {
                     c = internalConfigs.Length > 0 ? internalConfigs.Length : 1;
-                    if (internalConfigs.Length - 1 > i)interConfig = internalConfigs[i];
+                    if (internalConfigs.Length - 1 > i) interConfig = internalConfigs[i];
                 }
                 else
                 {
                     c = 1;
                 }
+
                 rankSlots[i]
                 .Init(interConfig,
                     i + 1,
