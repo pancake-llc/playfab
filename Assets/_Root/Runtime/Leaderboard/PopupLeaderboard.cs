@@ -16,6 +16,7 @@ using UnityEngine;
 using GetLeaderboardResult = PlayFab.ClientModels.GetLeaderboardResult;
 using GetPlayFabIDsFromFacebookIDsResult = PlayFab.ClientModels.GetPlayFabIDsFromFacebookIDsResult;
 using PlayerLeaderboardEntry = PlayFab.ClientModels.PlayerLeaderboardEntry;
+// ReSharper disable FieldCanBeMadeReadOnly.Local
 
 namespace Pancake.GameService
 {
@@ -324,8 +325,7 @@ namespace Pancake.GameService
             UpdateDisplayTab();
             content.SetActive(false);
             block.SetActive(true);
-            _friendData.players.Clear();
-
+            txtRank.text = "";
             // validate status login facebook
             if (!FacebookManager.Instance.IsLoggedIn)
             {
@@ -333,11 +333,7 @@ namespace Pancake.GameService
             }
             else
             {
-                if (!FacebookManager.Instance.IsCompletedGetFriendData) FacebookManager.Instance.GetMeFriend(FetchFriendDataFb);
-                else
-                {
-                    FetchFriendDataFb();
-                }
+                FetchFriend();
             }
         }
 
@@ -646,6 +642,18 @@ namespace Pancake.GameService
 
         #region friend
 
+        private void FetchFriend()
+        {
+            if (!FacebookManager.Instance.IsCompletedGetFriendData)
+            {
+                _friendData.players.Clear();
+                FacebookManager.Instance.GetMeFriend(FetchFriendDataFb);
+            }
+            else
+            {
+                FetchFriendDataFb();
+            }
+        }
         private void OnFacebookLoginError()
         {
             block.SetActive(false);
@@ -675,27 +683,13 @@ namespace Pancake.GameService
             }
             else
             {
-                if (!FacebookManager.Instance.IsCompletedGetFriendData)
-                {
-                    FacebookManager.Instance.GetMeFriend(FetchFriendDataFb);
-                }
-                else
-                {
-                    FetchFriendDataFb();
-                }
+                FetchFriend();
             }
         }
 
         private void OnLinkFacebookCompleted(LinkFacebookAccountResult obj)
         {
-            if (!FacebookManager.Instance.IsCompletedGetFriendData)
-            {
-                FacebookManager.Instance.GetMeFriend(FetchFriendDataFb);
-            }
-            else
-            {
-                FetchFriendDataFb();
-            }
+            FetchFriend();
 
             block.SetActive(false);
             LoginResultModel.facebookAuth = true;
@@ -817,8 +811,6 @@ namespace Pancake.GameService
                 }
             }
 
-            entries.OrderByDescending(_ => _.statValue);
-
             Timing.RunCoroutine(onCompleted?.Invoke(entries, null));
         }
 
@@ -837,6 +829,16 @@ namespace Pancake.GameService
             }
 
             block.SetActive(true);
+            data.players.OrderByDescending(_ => _.statValue);
+            for (int i = 0; i < data.players.Count; i++)
+            {
+                if (data.players[i].playfabId.Equals(LoginResultModel.playerId))
+                {
+                    data.myPosition = i;
+                    break;
+                }
+            }
+            txtRank.text = $"Friend Rank: {data.myPosition + 1}";
             var pageData = new List<FriendData.Entry>();
             for (int i = 0; i < CountInOnePage; i++)
             {
