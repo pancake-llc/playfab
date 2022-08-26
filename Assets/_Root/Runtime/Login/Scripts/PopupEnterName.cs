@@ -125,7 +125,14 @@ namespace Pancake.GameService
             AuthService.Instance.IsCompleteSetupName = true;
             LoginResultModel.countryCode = _selectedCountry;
             AuthService.OnUpdatePlayerStatisticsSuccess += AuthServiceOnUpdatePlayerStatisticsSuccess;
-            AuthService.UpdatePlayerStatistics(_nameTable, _valueExpression.Invoke());
+            if (_valueExpression != null) AuthService.UpdatePlayerStatistics(_nameTable, _valueExpression.Invoke());
+            else
+            {
+                AuthService.OnUpdatePlayerStatisticsSuccess -= AuthServiceOnUpdatePlayerStatisticsSuccess;
+                _uiElements.Block.gameObject.SetActive(false);
+                Popup.Close();// close current popup enter name
+                Popup.Show<PopupLeaderboard>();
+            }
         }
         
         protected virtual void AuthServiceOnUpdatePlayerStatisticsSuccess(UpdatePlayerStatisticsResult success)

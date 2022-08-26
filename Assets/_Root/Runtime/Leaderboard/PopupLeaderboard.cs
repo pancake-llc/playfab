@@ -327,6 +327,7 @@ namespace Pancake.GameService
             content.SetActive(false);
             block.SetActive(true);
             txtRank.text = "";
+            HideWarning();
             // validate status login facebook
             if (!FacebookManager.Instance.IsLoggedIn)
             {
@@ -343,6 +344,7 @@ namespace Pancake.GameService
             if (currentTab == ELeaderboardTab.Country) return;
             currentTab = ELeaderboardTab.Country;
             UpdateDisplayTab();
+            HideWarning();
             content.SetActive(false);
             if (countryData.IsCanRefresh(ServiceSettings.delayFetchRank))
             {
@@ -374,6 +376,7 @@ namespace Pancake.GameService
             if (currentTab == ELeaderboardTab.World) return;
             currentTab = ELeaderboardTab.World;
             UpdateDisplayTab();
+            HideWarning();
             WorldButtonInvokeImpl();
         }
 
@@ -387,6 +390,11 @@ namespace Pancake.GameService
             {
                 Popup.Show<PopupNotification>(_ => _.Message("Login failed for unknown reason!"));
             }
+        }
+
+        private void HideWarning()
+        {
+            txtWarning.gameObject.SetActive(false);
         }
 
         protected virtual void UpdateDisplayTab()

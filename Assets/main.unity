@@ -650,7 +650,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1568848845}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -17287.078}
+  m_LocalPosition: {x: 0, y: 0, z: -17287.162}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -790,7 +790,6 @@ GameObject:
   - component: {fileID: 1765215198}
   - component: {fileID: 1765215197}
   - component: {fileID: 1765215196}
-  - component: {fileID: 1765215200}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -985,15 +984,3 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1765215194}
   m_CullTransparentMesh: 1
---- !u!114 &1765215200
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1765215194}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a87d8cc692598394ca53e08ceba511e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
