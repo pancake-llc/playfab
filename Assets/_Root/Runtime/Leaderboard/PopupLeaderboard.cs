@@ -710,7 +710,14 @@ namespace Pancake.GameService
             LoginResultModel.facebookAuth = true;
         }
 
-        private void OnLinkFacebookError(PlayFabError error) { Popup.Show<PopupNotification>(_ => _.Message(error.ErrorMessage)); }
+        private void OnLinkFacebookError(PlayFabError error)
+        {
+            Popup.Show<PopupNotification>(_ =>
+            {
+                _.Message(error.ErrorMessage);
+                _.Ok(OnWorldButtonClicked);
+            });
+        }
 
         private async void OnGetPlayfabIDsFromFacebookIDsCompleted(GetPlayFabIDsFromFacebookIDsResult result)
         {
