@@ -2802,7 +2802,6 @@ GameObject:
   - component: {fileID: 2358777461302679889}
   - component: {fileID: 4175213834919258063}
   - component: {fileID: 5992227318430240666}
-  - component: {fileID: 5411622498831282574}
   - component: {fileID: 842330945061208251}
   m_Layer: 5
   m_Name: PopupEnterName
@@ -2872,75 +2871,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &5411622498831282574
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7681961561323099576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 057760b2d0074ae797c8970b78329ac2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Elements:
-  - GameObject: {fileID: 7681961561323099576}
-    Path: 
-  - GameObject: {fileID: 2279890316320754578}
-    Path: 418c38fc
-  - GameObject: {fileID: 1062329914707336737}
-    Path: c4c936d8
-  - GameObject: {fileID: 2894367417422971280}
-    Path: 1b9857c4c4c936d8
-  - GameObject: {fileID: 9106162106512449705}
-    Path: 14ba8f8a1b9857c4c4c936d8
-  - GameObject: {fileID: 5121100671359484316}
-    Path: 234afeb8c4c936d8
-  - GameObject: {fileID: 7241169965094343600}
-    Path: 9fd5ac4dc4c936d8
-  - GameObject: {fileID: 4632742356904451380}
-    Path: c45132e49fd5ac4dc4c936d8
-  - GameObject: {fileID: 495765355}
-    Path: cf47a00f9fd5ac4dc4c936d8
-  - GameObject: {fileID: 667124271}
-    Path: f4f224bdcf47a00f9fd5ac4dc4c936d8
-  - GameObject: {fileID: 1879394449}
-    Path: 266ab301cf47a00f9fd5ac4dc4c936d8
-  - GameObject: {fileID: 24508739782612967}
-    Path: ef0f096dc4c936d8
-  - GameObject: {fileID: 8197230264855388032}
-    Path: 417fd798ef0f096dc4c936d8
-  - GameObject: {fileID: 8352881404116825822}
-    Path: a57d32ffc4c936d8
-  - GameObject: {fileID: 1116961268748440438}
-    Path: 49210b1ea57d32ffc4c936d8
-  - GameObject: {fileID: 6357466431182333819}
-    Path: 3754c34e49210b1ea57d32ffc4c936d8
-  - GameObject: {fileID: 8201093859816679225}
-    Path: d4ce7ae33754c34e49210b1ea57d32ffc4c936d8
-  - GameObject: {fileID: 3506042762348613490}
-    Path: 355f00e449210b1ea57d32ffc4c936d8
-  - GameObject: {fileID: 6576868685425374653}
-    Path: a4198df9355f00e449210b1ea57d32ffc4c936d8
-  - GameObject: {fileID: 766226452256273554}
-    Path: 3d24569ba4198df9355f00e449210b1ea57d32ffc4c936d8
-  - GameObject: {fileID: 315493923117178552}
-    Path: 59a9a436a57d32ffc4c936d8
-  - GameObject: {fileID: 5585135771250714894}
-    Path: de529aa159a9a436a57d32ffc4c936d8
-  - GameObject: {fileID: 362502488}
-    Path: 8ee5abf359a9a436a57d32ffc4c936d8
-  - GameObject: {fileID: 1878514927}
-    Path: 3986a58759a9a436a57d32ffc4c936d8
-  - GameObject: {fileID: 299644171671003575}
-    Path: b70a590da57d32ffc4c936d8
-  - GameObject: {fileID: 7588171221870362055}
-    Path: 77f1915cc4c936d8
-  - GameObject: {fileID: 4839095225692587965}
-    Path: 8c495f3b
-  - GameObject: {fileID: 3532979838426686175}
-    Path: 4b65a9af8c495f3b
 --- !u!114 &842330945061208251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3000,8 +2930,6 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  canvas: {fileID: 0}
-  graphicRaycaster: {fileID: 0}
   backgroundTransform: {fileID: 0}
   backgroundCanvasGroup: {fileID: 0}
   containerTransform: {fileID: 0}
@@ -3009,6 +2937,15 @@ MonoBehaviour:
   countryCode: {fileID: 11400000, guid: a8b68d3469e81bb4d80003d99cd5e951, type: 2}
   elementPrefab: {fileID: 2671724171046910489, guid: 815eb80c90ba3904686e738de16e8b60, type: 3}
   btnSpriteLocked: {fileID: 21300000, guid: 75ea905c13ab93f40b75aa845cdabddf, type: 3}
+  ipfEnterName: {fileID: 1359196029}
+  btnCountry: {fileID: 1318771152547721863}
+  btnOk: {fileID: 145520247825414284}
+  scroller: {fileID: 0}
+  txtWarning: {fileID: 6498181116172816309}
+  imgCurrentCountryIcon: {fileID: 362502490}
+  txtCurrentCountryName: {fileID: 1878514929}
+  block: {fileID: 302068811102803553}
+  selectCountryPopup: {fileID: 1776638676250311204}
 --- !u!1 &8197230264855388032
 GameObject:
   m_ObjectHideFlags: 0

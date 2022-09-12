@@ -862,7 +862,6 @@ GameObject:
   - component: {fileID: 4246882647743069473}
   - component: {fileID: 2567803864224007103}
   - component: {fileID: 5294913891987827690}
-  - component: {fileID: 5857506512263681534}
   - component: {fileID: 369196249216386959}
   m_Layer: 5
   m_Name: PopupNoInternet
@@ -931,35 +930,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &5857506512263681534
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8126804386635870664}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 057760b2d0074ae797c8970b78329ac2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Elements:
-  - GameObject: {fileID: 8126804386635870664}
-    Path: 
-  - GameObject: {fileID: 427902399747518434}
-    Path: 418c38fc
-  - GameObject: {fileID: 1508105212051389009}
-    Path: c4c936d8
-  - GameObject: {fileID: 6719994288039503340}
-    Path: 234afeb8c4c936d8
-  - GameObject: {fileID: 1874878771983070103}
-    Path: ef0f096dc4c936d8
-  - GameObject: {fileID: 7751138750537890800}
-    Path: 417fd798ef0f096dc4c936d8
-  - GameObject: {fileID: 2738736542849020216}
-    Path: 76ed1083c4c936d8
-  - GameObject: {fileID: 4149678642905501820}
-    Path: 04e714cbc4c936d8
 --- !u!114 &369196249216386959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1019,9 +989,8 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  canvas: {fileID: 0}
-  graphicRaycaster: {fileID: 0}
   backgroundTransform: {fileID: 0}
   backgroundCanvasGroup: {fileID: 0}
   containerTransform: {fileID: 0}
   containerCanvasGroup: {fileID: 0}
+  btnOk: {fileID: 1753878526095301884}

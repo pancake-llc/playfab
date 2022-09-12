@@ -1,6 +1,4 @@
 using System;
-using Pancake.Common;
-using Pancake.Facebook;
 using Pancake.Linq;
 using Pancake.UI;
 using PlayFab;

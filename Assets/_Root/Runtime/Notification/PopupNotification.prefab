@@ -281,7 +281,6 @@ GameObject:
   - component: {fileID: 8245686092385439985}
   - component: {fileID: 7720250127529487983}
   - component: {fileID: 142473298168153658}
-  - component: {fileID: 1340105968225831537}
   - component: {fileID: 6797339749525730963}
   m_Layer: 5
   m_Name: PopupNotification
@@ -350,33 +349,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &1340105968225831537
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4055859921503771672}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 057760b2d0074ae797c8970b78329ac2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Elements:
-  - GameObject: {fileID: 4055859921503771672}
-    Path: 
-  - GameObject: {fileID: 5580325401374310962}
-    Path: 418c38fc
-  - GameObject: {fileID: 6659881735444060033}
-    Path: c4c936d8
-  - GameObject: {fileID: 1568182476122228796}
-    Path: 234afeb8c4c936d8
-  - GameObject: {fileID: 7962514723660373224}
-    Path: 76ed1083c4c936d8
-  - GameObject: {fileID: 5946320354044878407}
-    Path: ef0f096dc4c936d8
-  - GameObject: {fileID: 2526775802413897248}
-    Path: 417fd798ef0f096dc4c936d8
 --- !u!114 &6797339749525730963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -436,8 +408,6 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  canvas: {fileID: 0}
-  graphicRaycaster: {fileID: 0}
   backgroundTransform: {fileID: 0}
   backgroundCanvasGroup: {fileID: 0}
   containerTransform: {fileID: 0}
@@ -891,7 +861,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 393, y: 0}
   m_SizeDelta: {x: 700, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &276121148854905311
