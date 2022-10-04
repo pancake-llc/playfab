@@ -14,15 +14,15 @@
         },
         {
             "key": "UIPOPUP_CLOSE",
-            "state": false
+            "state": true
         },
         {
             "key": "UIPOPUP_SETTING_DISPLAY",
-            "state": false
+            "state": true
         },
         {
             "key": "UIPOPUP_SETTING_HIDE",
-            "state": false
+            "state": true
         },
         {
             "key": "UIPOPUP_LOGIN",

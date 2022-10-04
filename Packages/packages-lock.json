@@ -15,11 +15,11 @@
       "hash": "5e6da2e158cd4438a66d7ce47b12e435305c3b20"
     },
     "com.google.external-dependency-manager": {
-      "version": "https://github.com/pancake-llc/external-dependency-manager.git?path=Assets/_Root#1.2.169",
+      "version": "https://github.com/pancake-llc/external-dependency-manager.git?path=Assets/_Root#1.2.170",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "8479d378666d8af0e30fc0308df447196857659d"
+      "hash": "09d1fac2d7e800b4ab06911a783e27928d90b3fb"
     },
     "com.lupidan.apple-signin-unity": {
       "version": "https://github.com/lupidan/apple-signin-unity.git#v1.4.2",
@@ -27,13 +27,6 @@
       "source": "git",
       "dependencies": {},
       "hash": "e39981bca07f08f068231f651e1e8d0f69397222"
-    },
-    "com.pancake.facebook": {
-      "version": "https://github.com/pancake-llc/facebook.git?path=Assets/_Root#1.0.7",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "7251292310235ba86deebc449c06e64655c56e94"
     },
     "com.pancake.heart": {
       "version": "https://github.com/pancake-llc/heart.git?path=Assets/_Root",
@@ -43,51 +36,10 @@
         "com.unity.addressables": "1.19.19",
         "com.unity.inputsystem": "1.4.2",
         "com.unity.nuget.newtonsoft-json": "3.0.2",
-        "com.unity.mobile.notifications": "2.0.2"
+        "com.unity.mobile.notifications": "2.0.2",
+        "com.unity.2d.sprite": "1.0.0"
       },
-      "hash": "f9901b60ee7e531507bfeb69860729a1381786f7"
-    },
-    "com.system-community.ben-demystifier": {
-      "version": "https://github.com/system-community/BenDemystifier.git?path=Assets/_Root#0.4.1",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "550e24b66487b5be44f24e6d552e201c814fa278"
-    },
-    "com.system-community.harmony": {
-      "version": "https://github.com/system-community/harmony.git?path=Assets/_Root#2.2.2",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "c4d68cb50f2fcceda3c240727ecac3deeb4c0c99"
-    },
-    "com.system-community.reflection-metadata": {
-      "version": "https://github.com/system-community/SystemReflectionMetadata.git?path=Assets/_Root#5.0.0",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "10e380bf80b5d2311bf49f235a457bbf4b04e45b"
-    },
-    "com.system-community.stringtools": {
-      "version": "https://github.com/system-community/StringTools.git?path=Assets/_Root#1.0.0",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "e6a0ab48649ab87733bb3d3eccdef3e23c239da6"
-    },
-    "com.system-community.systemcollectionsimmutable": {
-      "version": "https://github.com/system-community/SystemCollectionsImmutable.git?path=Assets/_Root#5.0.0",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "29105c8d28a72fb500812c6e3de86e75bca5b93d"
-    },
-    "com.system-community.systemruntimecompilerservicesunsafe": {
-      "version": "https://github.com/system-community/SystemRuntimeCompilerServicesUnsafe.git?path=Assets/_Root#5.0.0",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "e3084b70c596260866a41681027907454c2aef51"
+      "hash": "45175bb628dac44574f4366115829598e261a3d3"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",

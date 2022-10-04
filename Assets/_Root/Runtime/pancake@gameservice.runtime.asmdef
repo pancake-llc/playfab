@@ -22,6 +22,11 @@
             "name": "com.unity.textmeshpro",
             "expression": "2.0.0",
             "define": "PANCAKE_TMP"
+        },
+        {
+            "name": "com.pancake.facebook",
+            "expression": "1.0.0",
+            "define": "PANCAKE_FACEBOOK"
         }
     ],
     "noEngineReferences": false
