@@ -105,6 +105,11 @@ namespace Pancake.Editor
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Block", GUILayout.Width(DEFAULT_LABEL_WIDTH));
             _block.objectReferenceValue = EditorGUILayout.ObjectField(_block.objectReferenceValue, typeof(Transform), allowSceneObjects: true);
+            EditorGUILayout.EndHorizontal();        
+            
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Scroller", GUILayout.Width(DEFAULT_LABEL_WIDTH));
+            _scroller.objectReferenceValue = EditorGUILayout.ObjectField(_scroller.objectReferenceValue, typeof(EnhancedScroller), allowSceneObjects: true);
             EditorGUILayout.EndHorizontal();
         }
     }

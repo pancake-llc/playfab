@@ -45,8 +45,8 @@ namespace Pancake.GameService
             ipfEnterName.Select();
             btnCountry.onClick.RemoveListener(OnButtonShowPopupCountryClicked);
             btnCountry.onClick.AddListener(OnButtonShowPopupCountryClicked);
-            btnOk.onClick.AddListener(OnButtonOkClicked);
             btnOk.onClick.RemoveListener(OnButtonOkClicked);
+            btnOk.onClick.AddListener(OnButtonOkClicked);
             txtWarning.gameObject.SetActive(false);
             var countryData = countryCode.Get(LoginResultModel.countryCode);
             imgCurrentCountryIcon.sprite = countryData.icon;

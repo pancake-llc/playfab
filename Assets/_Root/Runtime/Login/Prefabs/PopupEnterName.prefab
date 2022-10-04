@@ -2940,7 +2940,7 @@ MonoBehaviour:
   ipfEnterName: {fileID: 1359196029}
   btnCountry: {fileID: 1318771152547721863}
   btnOk: {fileID: 145520247825414284}
-  scroller: {fileID: 0}
+  scroller: {fileID: 184467000985319990}
   txtWarning: {fileID: 6498181116172816309}
   imgCurrentCountryIcon: {fileID: 362502490}
   txtCurrentCountryName: {fileID: 1878514929}
