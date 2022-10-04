@@ -2,7 +2,7 @@
 
 Add the lines below to Packages/manifest.json
 
-- for version 2.144.220804
+- for version 2.144.221004
 ```csharp
 "com.pancake.gameservice": "https://github.com/pancake-llc/game-service.git?path=Assets/_Root#2.144.220804",
 "com.lupidan.apple-signin-unity": "https://github.com/lupidan/apple-signin-unity.git#v1.4.2",
