@@ -490,6 +490,7 @@ namespace Pancake.GameService
                     if (friendData.currentPage < friendData.pageCount)
                     {
                         friendData.currentPage++;
+                        btnNextPage.interactable = true;
                         Refresh(friendData);
                     }
 
@@ -510,6 +511,7 @@ namespace Pancake.GameService
                     if (worldData.currentPage > 0)
                     {
                         worldData.currentPage--;
+                        btnBackPage.interactable = true;
                         Refresh(worldData);
                     }
 
@@ -518,6 +520,7 @@ namespace Pancake.GameService
                     if (countryData.currentPage > 0)
                     {
                         countryData.currentPage--;
+                        btnBackPage.interactable = true;
                         Refresh(countryData);
                     }
 
@@ -526,6 +529,7 @@ namespace Pancake.GameService
                     if (friendData.currentPage > 0)
                     {
                         friendData.currentPage--;
+                        btnBackPage.interactable = true;
                         Refresh(friendData);
                     }
 
