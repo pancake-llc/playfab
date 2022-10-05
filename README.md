@@ -34,6 +34,7 @@ Dependency : Heart
 - ![image](https://user-images.githubusercontent.com/44673303/193963879-16e7337d-3ebe-42b2-a700-feff49f1f1b0.png)
 - ![image](https://user-images.githubusercontent.com/44673303/193964093-d1d78788-3fe8-49ca-9036-1b063e65ac59.png)
 - sử dụng menu `Update Aggregation` để tạo table leaderboard cho 240 country chỉ cần thực hiện điều này 1 lần
+- cài đặt package demo-imnplemention trong release page
 - thay thế các đoạn code nằm trong `#if region replace your code` bằng code của bạn
 - for update score to leaderboard when first time you enter name complete. You can via using `valueExpression` in `ButtonLeaderBoard`
 
