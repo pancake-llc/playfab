@@ -529,19 +529,17 @@ namespace Pancake.GameService
         public static void UpdatePlayerStatistics(string nameTable, int value)
         {
             PlayFabClientAPI.UpdatePlayerStatistics(
-                new UpdatePlayerStatisticsRequest {Statistics = new List<StatisticUpdate> {new() {StatisticName = nameTable, Value = value}},},
-                result => { UpdatePlayerStatisticsCountry(nameTable, value); },
-                error => { OnUpdatePlayerStatisticsError?.Invoke(error); });
-        }
-
-        private static void UpdatePlayerStatisticsCountry(string nameTable, int value)
-        {
-            PlayFabClientAPI.UpdatePlayerStatistics(
                 new UpdatePlayerStatisticsRequest
                 {
-                    Statistics = new List<StatisticUpdate> {new() {StatisticName = $"{nameTable}_{LoginResultModel.countryCode}", Value = value}},
+                    Statistics = new List<StatisticUpdate> 
+                    {
+                        new() {StatisticName = nameTable, Value = value},
+                        new() {StatisticName = $"{nameTable}_{LoginResultModel.countryCode}", Value = value}
+                    },
+                }, result =>
+                {
+                    OnUpdatePlayerStatisticsSuccess?.Invoke(result);
                 },
-                result => { OnUpdatePlayerStatisticsSuccess?.Invoke(result); },
                 error => { OnUpdatePlayerStatisticsError?.Invoke(error); });
         }
 
