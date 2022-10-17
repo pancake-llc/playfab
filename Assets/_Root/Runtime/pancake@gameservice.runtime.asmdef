@@ -27,6 +27,11 @@
             "name": "com.pancake.facebook",
             "expression": "1.0.0",
             "define": "PANCAKE_FACEBOOK"
+        },
+        {
+            "name": "com.pancake.heart",
+            "expression": "1.0.0",
+            "define": "ENABLE_PLAYFABSERVER_API"
         }
     ],
     "noEngineReferences": false
