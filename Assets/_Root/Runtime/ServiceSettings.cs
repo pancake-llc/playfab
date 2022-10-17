@@ -62,7 +62,7 @@ namespace Pancake.GameService
         [SerializeField] private bool enableAdminApi = true;
         [SerializeField] private bool enableClientApi = true;
         [SerializeField] private bool enableEntityApi = true;
-        [SerializeField] private bool enableServerApi;
+        [SerializeField] private bool enableServerApi = true;
         [SerializeField] private bool enableRequestTimesApi;
         [SerializeField] private GetPlayerCombinedInfoRequestParams infoRequestParams;
 
@@ -84,7 +84,7 @@ namespace Pancake.GameService
 
         public static WebRequestType RequestType => Instance.requestType;
 
-        public static GetPlayerCombinedInfoRequestParams InfoRequestParams => Instance.infoRequestParams;
+        public static GetPlayerCombinedInfoRequestParams InfoRequestParams => Instance?.infoRequestParams;
 
         public static bool UseCustomIdAsDefault => Instance.useCustomIdAsDefault;
 
