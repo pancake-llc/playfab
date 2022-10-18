@@ -9,7 +9,6 @@ namespace Pancake.Editor
     {
         static AutoInitServiceSettings()
         {
-            EditorPrefs.SetBool($"__servicesettings__{PlayerSettings.productGUID}", false);
             if (!EditorPrefs.GetBool($"__servicesettings__{PlayerSettings.productGUID}", false))
             {
                 Run();

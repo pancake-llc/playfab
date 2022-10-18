@@ -5,7 +5,7 @@ namespace Pancake.Editor
 {
     public static class MenuManager
     {
-        [MenuItem("Tools/Pancake/Playfab &%6", false, 1)]
+        [MenuItem("Tools/Pancake/Playfab", false, 1)]
         public static void MenuOpenSettings()
         {
             InvokeCreate();
