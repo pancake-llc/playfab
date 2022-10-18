@@ -1,5 +1,4 @@
 using System;
-using Pancake.GameService;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,14 +7,10 @@ namespace Pancake.Editor
     [InitializeOnLoad]
     public class AutoInitServiceSettings
     {
-        private static readonly string[] NameFiles = {"GameServiceSettings.asset"}; 
-        private static readonly Type[] Types = {typeof(ServiceSettings)};
-        private static int internalIndex = 0;
         static AutoInitServiceSettings()
         {
-            if (!EditorPrefs.GetBool($"__servicesettings__{PlayerSettings.productGUID}", false))
+            if (!EditorPrefs.GetBool($"__servicesettings__{PlayerSettings.productGUID}", false) && !EditorPrefs.GetBool($"__playfabsettings_{PlayerSettings.productGUID}", false))
             {
-                Debug.Log("Init succeed");
                 Run();
             }
         }
@@ -23,16 +18,14 @@ namespace Pancake.Editor
         [MenuItem("Tools/Pancake/Create ServiceSettings", priority = 32000)]
         private static void Run()
         {
-            internalIndex = 0;
             Setup();
         }
         
         private static void Setup()
         {
-            var str = NameFiles[internalIndex];
-            UnityEditor.EditorUtility.DisplayProgressBar("Creating the necessary settings", $"Creating {str}...", internalIndex / (float)NameFiles.Length);
+            UnityEditor.EditorUtility.DisplayProgressBar("Creating the necessary settings", $"Creating GameServiceSettings.asset and PlayFabSharedSettings ...", 1f);
             var resourcePath = InEditor.DefaultResourcesPath();
-            if (!$"{resourcePath}/{NameFiles}".FileExists())
+            if (!$"{resourcePath}/GameServiceSettings.asset".FileExists() && !$"{resourcePath}/PlayFabSharedSettings.asset".FileExists())
             {
                 CreateInstance(Complete);
             }
@@ -43,31 +36,17 @@ namespace Pancake.Editor
             
             void Complete()
             {
-                if (internalIndex < NameFiles.Length - 1)
-                {
-                    internalIndex++;
-                    Setup();
-                }
-                else
-                {
-                    Debug.Log("Finish creating the necessary settings");
-                    EditorPrefs.SetBool($"__servicesettings__{PlayerSettings.productGUID}", true);
-                    UnityEditor.EditorUtility.ClearProgressBar();
-                }
+                Debug.Log("Finish creating the game service settings");
+                EditorPrefs.SetBool($"__servicesettings__{PlayerSettings.productGUID}", true);
+                EditorPrefs.SetBool($"__playfabsettings_{PlayerSettings.productGUID}", true);
+                UnityEditor.EditorUtility.ClearProgressBar();
             }
         }
         
         private static void CreateInstance(Action onComplete)
         {
-            switch (internalIndex)
-            {
-                case 0:
-                    var instance = UnityEngine.ScriptableObject.CreateInstance<ServiceSettings>();
-                    AssetDatabase.CreateAsset(instance, $"{InEditor.DefaultResourcesPath()}/{NameFiles[internalIndex]}");
-                    AssetDatabase.SaveAssets();
-                    onComplete?.Invoke();
-                    break;
-            }
+            MenuManager.InvokeCreate();
+            onComplete?.Invoke();
         }
     }
 }
