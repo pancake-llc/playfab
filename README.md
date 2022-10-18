@@ -30,7 +30,7 @@ Dependency : Heart
 
 # Usages
 
-- cài đặt setting thông qua phím tắt `alt + 4`
+- cài đặt setting thông qua phím tắt `ctrl + shift + 6`
 - ![image](https://user-images.githubusercontent.com/44673303/193963879-16e7337d-3ebe-42b2-a700-feff49f1f1b0.png)
 - ![image](https://user-images.githubusercontent.com/44673303/193964093-d1d78788-3fe8-49ca-9036-1b063e65ac59.png)
 - sử dụng menu `Update Aggregation` để tạo table leaderboard cho 240 country chỉ cần thực hiện điều này 1 lần

@@ -19,6 +19,7 @@ Assets/AssetStoreTools*
 /UnityGenerated/
 # Library should not freeze version, it should be written in README.
 /ProjectSettings/ProjectVersion.txt
+/Assets/_Root/Resources*
 
 # ============= #
 # IDE generated #
