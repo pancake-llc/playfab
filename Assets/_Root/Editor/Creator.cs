@@ -17,7 +17,7 @@ namespace Pancake.Editor
             EnsureFolderExists("Assets/Resources");
 
             // Now create the asset inside the Resources folder.
-            instance = ServiceSettings.Instance; // this will create a new instance of the EMSettings scriptable.
+            instance = UnityEngine.ScriptableObject.CreateInstance<ServiceSettings>();
             AssetDatabase.CreateAsset(instance, "Assets/Resources/GameServiceSettings.asset");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -37,7 +37,7 @@ namespace Pancake.Editor
             EnsureFolderExists("Assets/Resources");
 
             // Now create the asset inside the Resources folder.
-            instance = ServiceSettings.SharedSettings;
+            instance = UnityEngine.ScriptableObject.CreateInstance<PlayFabSharedSettings>();
             AssetDatabase.CreateAsset(instance, "Assets/Resources/PlayFabSharedSettings.asset");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();

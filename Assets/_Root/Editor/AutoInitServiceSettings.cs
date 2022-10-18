@@ -24,7 +24,7 @@ namespace Pancake.Editor
         private static void Setup()
         {
             UnityEditor.EditorUtility.DisplayProgressBar("Creating the necessary settings", $"Creating GameServiceSettings.asset and PlayFabSharedSettings ...", 1f);
-            var resourcePath = InEditor.DefaultResourcesPath();
+            var resourcePath = "Assets/Resources";
             if (!$"{resourcePath}/GameServiceSettings.asset".FileExists() && !$"{resourcePath}/PlayFabSharedSettings.asset".FileExists())
             {
                 CreateInstance(Complete);
