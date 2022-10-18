@@ -9,7 +9,8 @@ namespace Pancake.Editor
     {
         static AutoInitServiceSettings()
         {
-            if (!EditorPrefs.GetBool($"__servicesettings__{PlayerSettings.productGUID}", false) && !EditorPrefs.GetBool($"__playfabsettings_{PlayerSettings.productGUID}", false))
+            EditorPrefs.SetBool($"__servicesettings__{PlayerSettings.productGUID}", false);
+            if (!EditorPrefs.GetBool($"__servicesettings__{PlayerSettings.productGUID}", false))
             {
                 Run();
             }
@@ -24,7 +25,7 @@ namespace Pancake.Editor
         private static void Setup()
         {
             UnityEditor.EditorUtility.DisplayProgressBar("Creating the necessary settings", $"Creating GameServiceSettings.asset and PlayFabSharedSettings ...", 1f);
-            var resourcePath = "Assets/Resources";
+            var resourcePath = InEditor.DefaultResourcesPath();
             if (!$"{resourcePath}/GameServiceSettings.asset".FileExists() && !$"{resourcePath}/PlayFabSharedSettings.asset".FileExists())
             {
                 CreateInstance(Complete);
@@ -38,7 +39,6 @@ namespace Pancake.Editor
             {
                 Debug.Log("Finish creating the game service settings");
                 EditorPrefs.SetBool($"__servicesettings__{PlayerSettings.productGUID}", true);
-                EditorPrefs.SetBool($"__playfabsettings_{PlayerSettings.productGUID}", true);
                 UnityEditor.EditorUtility.ClearProgressBar();
             }
         }

@@ -25,7 +25,7 @@ namespace Pancake.GameService
                 if (instance == null)
                 {
 #if UNITY_EDITOR
-                    Debug.LogError("ServiceSettings not found! Please go to menu Tools > Pancake > Playfab to setup the plugin.");
+                    Debug.LogWarning("ServiceSettings not found! Please go to menu Tools > Pancake > Playfab to setup the plugin.");
 #endif
                     instance = LoadSettings();
                 }
@@ -43,7 +43,7 @@ namespace Pancake.GameService
                 if (sharedSettings == null)
                 {
 #if UNITY_EDITOR
-                    Debug.LogError("PlayFabSharedSettings not found! Please go to menu Tools > Pancake > Playfab to setup the plugin.");
+                    Debug.LogWarning("PlayFabSharedSettings not found! Please go to menu Tools > Pancake > Playfab to setup the plugin.");
 #endif
                     sharedSettings = GetSharedSettingsObjectPrivate();
                 }

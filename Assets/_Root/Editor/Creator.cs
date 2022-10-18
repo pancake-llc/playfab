@@ -13,16 +13,13 @@ namespace Pancake.Editor
             var instance = ServiceSettings.LoadSettings();
             if (instance != null) return instance;
 
-            // Create Resources folder if it doesn't exist.
-            EnsureFolderExists("Assets/Resources");
-
             // Now create the asset inside the Resources folder.
             instance = UnityEngine.ScriptableObject.CreateInstance<ServiceSettings>();
-            AssetDatabase.CreateAsset(instance, "Assets/Resources/GameServiceSettings.asset");
+            AssetDatabase.CreateAsset(instance,  $"{InEditor.DefaultResourcesPath()}/GameServiceSettings.asset");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            Debug.Log("Settings was created at Assets/Resources/GameServiceSettings.asset");
+            Debug.Log($"Settings was created at {InEditor.DefaultResourcesPath()}/GameServiceSettings.asset");
 
             return instance;
         }
@@ -33,16 +30,13 @@ namespace Pancake.Editor
             var instance = ServiceSettings.GetSharedSettingsObjectPrivate();
             if (instance != null) return instance;
 
-            // Create Resources folder if it doesn't exist.
-            EnsureFolderExists("Assets/Resources");
-
             // Now create the asset inside the Resources folder.
             instance = UnityEngine.ScriptableObject.CreateInstance<PlayFabSharedSettings>();
-            AssetDatabase.CreateAsset(instance, "Assets/Resources/PlayFabSharedSettings.asset");
+            AssetDatabase.CreateAsset(instance, $"{InEditor.DefaultResourcesPath()}/PlayFabSharedSettings.asset");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            Debug.Log("Settings was created at Assets/Resources/PlayFabSharedSettings.asset");
+            Debug.Log($"Settings was created at {InEditor.DefaultResourcesPath()}/PlayFabSharedSettings.asset");
 
             return instance;
         }
