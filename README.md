@@ -2,9 +2,9 @@
 
 Add the lines below to Packages/manifest.json
 
-- for version 2.146.221018
+- for version 2.146.221019
 ```csharp
-"com.pancake.gameservice": "https://github.com/pancake-llc/game-service.git?path=Assets/_Root#2.146.221018",
+"com.pancake.gameservice": "https://github.com/pancake-llc/game-service.git?path=Assets/_Root#2.146.221019",
 "com.lupidan.apple-signin-unity": "https://github.com/lupidan/apple-signin-unity.git#v1.4.2",
 "com.coffee.ui-effect": "https://github.com/mob-sakai/UIEffect.git#4.0.0-preview.9",
 "com.coffee.ui-particle": "https://github.com/mob-sakai/ParticleEffectForUGUI.git#4.1.6",
