@@ -9,7 +9,9 @@ using AppleAuth.Native;
 using PlayFab;
 using PlayFab.ClientModels;
 using PlayFab.Json;
+#if ENABLE_PLAYFABADMIN_API
 using PlayFab.ServerModels;
+#endif
 using UnityEngine;
 using GetLeaderboardRequest = PlayFab.ClientModels.GetLeaderboardRequest;
 using GetLeaderboardResult = PlayFab.ClientModels.GetLeaderboardResult;
@@ -692,7 +694,7 @@ namespace Pancake.GameService
             await UniTask.WaitUntil(() => flag);
             return t;
         }
-
+#if ENABLE_PLAYFABADMIN_API
         public static void GetStatistic(
             string playerId,
             string nameTable,
@@ -703,6 +705,7 @@ namespace Pancake.GameService
                 onGetLeaderboardAroundUserSuccess,
                 onGetLeaderboardAroundUserError);
         }
+        #endif
 
         /// <summary>
         /// use to link current account to facebook

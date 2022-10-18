@@ -10,7 +10,9 @@ using Pancake.Tween;
 using Pancake.UI;
 using PlayFab;
 using PlayFab.ClientModels;
+#if ENABLE_PLAYFABADMIN_API
 using PlayFab.ServerModels;
+#endif
 using TMPro;
 using UnityEngine;
 using GetLeaderboardResult = PlayFab.ClientModels.GetLeaderboardResult;
@@ -222,7 +224,7 @@ namespace Pancake.GameService
                 default: return colorOutRank;
             }
         }
-
+#if ENABLE_PLAYFABSERVER_API
         protected virtual void OnEnable()
         {
             btnBackPage.onClick.AddListener(OnBackPageButtonClicked);
@@ -244,7 +246,7 @@ namespace Pancake.GameService
             currentTab = ELeaderboardTab.World;
             WorldButtonInvokeImpl();
         }
-
+#endif
         protected virtual void Refresh(Data data)
         {
             txtCurrentPage.text = $"PAGE {data.currentPage + 1}";
@@ -352,7 +354,7 @@ namespace Pancake.GameService
             }
         }
 #endif
-
+#if ENABLE_PLAYFABSERVER_API
         protected virtual void OnCountryButtonClicked()
         {
             if (currentTab == ELeaderboardTab.Country) return;
@@ -384,7 +386,8 @@ namespace Pancake.GameService
                 Refresh(countryData);
             }
         }
-
+#endif
+#if ENABLE_PLAYFABSERVER_API
         protected virtual void OnWorldButtonClicked()
         {
             if (currentTab == ELeaderboardTab.World) return;
@@ -393,7 +396,7 @@ namespace Pancake.GameService
             HideWarning();
             WorldButtonInvokeImpl();
         }
-
+#endif
         private void LogError()
         {
             if (AuthService.Instance.isLoggedIn)
@@ -588,14 +591,14 @@ namespace Pancake.GameService
 
             #endregion
         }
-
+#if ENABLE_PLAYFABSERVER_API
         private void OnGetLeaderboardAroundUserWorldSuccess(GetLeaderboardAroundUserResult success)
         {
             worldData.myPosition = success.Leaderboard[0].Position;
             txtRank.text = $"World Rank: {worldData.myPosition + 1}";
             AuthService.RequestLeaderboard(nameTableLeaderboard, RequestWorldLeaderboardSuccess, RequestWorldLeaderboardError);
         }
-
+#endif
         private void RequestWorldLeaderboardError(PlayFabError error)
         {
             #region replace your code show popup notification
@@ -615,7 +618,7 @@ namespace Pancake.GameService
             worldData.pageCount = M.CeilToInt(worldData.players.Count / (float) CountInOnePage);
             Refresh(worldData);
         }
-
+#if ENABLE_PLAYFABSERVER_API
         private void WorldButtonInvokeImpl()
         {
             content.SetActive(false);
@@ -646,6 +649,7 @@ namespace Pancake.GameService
                 Refresh(worldData);
             }
         }
+#endif
 
         #endregion
 
@@ -673,7 +677,7 @@ namespace Pancake.GameService
 
             #endregion
         }
-
+#if ENABLE_PLAYFABSERVER_API
         private void OnGetLeaderboardAroundUserCountrySuccess(GetLeaderboardAroundUserResult success)
         {
             countryData.myPosition = success.Leaderboard[0].Position;
@@ -690,6 +694,7 @@ namespace Pancake.GameService
 
             #endregion
         }
+#endif
 
         private void RequestCountryLeaderboardSuccess(GetLeaderboardResult result)
         {
@@ -973,8 +978,8 @@ namespace Pancake.GameService
 
         #endregion
 #endif
-
-
+        
+#if ENABLE_PLAYFABSERVER_API
         protected virtual void OnDisable()
         {
             btnBackPage.onClick.RemoveListener(OnBackPageButtonClicked);
@@ -985,9 +990,9 @@ namespace Pancake.GameService
             btnFriend.onClick.RemoveListener(OnFriendButtonClicked);
 #endif
         }
+#endif
 
-#if UNITY_EDITOR
-
+#if UNITY_EDITOR && ENABLE_PLAYFABSERVER_API
         private int _internalIndex = 0;
         [ContextMenu("Update Aggregation")]
         public void CreateOrUpdateAggregationLeaderboard()
