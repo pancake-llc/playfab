@@ -2281,19 +2281,9 @@ namespace PlayFab.MultiplayerModels
     public class GetMultiplayerServerDetailsRequest : PlayFabRequestCommon
     {
         /// <summary>
-        /// The guid string build ID of the multiplayer server to get details for.
-        /// </summary>
-        [Obsolete("No longer available", true)]
-        public string BuildId;
-        /// <summary>
         /// The optional custom tags associated with the request (e.g. build number, external trace identifiers, etc.).
         /// </summary>
         public Dictionary<string,string> CustomTags;
-        /// <summary>
-        /// The region the multiplayer server is located in to get details for.
-        /// </summary>
-        [Obsolete("No longer available", true)]
-        public string Region;
         /// <summary>
         /// The title generated guid string session ID of the multiplayer server to get details for. This is to keep track of
         /// multiplayer server sessions.
@@ -4381,7 +4371,8 @@ namespace PlayFab.MultiplayerModels
         /// </summary>
         public string PubSubConnectionHandle;
         /// <summary>
-        /// The name of the resource to subscribe to.
+        /// The name of the resource to subscribe to. It follows the format {queueName}|{ticketId} for MatchTicketStatusChange. For
+        /// MatchInvite, ResourceId is @me.
         /// </summary>
         public string ResourceId;
         /// <summary>
@@ -4556,7 +4547,8 @@ namespace PlayFab.MultiplayerModels
         /// </summary>
         public string PubSubConnectionHandle;
         /// <summary>
-        /// The resource to unsubscribe from.
+        /// The name of the resource to unsubscribe from. It follows the format {queueName}|{ticketId} for MatchTicketStatusChange.
+        /// For MatchInvite, ResourceId is @me.
         /// </summary>
         public string ResourceId;
         /// <summary>
