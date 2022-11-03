@@ -1,6 +1,8 @@
 # What
 PlayFab SDK for Unity
 
+# How to install
+
 Add the lines below to Packages/manifest.json
 
 for version `2.153.221024`
