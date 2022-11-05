@@ -2,7 +2,6 @@ using UnityEngine;
 using PlayFab;
 
 #if UNITY_5_3_OR_NEWER
-[CreateAssetMenu(fileName = "PlayFabSharedSettings", menuName = "PlayFab/CreateSharedSettings", order = 1)]
 #endif
 public class PlayFabSharedSettings : ScriptableObject
 {
