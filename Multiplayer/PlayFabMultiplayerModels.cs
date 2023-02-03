@@ -1708,6 +1708,16 @@ namespace PlayFab.MultiplayerModels
         public string Type;
     }
 
+    public enum ExternalFriendSources
+    {
+        None,
+        Steam,
+        Facebook,
+        Xbox,
+        Psn,
+        All
+    }
+
     /// <summary>
     /// Request to find friends lobbies. Only a client can find friend lobbies.
     /// </summary>
@@ -1721,11 +1731,17 @@ namespace PlayFab.MultiplayerModels
         /// <summary>
         /// Controls whether this query should link to friends made on the Facebook network. Defaults to false
         /// </summary>
-        public bool ExcludeFacebookFriends;
+        [Obsolete("Use 'ExternalPlatformFriends' instead", true)]
+        public bool? ExcludeFacebookFriends;
         /// <summary>
         /// Controls whether this query should link to friends made on the Steam network. Defaults to false
         /// </summary>
-        public bool ExcludeSteamFriends;
+        [Obsolete("Use 'ExternalPlatformFriends' instead", true)]
+        public bool? ExcludeSteamFriends;
+        /// <summary>
+        /// Indicates which other platforms' friends this query should link to.
+        /// </summary>
+        public ExternalFriendSources? ExternalPlatformFriends;
         /// <summary>
         /// OData style string that contains one or more filters. Only the following operators are supported: "and" (logical and),
         /// "eq" (equal), "ne" (not equals), "ge" (greater than or equal), "gt" (greater than), "le" (less than or equal), and "lt"
