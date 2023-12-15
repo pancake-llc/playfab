@@ -142,10 +142,6 @@ namespace PlayFab.ProfilesModels
         /// </summary>
         public string Language;
         /// <summary>
-        /// Leaderboard metadata for the entity.
-        /// </summary>
-        public string LeaderboardMetadata;
-        /// <summary>
         /// The lineage of this profile.
         /// </summary>
         public EntityLineage Lineage;
@@ -194,37 +190,41 @@ namespace PlayFab.ProfilesModels
     }
 
     [Serializable]
-    public class EntityStatisticChildValue : PlayFabBaseModel
+    public class EntityStatisticAttributeValue : PlayFabBaseModel
     {
         /// <summary>
-        /// Child name value, if child statistic
-        /// </summary>
-        public string ChildName;
-        /// <summary>
-        /// Child statistic metadata
+        /// Metadata associated with the Statistic.
         /// </summary>
         public string Metadata;
         /// <summary>
-        /// Child statistic value
+        /// Attribute name.
         /// </summary>
-        public int Value;
+        public string Name;
+        /// <summary>
+        /// Attribute Statistic scores.
+        /// </summary>
+        public List<string> Scores;
     }
 
     [Serializable]
     public class EntityStatisticValue : PlayFabBaseModel
     {
         /// <summary>
-        /// Child statistic values
+        /// Attribute Statistic values.
         /// </summary>
-        public Dictionary<string,EntityStatisticChildValue> ChildStatistics;
+        public Dictionary<string,EntityStatisticAttributeValue> AttributeStatistics;
         /// <summary>
-        /// Statistic metadata
+        /// Metadata associated with the Statistic.
         /// </summary>
         public string Metadata;
         /// <summary>
         /// Statistic name
         /// </summary>
         public string Name;
+        /// <summary>
+        /// Statistic scores
+        /// </summary>
+        public List<string> Scores;
         /// <summary>
         /// Statistic value
         /// </summary>
@@ -357,6 +357,40 @@ namespace PlayFab.ProfilesModels
         /// Dictionary of master player ids mapped to title player entity keys and id pairs
         /// </summary>
         public Dictionary<string,EntityKey> TitlePlayerAccounts;
+    }
+
+    [Serializable]
+    public class GetTitlePlayersFromProviderIDsResponse : PlayFabResultCommon
+    {
+        /// <summary>
+        /// Dictionary of provider identifiers mapped to title_player_account lineage. Missing lineage indicates the player either
+        /// doesn't exist or doesn't play the requested title.
+        /// </summary>
+        public Dictionary<string,EntityLineage> TitlePlayerAccounts;
+    }
+
+    /// <summary>
+    /// Given a collection of Xbox IDs (XUIDs), returns all title player accounts.
+    /// </summary>
+    [Serializable]
+    public class GetTitlePlayersFromXboxLiveIDsRequest : PlayFabRequestCommon
+    {
+        /// <summary>
+        /// The optional custom tags associated with the request (e.g. build number, external trace identifiers, etc.).
+        /// </summary>
+        public Dictionary<string,string> CustomTags;
+        /// <summary>
+        /// Xbox Sandbox the players had on their Xbox tokens.
+        /// </summary>
+        public string Sandbox;
+        /// <summary>
+        /// Optional ID of title to get players from, required if calling using a master_player_account.
+        /// </summary>
+        public string TitleId;
+        /// <summary>
+        /// List of Xbox Live XUIDs
+        /// </summary>
+        public List<string> XboxLiveIds;
     }
 
     public enum OperationTypes

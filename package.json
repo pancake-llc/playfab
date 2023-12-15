@@ -2,7 +2,7 @@
   "name": "com.pancake.playfab",
   "displayName": "PlayFab",
   "description": "PlayFab SDK for Unity",
-  "version": "2.157.230123",
+  "version": "2.183.231124",
   "unity": "2019.1",
   "category": "pancake",
   "author": {
